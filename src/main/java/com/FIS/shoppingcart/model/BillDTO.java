@@ -3,7 +3,7 @@ package com.FIS.shoppingcart.model;
 
 public class BillDTO {
     private Long id;
-    private UserDTO user;
+    private UserModel user;
     private String buyDate;
     private Long priceTotal;
     private String status;
@@ -27,11 +27,11 @@ public class BillDTO {
         this.id = id;
     }
 
-    public UserDTO getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 

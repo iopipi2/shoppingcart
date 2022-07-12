@@ -7,19 +7,16 @@ import java.util.List;
 
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.User;
-import com.FIS.shoppingcart.model.UserDTO;
+
 import com.FIS.shoppingcart.service.UserService;
-import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
+
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
@@ -45,9 +42,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    @Override
-    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
-
-    }
+//    @Override
+//    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
+//
+//    }
 
 }

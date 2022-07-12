@@ -5,10 +5,10 @@ public class CartItemDTO {
 
     private Integer id;
     private ProductDTO product;
-    private UserDTO user;
+    private UserModel user;
     private int quantity;
 
-    public CartItemDTO(Integer id, ProductDTO product, UserDTO user, int quantity) {
+    public CartItemDTO(Integer id, ProductDTO product, UserModel user, int quantity) {
         super();
         this.id = id;
         this.product = product;
@@ -37,11 +37,11 @@ public class CartItemDTO {
         this.product = product;
     }
 
-    public UserDTO getUser() {
+    public UserModel getUser() {
         return user;
     }
 
-    public void setUser(UserDTO user) {
+    public void setUser(UserModel user) {
         this.user = user;
     }
 

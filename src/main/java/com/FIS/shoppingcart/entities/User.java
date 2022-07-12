@@ -4,15 +4,7 @@ package com.FIS.shoppingcart.entities;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "user", schema = "shoppingcart")
@@ -55,6 +47,8 @@ public class User implements Serializable {
     private String postal_code;
     private String avatar;
 
+    @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private Cart cart;
 
 
     @Column(name = "one_time_password")
@@ -82,6 +76,13 @@ public class User implements Serializable {
 
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
     public String getName() {
         return name;
     }
