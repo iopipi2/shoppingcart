@@ -1,9 +1,7 @@
 package com.FIS.shoppingcart.entities;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -41,7 +38,7 @@ public class Product implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categories_id")
-    private Categories category;
+    private Category category;
 
     @Column(name = "img_main")
     private String img_main;
@@ -52,12 +49,22 @@ public class Product implements Serializable {
     @Column(name = "img_sub")
     private String img_sub;
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Column(name = "active")
+    private boolean active;
 
 
     public Product() {
     }
 
-    public Product(int id, String name, Long price, String description, Categories category,
+    public Product(int id, String name, Long price, String description, Category category,
                    String img_main, String img_hover, String img_sub) {
         super();
         this.id = id;
@@ -108,11 +115,11 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public Categories getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Categories category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

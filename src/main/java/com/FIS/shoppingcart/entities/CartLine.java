@@ -10,8 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="cart_items")
-public class CartItem {
+@Table(name="cart_line")
+public class CartLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +23,17 @@ public class CartItem {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     private int quantity;
 
-    public CartItem() {
+    public CartLine() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public CartItem(Integer id, Product product , int quantity) {
+    public CartLine(Integer id, Product product , int quantity) {
         super();
         this.id = id;
         this.product = product;

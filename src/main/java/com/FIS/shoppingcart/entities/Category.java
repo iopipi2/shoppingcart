@@ -12,8 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "categories")
-public class Categories {
+@Table(name = "category")
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +23,12 @@ public class Categories {
     @Column(name = "type", unique=true)
     private String type;
 
+    @Column(name = "active")
+    private boolean active;
     @OneToMany(mappedBy= "category")
     private List<Product> products = new ArrayList<>();
 
-    public Categories(int id, String type, List<Product> products) {
+    public Category(int id, String type, List<Product> products) {
         super();
         this.id = id;
         this.type = type;
@@ -41,7 +43,7 @@ public class Categories {
         this.id = id;
     }
 
-    public Categories() {
+    public Category() {
     }
 
     public String getType() {
@@ -50,6 +52,14 @@ public class Categories {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public List<Product> getProducts() {

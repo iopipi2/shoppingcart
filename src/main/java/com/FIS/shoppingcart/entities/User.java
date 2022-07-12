@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "user", schema = "commerce")
+@Table(name = "user", schema = "shoppingcart")
 public class User implements Serializable {
 
     /**
