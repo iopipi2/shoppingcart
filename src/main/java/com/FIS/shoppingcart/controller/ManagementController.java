@@ -1,11 +1,10 @@
 package com.FIS.shoppingcart.controller;
 
-
 import com.FIS.shoppingcart.entities.Category;
 import com.FIS.shoppingcart.entities.Product;
 import com.FIS.shoppingcart.service.CategoryService;
 import com.FIS.shoppingcart.service.ProductService;
-import com.FIS.shoppingcart.validatior.ProductValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,15 @@ public class ManagementController {
     @Qualifier("productService")
     @Autowired
     private ProductService productService;
+
+
+    //Onlineshoppingcart
+
+
+
+
+
+    //Comerce-onlineshoppingcart
 
     @GetMapping(value = "/products")
     public ModelAndView showManageProducts(@RequestParam(name = "operation", required = false) String operation) {
