@@ -16,7 +16,8 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findProductByCategoryId(Integer categoryId);
 
 //
-//    public List<Product> getProductForProductPage(String findName,long priceStart, long priceEnd, int start, int length);
+
+
 //
 //    public List<Product> getProductPriceLowtoHigh(String sort);
 //    {

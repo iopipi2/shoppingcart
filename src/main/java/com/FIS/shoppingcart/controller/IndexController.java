@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class IndexController {
@@ -51,9 +52,9 @@ public class IndexController {
     }
 
     @GetMapping("/product-detail")
-    public String getProductById(Model model, @RequestParam(name = "id", required = false) int id,
+    public String getProductById(Model model, @RequestParam int id,
                                  HttpSession session) {
-//
+            Optional<Product> product=productService.findProductById(id);
 //        try {
 //            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //            model.addAttribute("id", principal.getId());
@@ -69,8 +70,9 @@ public class IndexController {
 //        System.out.println(numberOfReview);
 //
 //        model.addAttribute("reviews", reviewService.find(id));
-
-        model.addAttribute("product", productService.findProductById(id));
+        product.get().setId(1);
+        model.addAttribute("products", product);
+        System.out.println("AAAAAAAAAAAza++++" + product.get().getName());
 
         return "product-detail";
     }
@@ -141,15 +143,15 @@ public class IndexController {
         Long priceEnd = (request.getParameter("priceEnd") == null || request.getParameter("priceEnd") == "") ? 100000
                 : Long.valueOf(request.getParameter("priceEnd"));
 
-        //List<ProductDTO> listProducts = productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8);
+//        List<Product> listProducts = productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8);
 
         String lowtohigh = request.getParameter("lowtohigh");
-//
-//        if(lowtohigh != null && lowtohigh != "") {
-//            model.addAttribute("products", productService.getProductForProductPagePriceHigh(lowtohigh));
-//        }else {
-//            model.addAttribute("products", productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8));
-//        }
+
+        if(lowtohigh != null && lowtohigh != "") {
+            model.addAttribute("products", productService.getProductForProductPagePriceHigh(lowtohigh));
+        }else {
+            model.addAttribute("products", productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8));
+        }
 
         request.setAttribute("page", page);
         request.setAttribute("priceStart", priceStart);
@@ -160,7 +162,6 @@ public class IndexController {
 
         return "product";
     }
-
 
 
 
@@ -257,24 +258,21 @@ public class IndexController {
      * Viewing a single product
      */
 
-    @GetMapping("/show/{id}/product")
-    public ModelAndView showSingleProduct(@PathVariable("id") int id) throws ProductNotFoundExceptoion {
-
-        ModelAndView modelAndView = new ModelAndView("page");
-
-        Product product = productService.findProductById(id);
-
-
-
-
-        productService.updateProduct(product);
-        modelAndView.addObject("title", product.getName());
-        modelAndView.addObject("product", product);
-        modelAndView.addObject("userClickShowProduct", true);
-
-        return modelAndView;
-
-    }
+//    @GetMapping("/show/{id}/product")
+//    public ModelAndView showSingleProduct(@PathVariable("id") int id) throws ProductNotFoundExceptoion {
+//
+//        ModelAndView modelAndView = new ModelAndView("page");
+//
+//        Product product = productService.findProductById(id);
+//
+//        productService.updateProduct(product);
+//        modelAndView.addObject("title", product.getName());
+//        modelAndView.addObject("product", product);
+//        modelAndView.addObject("userClickShowProduct", true);
+//
+//        return modelAndView;
+//
+//    }
 
     /*
      * Access denied Page
