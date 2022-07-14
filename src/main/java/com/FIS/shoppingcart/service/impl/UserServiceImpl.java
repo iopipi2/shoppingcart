@@ -1,53 +1,64 @@
 package com.FIS.shoppingcart.service.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.User;
-import com.FIS.shoppingcart.model.UserDTO;
 import com.FIS.shoppingcart.service.UserService;
-import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Service("userService")
+@Transactional
 public class UserServiceImpl implements UserService {
 
-    @Qualifier("userRepository")
-    @Autowired
-    private UserRepository userRepository;
+    @PersistenceContext
+    EntityManager entityManager;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    UserService userService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
-    public boolean saveUser(User user) {
-        // TODO Auto-generated method stub
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.saveAndFlush(user);
-        return true;
+    public List<User> getAllUser() {
+        List<User> users = userRepository.findAll();
+
+        return users;
     }
 
     @Override
-    public User findUserByEmail(String email) {
-        // TODO Auto-generated method stub
-        return userRepository.findUserByEmail(email);
+    public User getUserById(int id) {
+        User user = userRepository.getById(id);
+        System.out.println(user);
+        return user;
     }
 
     @Override
-    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
+    public User get(int id) {
+
+            Optional<User> result = userRepository.findById(id);
+            return userRepository.findById(id).get();
 
     }
 
+    @Override
+    public User editUser(int id ) {
+        User user1 = userRepository.getById(id);
+        System.out.println(user1);
+        return user1;
+    }
+
+    @Override
+    public void editUserEntity(User user) {
+
+            entityManager.merge(user);
+
+    }
 }

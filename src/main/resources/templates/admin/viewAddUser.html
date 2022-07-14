@@ -355,7 +355,7 @@ table.table .avatar {
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="p : ${users}">
+                <th:block th:each="p : ${user}">
                     <tr>
                         <td><img style="border-radius: 50%; height:45px; width:45px; margin:2px; background-color: black;" th:src="@{${p.avatarImagePath} == null} ? @{/images/icons/user.png} : @{${p.avatarImagePath}}"> </td>
                         <td th:text="${p.username}"></td>

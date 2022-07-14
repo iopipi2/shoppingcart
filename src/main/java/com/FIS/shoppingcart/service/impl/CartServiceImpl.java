@@ -12,31 +12,6 @@ import javax.servlet.http.HttpSession;
 @Service("cartService")
 public class CartServiceImpl implements CartService {
 
-    @Qualifier("cartRepository")
-    @Autowired
-    private CartRepository cartRepository;
 
-    @Autowired
-    private HttpSession httpSession;
-
-    @Override
-    public boolean saveCart(Cart cart) {
-        // TODO Auto-generated method stub
-        cartRepository.saveAndFlush(cart);
-        return true;
-    }
-
-    @Override
-    public boolean updateCart(Cart cart) {
-        // TODO Auto-generated method stub
-        cartRepository.saveAndFlush(cart);
-        return true;
-    }
-
-//    @Override
-//    public Cart findCart() {
-//        // TODO Auto-generated method stub
-//        return ((UserModel) httpSession.getAttribute("userModel")).getCart();
-//    }
 
 }

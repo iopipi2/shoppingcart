@@ -27,20 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 public class ProductController {
 
-    @Autowired
-    ProductRepository productRepository;
 
-    @Autowired
-    CategoryRepository categoryRepository;
-
-    @Autowired
-    CategoryServiceImpl categoryService;
-
-    @Autowired
-    ProductServiceImpl productService;
-    @Autowired
-    UserService userService;
-
-//
 
 }
