@@ -45,6 +45,8 @@ public class UserController {
         return "/admin/viewAddUser";
     }
 
+
+
     @GetMapping("/infoUser")
     public String infoUser(Model model) {
         User users = userService.getUserById(52);
