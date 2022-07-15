@@ -16,7 +16,8 @@ import java.nio.file.Paths;
 
 @Configuration
 public class MVCConfig implements WebMvcConfigurer {
-//    public static String ROOT_UPLOAD_PATH = "C:/Users/Admin/Desktop/com.devpro.shop13/com.devpro.shop13/upload/";
+    public static String ROOT_UPLOAD_PATH = "D:/FIS/shoppingcart/shoppingcart/upload/product";
+
 //    //cấu hình vị trí chứa folder chứa view
 //
 //    @Override
@@ -52,6 +53,7 @@ public void addResourceHandlers(ResourceHandlerRegistry registry) {
     registry.addResourceHandler("/product-images/**").addResourceLocations("file:/" + productUploadPath + "/");
     registry.addResourceHandler("/blog-images/**").addResourceLocations("file:/" + blogUploadPath + "/");
     registry.addResourceHandler("/avatar-images/**").addResourceLocations("file:/" + avatarUploadPath + "/");
+    registry.addResourceHandler("/upload/**").addResourceLocations("file:" + ROOT_UPLOAD_PATH);
 
 
 }

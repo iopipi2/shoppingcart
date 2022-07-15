@@ -70,8 +70,9 @@ public class IndexController {
 //        System.out.println(numberOfReview);
 //
 //        model.addAttribute("reviews", reviewService.find(id));
+        productService.findProductById(id).ifPresent(p->model.addAttribute("products",p));
 
-        model.addAttribute("products", product);
+//        model.addAttribute("products", product);
 
         return "product-detail";
     }

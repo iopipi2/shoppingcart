@@ -123,6 +123,7 @@ public class Product implements Serializable {
         this.category = category;
     }
 
+
     public String getImg_main() {
         return img_main;
     }
