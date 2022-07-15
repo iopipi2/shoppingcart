@@ -34,41 +34,41 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/member/user")
-    public String memberUser(Model model, int id) {
-
-        model.addAttribute("user", userService.getUserById(id));
-
-        return "/informationUser";
-    }
-
-    @PostMapping("/member/user/edit")
-    public String editInfomationMember(@ModelAttribute(name = "user") UserDTO userDTO, @RequestParam(name="avatarImage") MultipartFile file) throws IOException {
-
-        String fileName = org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
-
-        userDTO.setAvatar(fileName);
-
-        User user =  userService.editUser(userDTO);
-
-        String uploadDir = "./avatar-images/" + user.getId();
-
-        Path uploadPath = Paths.get(uploadDir);
-
-        if(!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try(InputStream inputStream = file.getInputStream()){
-            Path filePathMain = uploadPath.resolve(fileName);
-            System.out.println("Check : " + filePathMain.toFile().getAbsolutePath());
-
-            Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
-        }catch(IOException e) {
-            throw new IOException("Could not save upload file : " + fileName);
-        }
-
-        return "redirect:/trang-chu";
-    }
+//    @GetMapping("/member/user")
+//    public String memberUser(Model model, int id) {
+//
+//        model.addAttribute("user", userService.getUserById(id));
+//
+//        return "/informationUser";
+//    }
+//
+//    @PostMapping("/member/user/edit")
+//    public String editInfomationMember(@ModelAttribute(name = "user") UserDTO userDTO, @RequestParam(name="avatarImage") MultipartFile file) throws IOException {
+//
+//        String fileName = org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
+//
+//        userDTO.setAvatar(fileName);
+//
+//        User user =  userService.editUser(userDTO);
+//
+//        String uploadDir = "./avatar-images/" + user.getId();
+//
+//        Path uploadPath = Paths.get(uploadDir);
+//
+//        if(!Files.exists(uploadPath)) {
+//            Files.createDirectories(uploadPath);
+//        }
+//
+//        try(InputStream inputStream = file.getInputStream()){
+//            Path filePathMain = uploadPath.resolve(fileName);
+//            System.out.println("Check : " + filePathMain.toFile().getAbsolutePath());
+//
+//            Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
+//        }catch(IOException e) {
+//            throw new IOException("Could not save upload file : " + fileName);
+//        }
+//
+//        return "redirect:/trang-chu";
+//    }
 
 }
