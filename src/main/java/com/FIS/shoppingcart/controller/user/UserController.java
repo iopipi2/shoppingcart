@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import com.FIS.shoppingcart.entities.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,8 @@ import com.FIS.shoppingcart.service.UserService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 
 @Controller
@@ -43,6 +46,65 @@ public class UserController {
         model.addAttribute("u", new User());
 
         return "/admin/viewAddUser";
+    }
+
+//    @GetMapping(value = "/product")
+//    public String getAllProductForProductPage(Model model, HttpServletRequest request, HttpSession session) {
+//
+////        try {
+////            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+////            model.addAttribute("id", principal.getId());
+////            model.addAttribute("user", userService.getUserById(principal.getId()));
+////        } catch (Exception e) {
+////            e.getStackTrace();
+////        }
+//
+//        String keyword = request.getParameter("keyword") == null ? "" : request.getParameter("keyword");
+//
+//        Integer page = request.getParameter("page") == null ? 1 : Integer.valueOf(request.getParameter("page"));
+//
+//        Long priceStart = (request.getParameter("priceStart") == null || request.getParameter("priceStart") == "") ? 1
+//                : Long.valueOf(request.getParameter("priceStart"));
+//
+//        Long priceEnd = (request.getParameter("priceEnd") == null || request.getParameter("priceEnd") == "") ? 100000
+//                : Long.valueOf(request.getParameter("priceEnd"));
+//
+////        List<Product> listProducts = productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8);
+//
+//        String lowtohigh = request.getParameter("lowtohigh");
+//
+//        if(lowtohigh != null && lowtohigh != "") {
+//            model.addAttribute("products", productService.getProductForProductPagePriceHigh(lowtohigh));
+//        }else {
+//            model.addAttribute("products", productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8));
+//        }
+//
+//        request.setAttribute("page", page);
+//        request.setAttribute("priceStart", priceStart);
+//        request.setAttribute("priceEnd", priceEnd);
+//        request.setAttribute("keyword", keyword);
+//
+//        model.addAttribute("cate", categoryService.findAllCategories());
+//
+//        return "product";
+//    }
+    @GetMapping(value = "/trang-chu")
+    public String getAllProduct(Model model, HttpServletRequest request, @ModelAttribute("categories") Category category, HttpSession session) {
+
+        //Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
+//        try {
+//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            model.addAttribute("id", principal.getId());
+//            model.addAttribute("user", userService.getUserById(principal.getId()));
+//        } catch (Exception e) {
+//            e.getStackTrace();
+//        }
+
+        model.addAttribute("products", productService.findAllProducts());
+
+        model.addAttribute("cate", categoryService.findAllCategories());
+
+        return "index";
     }
 
 
