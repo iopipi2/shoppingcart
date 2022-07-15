@@ -1,7 +1,6 @@
 package com.FIS.shoppingcart.model;
 
 public class CategoriesDTO {
-
     private int id_cate;
     private String type;
 

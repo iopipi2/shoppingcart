@@ -1,14 +1,18 @@
 package com.FIS.shoppingcart.model;
 
 
+import com.FIS.shoppingcart.entities.Product;
+
+import java.util.Optional;
+
 public class CartItemDTO {
 
     private Integer id;
-    private ProductDTO product;
+    private Optional<Product> product;
     private UserDTO user;
     private int quantity;
 
-    public CartItemDTO(Integer id, ProductDTO product, UserDTO user, int quantity) {
+    public CartItemDTO(Integer id, Optional<Product> product, UserDTO user, int quantity) {
         super();
         this.id = id;
         this.product = product;
@@ -29,11 +33,11 @@ public class CartItemDTO {
         this.id = id;
     }
 
-    public ProductDTO getProduct() {
+    public Optional<Product> getProduct() {
         return product;
     }
 
-    public void setProduct(ProductDTO product) {
+    public void setProduct(Optional<Product> product) {
         this.product = product;
     }
 
