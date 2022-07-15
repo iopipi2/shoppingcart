@@ -7,7 +7,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import com.FIS.shoppingcart.entities.Category;
+import com.FIS.shoppingcart.service.CategoryService;
+import com.FIS.shoppingcart.service.ProductService;
+import com.FIS.shoppingcart.service.impl.CategoryServiceImpl;
+import com.FIS.shoppingcart.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +30,46 @@ import com.FIS.shoppingcart.service.UserService;
 
 import antlr.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 
 @Controller
 public class UserController {
 
+//    @Autowired
+//    UserRepository userRepo;
+//
+//    @Autowired
+//    UserService userService;
     @Autowired
-    UserRepository userRepo;
+    @Qualifier("categoryService")
+    private CategoryServiceImpl categoryService;
 
     @Autowired
-    UserService userService;
+    @Qualifier("productService")
+    private ProductServiceImpl productService;
+
+    //comerce
+
+    @GetMapping(value = "/trang-chu")
+    public String getAllProduct(Model model, HttpServletRequest request, @ModelAttribute("categories") Category category, HttpSession session) {
+
+        //Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
+//        try {
+//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            model.addAttribute("id", principal.getId());
+//            model.addAttribute("user", userService.getUserById(principal.getId()));
+//        } catch (Exception e) {
+//            e.getStackTrace();
+//        }
+
+        model.addAttribute("products", productService.findAllProducts());
+
+        model.addAttribute("cate", categoryService.findAllCategories());
+
+        return "index";
+    }
 
 //    @GetMapping("/member/user")
 //    public String memberUser(Model model, int id) {

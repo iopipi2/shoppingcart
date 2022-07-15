@@ -12,9 +12,9 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User,Integer> {
 
-    public List<Product> getProductPriceLowtoHigh(String sort);
+//    public List<Product> getProductPriceLowtoHigh(String sort);
 
 
-    User findUserByEmail(String email);
+//    User findUserByEmail(String mail);
 
 }

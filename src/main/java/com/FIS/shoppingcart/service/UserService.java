@@ -11,9 +11,9 @@ public interface UserService {
 
     boolean saveUser(User user);
 
-    User findUserByEmail(String email);
+//    User findUserByEmail(String mail);
 
 
-    void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException;
+//    void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException;
 
 }

@@ -39,15 +39,15 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    @Override
-    public User findUserByEmail(String email) {
-        // TODO Auto-generated method stub
-        return userRepository.findUserByEmail(email);
-    }
+//    @Override
+//    public User findUserByEmail(String mail) {
+//        // TODO Auto-generated method stub
+//        return userRepository.findUserByEmail(mail);
+//    }
 
-    @Override
-    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
-
-    }
+//    @Override
+//    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
+//
+//    }
 
 }
