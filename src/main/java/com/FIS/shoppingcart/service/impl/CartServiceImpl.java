@@ -2,12 +2,14 @@ package com.FIS.shoppingcart.service.impl;
 
 import com.FIS.shoppingcart.dao.CartRepository;
 import com.FIS.shoppingcart.entities.Cart;
+import com.FIS.shoppingcart.entities.UserModel;
 import com.FIS.shoppingcart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Service("cartService")
 public class CartServiceImpl implements CartService {
@@ -33,10 +35,15 @@ public class CartServiceImpl implements CartService {
         return true;
     }
 
-//    @Override
-//    public Cart findCart() {
-//        // TODO Auto-generated method stub
-//        return ((UserModel) httpSession.getAttribute("userModel")).getCart();
-//    }
+    @Override
+    public List<Cart> findAllCart() {
+        return cartRepository.findAll();
+    }
+
+    @Override
+    public Cart findCart() {
+        // TODO Auto-generated method stub
+        return ((UserModel) httpSession.getAttribute("userModel")).getCart();
+    }
 
 }

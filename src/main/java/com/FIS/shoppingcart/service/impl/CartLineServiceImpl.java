@@ -55,11 +55,11 @@ public class CartLineServiceImpl implements CartLineService {
         return cartLineRepository.findAll();
     }
 
-//    @Override
-//    public List<CartLine> findCartLines() {
-//        Cart cart = cartService.findCart();
-//        return cartLineRepository.findCartLineByCartId(cart.getId());
-//    }
+    @Override
+    public List<CartLine> findCartLines() {
+        Cart cart = cartService.findCart();
+        return cartLineRepository.findCartLineByCartId(cart.getId());
+    }
 
     @Override
     public CartLine findCartLineByCartIdAndProductId(int cartId, int id) {

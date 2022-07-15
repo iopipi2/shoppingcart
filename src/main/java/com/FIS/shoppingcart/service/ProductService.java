@@ -21,7 +21,8 @@ public interface ProductService {
     String updateProduct(Product product);
 
     List<Product> findProductByCategoryId(Integer categoryId);
-
+    public long count();
+    public List<Product> search(String keyword, String category, int page, int sizePerPage);
     Product findProductByIdForAdmin(int id);
     public List<Product> getProductForProductPage(String findName, long priceStart, long priceEnd, int start, int length);
 

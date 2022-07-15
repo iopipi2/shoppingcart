@@ -9,6 +9,8 @@ import com.FIS.shoppingcart.entities.Product;
 import com.FIS.shoppingcart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +62,22 @@ public class ProductServiceImpl implements ProductService {
             product = null;}
 
         return product;
+    }
+
+    @Override
+    public long count() {
+            return productRepository.count();
+        }
+    @Override
+    public List<Product> search(String keyword, String category, int page, int sizePerPage) {
+
+
+        Pageable pageable = (Pageable) PageRequest.of(page, sizePerPage, Sort.by("id").descending());
+
+        List<Product> productEntities = productRepository.findAll(keyword,category, pageable);
+
+
+        return productEntities;
     }
 
     @Override
