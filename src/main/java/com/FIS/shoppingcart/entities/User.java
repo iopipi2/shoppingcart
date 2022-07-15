@@ -6,8 +6,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,11 +46,8 @@ public class User implements Serializable {
 
     private String phone;
 
-    private String city;
     private String address;
-    private String state;
-    private int country_id;
-    private String postal_code;
+
     private String avatar;
 
 
@@ -63,7 +58,7 @@ public class User implements Serializable {
 
 
     public User(int id, String password, String username, String role, Boolean enabled, Date created_time, String name,
-                String phone, String city, String address, String state, int country_id, String postal_code,String avatar) {
+                String phone, String address, String avatar) {
         super();
         this.id = id;
         this.password = password;
@@ -73,11 +68,7 @@ public class User implements Serializable {
         this.created_time = created_time;
         this.name = name;
         this.phone = phone;
-        this.city = city;
         this.address = address;
-        this.state = state;
-        this.country_id = country_id;
-        this.postal_code = postal_code;
         this.avatar = avatar;
 
     }
@@ -106,45 +97,16 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public String getCity() {
-        return city;
-    }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
     public void setAddress(String address) {
         this.address = address;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public int getCountry_id() {
-        return country_id;
-    }
-
-    public void setCountry_id(int country_id) {
-        this.country_id = country_id;
-    }
-
-    public String getPostal_code() {
-        return postal_code;
-    }
-
-    public void setPostal_code(String postal_code) {
-        this.postal_code = postal_code;
-    }
 
     public User() {
 

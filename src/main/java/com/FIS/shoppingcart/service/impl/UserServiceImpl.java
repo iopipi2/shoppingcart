@@ -48,17 +48,4 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public User editUser(int id ) {
-        User user1 = userRepository.getById(id);
-        System.out.println(user1);
-        return user1;
-    }
-
-    @Override
-    public void editUserEntity(User user) {
-
-            entityManager.merge(user);
-
-    }
 }

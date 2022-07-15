@@ -11,9 +11,9 @@ public User getUserById(int id);
 
 public User get(int id);
 
-public User editUser(int id);
 
-public void editUserEntity(User user);
+
+
 
 
 

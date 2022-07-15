@@ -9,7 +9,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.User;
-import com.FIS.shoppingcart.model.UserDTO;
 import com.FIS.shoppingcart.service.UserService;
-
-import antlr.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -59,9 +54,30 @@ public class UserController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editUser(@ModelAttribute (name = "user") User user) throws IOException {
+    public String editUser(@ModelAttribute (name = "user") User user, @RequestParam (name = "avatarImage") MultipartFile file) throws IOException {
+        String fileName =org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
+        user.setAvatar(fileName);
         userRepository.save(user);
+        String uploadAvt = "./avatar-images/" + user.getId();
+        Path uploadPath = Paths.get(uploadAvt);
+        if(!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try(InputStream inputStream = file.getInputStream()){
+            Path filePathMain = uploadPath.resolve(fileName);
+            System.out.println("check : "+filePathMain.toFile().getAbsolutePath());
+
+            Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
+
+        }catch (IOException e){
+            throw new IOException("Could not save upload file : " + fileName);
+        }
+
         return "redirect:/infoUser";
+
+
+
+
 
     }
 
