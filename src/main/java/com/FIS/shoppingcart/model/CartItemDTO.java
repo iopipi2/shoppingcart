@@ -1,14 +1,16 @@
 package com.FIS.shoppingcart.model;
 
 
+import com.FIS.shoppingcart.entities.Product;
+
 public class CartItemDTO {
 
     private Integer id;
-    private ProductDTO product;
+    private Product product;
     private UserModel user;
     private int quantity;
 
-    public CartItemDTO(Integer id, ProductDTO product, UserModel user, int quantity) {
+    public CartItemDTO(Integer id, Product product, UserModel user, int quantity) {
         super();
         this.id = id;
         this.product = product;
@@ -29,11 +31,11 @@ public class CartItemDTO {
         this.id = id;
     }
 
-    public ProductDTO getProduct() {
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(ProductDTO product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 

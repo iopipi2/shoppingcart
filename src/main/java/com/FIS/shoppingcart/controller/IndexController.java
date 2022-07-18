@@ -1,8 +1,7 @@
 package com.FIS.shoppingcart.controller;
-import com.FIS.shoppingcart.entities.CartLine;
 import com.FIS.shoppingcart.entities.Category;
 import com.FIS.shoppingcart.entities.Product;
-import com.FIS.shoppingcart.model.ProductDTO;
+import com.FIS.shoppingcart.model.CartItemDTO;
 import com.FIS.shoppingcart.service.CategoryService;
 import com.FIS.shoppingcart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,24 +168,22 @@ public class IndexController {
         return "product";
     }
 
-
-    @PostMapping("/add-to-cart")
+    //Add item to cart
+    @RequestMapping("/add-to-cart")
     public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
                             @RequestParam(name = "num-product") int numproduct) throws IOException {
 
         Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
-        productService.findProductById(id).ifPresent( pro->model.addAttribute("products",pro));
-
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
         int totalOfCart = 0;
         double totalPrice = 0;
         double totalPriceAfterApplyCoupon = 0;
 
         if (object == null) {
-            CartLine cartItemDTO = new CartLine();
+            CartItemDTO cartItemDTO = new CartItemDTO();
             cartItemDTO.setProduct(product.get());
             cartItemDTO.setQuantity(numproduct);
-            Map<Integer, CartLine> map = new HashMap<>();
+            Map<Integer, CartItemDTO> map = new HashMap<>();// gio hang
             map.put(id, cartItemDTO);
             session.setAttribute("cart", map);
 
@@ -196,14 +193,14 @@ public class IndexController {
 
 
         } else {
-            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
-            CartLine cartLine = map.get(id);
+            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;// lay ra map
+            CartItemDTO cartItemDTO = map.get(id);
 
-            if (cartLine == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
-                cartLine = new CartLine();
-                cartLine.setProduct(product.get());
-                cartLine.setQuantity(numproduct);
-                map.put(id, cartLine);
+            if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
+                cartItemDTO = new CartItemDTO();
+                cartItemDTO.setProduct(product.get());
+                cartItemDTO.setQuantity(numproduct);
+                map.put(id, cartItemDTO);
 
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
@@ -216,7 +213,7 @@ public class IndexController {
 
 
             } else { // neu co sp trong map roi thi tang sl cua sp len
-                cartLine.setQuantity(cartLine.getQuantity() + numproduct);
+                cartItemDTO.setQuantity(cartItemDTO.getQuantity() + numproduct);
 
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
@@ -235,7 +232,6 @@ public class IndexController {
 
         return "redirect:/product-detail?id=" + id;
     }
-
 
 
 
