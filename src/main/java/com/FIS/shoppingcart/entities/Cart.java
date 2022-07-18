@@ -43,16 +43,7 @@ public class Cart implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartLine> cartLine;
 
-    @Column(name = "pay")
-    private String pay;
 
-    public String getPay() {
-        return pay;
-    }
-
-    public void setPay(String pay) {
-        this.pay = pay;
-    }
 
     public int getId() {
         return id;

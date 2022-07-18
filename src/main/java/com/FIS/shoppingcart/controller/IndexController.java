@@ -1,6 +1,8 @@
 package com.FIS.shoppingcart.controller;
+import com.FIS.shoppingcart.entities.CartLine;
 import com.FIS.shoppingcart.entities.Category;
 import com.FIS.shoppingcart.entities.Product;
+import com.FIS.shoppingcart.model.ProductDTO;
 import com.FIS.shoppingcart.service.CategoryService;
 import com.FIS.shoppingcart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 public class IndexController {
@@ -32,6 +34,8 @@ public class IndexController {
 
     //comerce
 
+
+    //View trang chu customer
     @GetMapping(value = "/trang-chu")
     public String getAllProduct(Model model, HttpServletRequest request, @ModelAttribute("categories") Category category, HttpSession session) {
 
@@ -51,6 +55,7 @@ public class IndexController {
         return "index";
     }
 
+    //View product detail
     @GetMapping("/product-detail")
     public String getProductById(Model model, @RequestParam int id,
                                  HttpSession session) {
@@ -122,6 +127,7 @@ public class IndexController {
 //        return "redirect:/product-detail?id=" + productId;
 //    }
 
+    //Filter product by price, category,...
     @GetMapping(value = "/product")
     public String getAllProductForProductPage(Model model, HttpServletRequest request, HttpSession session) {
 
@@ -162,6 +168,74 @@ public class IndexController {
 
         return "product";
     }
+
+
+    @PostMapping("/add-to-cart")
+    public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
+                            @RequestParam(name = "num-product") int numproduct) throws IOException {
+
+        Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
+        productService.findProductById(id).ifPresent( pro->model.addAttribute("products",pro));
+
+        Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
+        int totalOfCart = 0;
+        double totalPrice = 0;
+        double totalPriceAfterApplyCoupon = 0;
+
+        if (object == null) {
+            CartLine cartItemDTO = new CartLine();
+            cartItemDTO.setProduct(product.get());
+            cartItemDTO.setQuantity(numproduct);
+            Map<Integer, CartLine> map = new HashMap<>();
+            map.put(id, cartItemDTO);
+            session.setAttribute("cart", map);
+
+            totalOfCart += numproduct;
+            totalPrice = (numproduct*map.get(id).getProduct().getPrice());
+            totalPriceAfterApplyCoupon = totalPrice;
+
+
+        } else {
+            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
+            CartLine cartLine = map.get(id);
+
+            if (cartLine == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
+                cartLine = new CartLine();
+                cartLine.setProduct(product.get());
+                cartLine.setQuantity(numproduct);
+                map.put(id, cartLine);
+
+                Set<Integer> set = map.keySet();
+                for(Integer key : set) {
+
+                    totalOfCart += map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+                    totalPriceAfterApplyCoupon = totalPrice;
+
+                }
+
+
+            } else { // neu co sp trong map roi thi tang sl cua sp len
+                cartLine.setQuantity(cartLine.getQuantity() + numproduct);
+
+                Set<Integer> set = map.keySet();
+                for(Integer key : set) {
+
+                    totalOfCart += map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+                    totalPriceAfterApplyCoupon = totalPrice;
+
+                }
+            }
+        }
+
+        session.setAttribute("totalPriceAfterApplyCoupon",totalPriceAfterApplyCoupon);
+        session.setAttribute("totalPrice", totalPrice);
+        session.setAttribute("totalOfCart", totalOfCart);
+
+        return "redirect:/product-detail?id=" + id;
+    }
+
 
 
 
