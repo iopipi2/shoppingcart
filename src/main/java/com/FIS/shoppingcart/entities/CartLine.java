@@ -64,5 +64,11 @@ public class CartLine {
         this.quantity = quantity;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }

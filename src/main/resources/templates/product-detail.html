@@ -526,6 +526,7 @@
                             </p>
 
                             <!--  -->
+                            <form th:action="@{/add-to-cart}" method="post">
                             <div class="p-t-33">
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-203 flex-c-m respon6">
@@ -579,13 +580,13 @@
                                             </div>
                                         </div>
 
-                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" th:formaction="@{'/add-to-cart?id='+${products.id}}">
                                             <a>Add to cart</a>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-
+                            </form>
                             <!--  -->
                             <div class="flex-w flex-m p-l-100 p-t-40 respon7">
                                 <div class="flex-m bor9 p-r-10 m-r-11">

@@ -1,6 +1,7 @@
 package com.FIS.shoppingcart.service.impl;
 
 import com.FIS.shoppingcart.dao.CartRepository;
+import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Cart;
 import com.FIS.shoppingcart.entities.UserModel;
 import com.FIS.shoppingcart.service.CartService;
@@ -14,9 +15,15 @@ import java.util.List;
 @Service("cartService")
 public class CartServiceImpl implements CartService {
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CartService cartService;
     @Qualifier("cartRepository")
     @Autowired
     private CartRepository cartRepository;
+
 
     @Autowired
     private HttpSession httpSession;
@@ -41,9 +48,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<Cart> findCartByBuyerId(int buyerId) {
+        return cartRepository.findAllCartByBuyerId(buyerId);
+    }
+
+    @Override
     public Cart findCart() {
         // TODO Auto-generated method stub
-        return ((UserModel) httpSession.getAttribute("userModel")).getCart();
+
+        return null;
     }
 
 }

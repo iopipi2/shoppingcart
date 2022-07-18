@@ -356,9 +356,9 @@ table.table .avatar {
                         <table id="cart" class="table table-hover table-condensed">
                             <thead>
                             <tr>
-                                <th style="width: 50%">Product</th>
-                                <th style="width: 10%">Price</th>
-                                <th style="width: 8%">Quantity</th>
+                                <th style="width: 50%">ID</th>
+                                <th style="width: 10%">User</th>
+                                <th style="width: 8%">Status</th>
                                 <th style="width: 22%" class="text-center">Subtotal</th>
                                 <th style="width: 10%"></th>
                             </tr>
@@ -366,11 +366,13 @@ table.table .avatar {
 
 
                             <tbody>
-                            <th:block th:each="c : ${cartLines}">
+                            <th:block th:each="c : ${carts}">
 
                                 <tr>
                                     <td><span th:text=" ${c.id}"></span></td>
+                                    <td><span th:text=" ${c.buyer.name}"></span></td>
                                     <td><span th:text="${c.status}"></span></td>
+                                    <td><span><a th:href="'/admin/cart/cartline?id='+ ${c.id}">Details</a></span></td>
 
                                 </tr>
 

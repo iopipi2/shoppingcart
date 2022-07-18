@@ -3,6 +3,7 @@ package com.FIS.shoppingcart.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -47,8 +48,8 @@ public class User implements Serializable {
     private String postal_code;
     private String avatar;
 
-    @OneToOne(mappedBy = "buyer", cascade = CascadeType.ALL)
-    private Cart cart;
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL)
+    private List<Cart> carts;
 
 
     @Column(name = "one_time_password")
@@ -77,11 +78,11 @@ public class User implements Serializable {
     }
 
     public Cart getCart() {
-        return cart;
+        return (Cart) carts;
     }
 
     public void setCart(Cart cart) {
-        this.cart = cart;
+        this.carts = (List<Cart>) cart;
     }
     public String getName() {
         return name;
