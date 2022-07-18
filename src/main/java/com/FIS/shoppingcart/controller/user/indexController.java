@@ -71,7 +71,7 @@ public class indexController {
 //
 //        model.addAttribute("reviews", reviewService.find(id));
 
-        model.addAttribute("products", product);
+        productService.findProductById(id).ifPresent(p->model.addAttribute("products",p));
 
         return "product-detail";
     }

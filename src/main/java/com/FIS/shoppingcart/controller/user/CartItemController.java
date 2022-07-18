@@ -7,7 +7,7 @@ import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,25 @@ public class CartItemController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/add-to-cart")
+
+//    @GetMapping("/cart")
+//    public String getAllCartItem(Model model, @AuthenticationPrincipal Authentication authentication, HttpSession session) {
+//
+//        Object object = session.getAttribute("cart");
+//
+//        try {
+//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//            model.addAttribute("id", principal.getId());
+//            model.addAttribute("user", userService.getUserById(principal.getId()));
+//        } catch (Exception e) {
+//            e.getStackTrace();
+//        }
+//
+//        return "shoping-cart";
+//    }
+
+
+    @RequestMapping("/add-to-cart")
     public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
                             @RequestParam(name = "num-product") int numproduct) throws IOException {
 
@@ -38,14 +56,14 @@ public class CartItemController {
 
         if (object == null) {
             CartItemDTO cartItemDTO = new CartItemDTO();
-            cartItemDTO.setProduct(product);
+            cartItemDTO.setProduct(product.get());
             cartItemDTO.setQuantity(numproduct);
-            Map<Integer, CartItemDTO> map = new HashMap<>();
+            Map<Integer, CartItemDTO> map = new HashMap<>();// gio hang
             map.put(id, cartItemDTO);
             session.setAttribute("cart", map);
 
             totalOfCart += numproduct;
-            totalPrice = (numproduct*map.get(id).getProduct().get().getPrice());
+            totalPrice = (numproduct*map.get(id).getProduct().getPrice());
             totalPriceAfterApplyCoupon = totalPrice;
 
 
@@ -55,7 +73,7 @@ public class CartItemController {
 
             if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
                 cartItemDTO = new CartItemDTO();
-                cartItemDTO.setProduct(product);
+                cartItemDTO.setProduct(product.get());
                 cartItemDTO.setQuantity(numproduct);
                 map.put(id, cartItemDTO);
 
@@ -63,7 +81,7 @@ public class CartItemController {
                 for(Integer key : set) {
 
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().get().getPrice()*map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
                     totalPriceAfterApplyCoupon = totalPrice;
 
                 }
@@ -76,7 +94,7 @@ public class CartItemController {
                 for(Integer key : set) {
 
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().get().getPrice()*map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
                     totalPriceAfterApplyCoupon = totalPrice;
 
                 }

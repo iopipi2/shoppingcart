@@ -1,6 +1,7 @@
 package com.FIS.shoppingcart.service;
 
 import com.FIS.shoppingcart.entities.Product;
+import com.FIS.shoppingcart.model.ProductDTO;
 
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface ProductService {
 
     List<Product> findAllProductsForAdmin();
 
-    Optional<Product> findProductById(Integer id);
+    public Optional<Product> findProductById(Integer id);
 
     String deleteProduct(Integer id);
 

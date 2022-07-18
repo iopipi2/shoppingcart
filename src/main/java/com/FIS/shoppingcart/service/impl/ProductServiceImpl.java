@@ -6,6 +6,7 @@ import java.util.*;
 import com.FIS.shoppingcart.dao.ProductRepository;
 import com.FIS.shoppingcart.entities.Product;
 
+import com.FIS.shoppingcart.model.ProductDTO;
 import com.FIS.shoppingcart.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,13 +63,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Optional<Product> findProductById(Integer id) {
-        // TODO Auto-generated method stub
         Optional<Product>  product = productRepository.findById(id);
         if (!product.get().isActive()){
             product = null;}
 
         return product;
     }
+
 
     @Override
     public String deleteProduct(Integer id) {
