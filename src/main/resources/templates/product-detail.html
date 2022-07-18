@@ -471,9 +471,9 @@
                                     <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
     
                                     <div class="slick3 gallery-lb">
-                                        <div class="item-slick3" th:data-thumb="'/product-images/'+'${products.id}/'+${products.img_main}">
+                                        <div class="item-slick3" th:data-thumb="'/product-images/'+${products.img_main}">
                                             <div class="wrap-pic-w pos-relative">
-                                                <img th:src="'/product-images/'+'${products.id}/'+${products.img_main}" alt="IMG-PRODUCT">
+                                                <img th:src="'/product-images/'+${products.img_main}" alt="IMG-PRODUCT">
     
                                                 <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="images/product-detail-01.jpg">
                                                     <i class="fa fa-expand"></i>
@@ -481,9 +481,9 @@
                                             </div>
                                         </div>
     
-                                        <div class="item-slick3" th:data-thumb="'/product-images/'+'${products.id}/'+${products.img_hover}">
+                                        <div class="item-slick3" th:data-thumb="'/product-images/'+${products.img_hover}">
                                             <div class="wrap-pic-w pos-relative">
-                                                <img th:src="'/product-images/'+'${products.id}/'+ ${products.img_hover}" alt="IMG-PRODUCT">
+                                                <img th:src="'/product-images/'+ ${products.img_hover}" alt="IMG-PRODUCT">
     
                                                 <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="images/product-detail-02.jpg">
                                                     <i class="fa fa-expand"></i>
@@ -491,9 +491,9 @@
                                             </div>
                                         </div>
     
-                                        <div class="item-slick3" th:data-thumb="'/product-images/'+'${products.id}/'+${products.img_sub}">
+                                        <div class="item-slick3" th:data-thumb="'/product-images/'+${products.img_sub}">
                                             <div class="wrap-pic-w pos-relative">
-                                                <img th:src="'/product-images/'+'${products.id}/'+${products.img_sub}" alt="IMG-PRODUCT">
+                                                <img th:src="'/product-images/'+${products.img_sub}" alt="IMG-PRODUCT">
     
                                                 <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="images/product-detail-03.jpg">
                                                     <i class="fa fa-expand"></i>
@@ -523,6 +523,7 @@
                                 </p>
     
                                 <!--  -->
+                                <form th:action="@{/add-to-cart}" method="post">
                                 <div class="p-t-33">
                                     <div class="flex-w flex-r-m p-b-10">
                                         <div class="size-203 flex-c-m respon6">
@@ -576,12 +577,13 @@
                                                 </div>
                                             </div>
     
-                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                            <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" th:formaction="@{'/add-to-cart?id='+${products.id}}">
                                                 <a>Add to cart</a>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
+                            </form>
     
                                 <!--  -->
                                 <div class="flex-w flex-m p-l-100 p-t-40 respon7">
