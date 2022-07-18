@@ -10,6 +10,7 @@ public class ShoppingcartApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ShoppingcartApplication.class, args);
 		System.out.println("Test");
+		System.out.println("aaaaaaaaaa");
 	}
 
 }
