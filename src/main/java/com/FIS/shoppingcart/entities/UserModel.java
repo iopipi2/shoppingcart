@@ -1,15 +1,19 @@
 package com.FIS.shoppingcart.entities;
 
 
-import java.io.Serializable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class UserModel implements Serializable {
+import java.io.Serializable;
+import java.util.Collection;
+
+public class UserModel implements UserDetails {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-
+    private User user;
     private int id;
     private String fullName;
     private String email;
@@ -60,5 +64,47 @@ public class UserModel implements Serializable {
     public String toString() {
         return "UserModel [id=" + id + ", fullName=" + fullName + ", email=" + email + ", role=" + role + "]";
     }
+    public UserModel(User users){
+        this.user=users;
+    }
+    public boolean hasAuthority(String role) {
+            if(user.getName().equals(role)){
+                return true;
+        }
+        return false;
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }

@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 //    public List<Product> getProductPriceLowtoHigh(String sort);
 
 
-    @Query("SELECT a FROM User a where a.username= ?1")
+    @Query("SELECT a FROM User a where a.username = ?1")
     User findUserByEmail(String email);
 
 }

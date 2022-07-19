@@ -37,6 +37,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User addUser(User userDTO) {
+
+        User user = new User();
+
+        user.setId(userDTO.getId());
+
+        user.setName(userDTO.getName());
+        //Lấy password người dùng nhập, mã hóa về dạng BCrypt r lưu database
+        BCryptPasswordEncoder endcoder = new BCryptPasswordEncoder();
+        String rawPassword = userDTO.getPassword();
+        String endcodedPassword = endcoder.encode(rawPassword);
+        System.out.println(endcodedPassword);
+        user.setPassword(endcodedPassword);
+        user.setUsername(userDTO.getUsername());
+        user.setCountry_id(userDTO.getCountry_id());
+        user.setAvatar(userDTO.getAvatar());
+        user.setCreated_time(new Date());
+        user.setRole("ROLE_USER");
+        user.setEnabled(true);
+        user.setState(userDTO.getState());
+        userRepository.saveAndFlush(user);
+        return user;
+
+    }
+
+    @Override
     public User findUserByEmail(String email) {
         // TODO Auto-generated method stub
         return userRepository.findUserByEmail(email);

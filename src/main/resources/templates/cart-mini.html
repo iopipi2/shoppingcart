@@ -34,12 +34,13 @@
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40" >Total: $[[${session.totalPrice}]]</div>
 
-					<div class="header-cart-buttons flex-w w-full">
-						<a th:href="@{/cart}"
+					<div class="header-cart-buttons flex-w w-full" >
+						<th:block th:each="entry: ${#session.getAttribute('cart')}"><a  th:href="@{'/cart/viewcart?id=' + ${entry.value.id}}"
 							class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
 							View Cart </a> <a th:href="@{/cart}"
 							class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">
 							Check Out </a>
+						</th:block>
 					</div>
 				</div>
 			</div>

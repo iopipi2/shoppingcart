@@ -36,11 +36,12 @@ public class CartController {
 
     private CartServiceImpl cartService;
 
+    //View All Cart By Admin
     @GetMapping("/admin/cart")
     public String viewallCart(Model model) {
         //Test find by user id
         //List<Cart> allcart=cartService.findAllCart();
-        List<Cart> allcart= cartService.findCartByBuyerId(52);
+        List<Cart> allcart = cartService.findAllCart();
         System.out.println(allcart);
         model.addAttribute("carts", allcart);
 
@@ -48,14 +49,12 @@ public class CartController {
     }
 
 
-
-
+    //View All Cart Item In Cart By Admin
     @GetMapping("/admin/cart/cartline")
-    public String viewCartLine(Model model,
-                               HttpSession session)
-    {
-        int id=1;
-        List<CartLine> cartLines= cartLineService.findCartLineByCartId(id);
+    public String viewCartLine(Model model, @RequestParam int id,
+                               HttpSession session) {
+
+        List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
         System.out.println("${cartLines.get().getProduct().getId()}");
         model.addAttribute("cartLines", cartLines);
         return "/admin/viewCartLine";
@@ -131,69 +130,5 @@ public class CartController {
 //            return "redirect:/cart/show?result=added";
 //        }
 //    }
-@RequestMapping("/add-to-cart")
-public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
-                        @RequestParam(name = "num-product") int numproduct) throws IOException {
-
-    Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
-    Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
-    int totalOfCart = 0;
-    double totalPrice = 0;
-    double totalPriceAfterApplyCoupon = 0;
-
-    if (object == null) {
-        CartItemDTO cartItemDTO = new CartItemDTO();
-        cartItemDTO.setProduct(product.get());
-        cartItemDTO.setQuantity(numproduct);
-        Map<Integer, CartItemDTO> map = new HashMap<>();// gio hang
-        map.put(id, cartItemDTO);
-        session.setAttribute("cart", map);
-
-        totalOfCart += numproduct;
-        totalPrice = (numproduct*map.get(id).getProduct().getPrice());
-        totalPriceAfterApplyCoupon = totalPrice;
-
-
-    } else {
-        Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;// lay ra map
-        CartItemDTO cartItemDTO = map.get(id);
-
-        if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
-            cartItemDTO = new CartItemDTO();
-            cartItemDTO.setProduct(product.get());
-            cartItemDTO.setQuantity(numproduct);
-            map.put(id, cartItemDTO);
-
-            Set<Integer> set = map.keySet();
-            for(Integer key : set) {
-
-                totalOfCart += map.get(key).getQuantity();
-                totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-                totalPriceAfterApplyCoupon = totalPrice;
-
-            }
-
-
-        } else { // neu co sp trong map roi thi tang sl cua sp len
-            cartItemDTO.setQuantity(cartItemDTO.getQuantity() + numproduct);
-
-            Set<Integer> set = map.keySet();
-            for(Integer key : set) {
-
-                totalOfCart += map.get(key).getQuantity();
-                totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-                totalPriceAfterApplyCoupon = totalPrice;
-
-            }
-        }
-    }
-
-    session.setAttribute("totalPriceAfterApplyCoupon",totalPriceAfterApplyCoupon);
-    session.setAttribute("totalPrice", totalPrice);
-    session.setAttribute("totalOfCart", totalOfCart);
-
-    return "redirect:/product-detail?id=" + id;
 }
 
-
-}
