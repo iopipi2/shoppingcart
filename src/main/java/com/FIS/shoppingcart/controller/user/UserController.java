@@ -49,7 +49,7 @@ public class UserController {
 
     @GetMapping("/infoUser")
     public String infoUser(Model model) {
-        User users = userService.getUserById(52);
+        User users = userService.getUserById(1);
         model.addAttribute("user",users);
         System.out.println(users);
          return "/user/detailUser";

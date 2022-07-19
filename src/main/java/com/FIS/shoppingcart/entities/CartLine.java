@@ -15,11 +15,11 @@ public class CartLine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name="product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     @ManyToOne
@@ -33,7 +33,7 @@ public class CartLine {
         // TODO Auto-generated constructor stub
     }
 
-    public CartLine(Integer id, Product product , int quantity) {
+    public CartLine(Integer id, Product product, int quantity) {
         super();
         this.id = id;
         this.product = product;
@@ -63,6 +63,4 @@ public class CartLine {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-
-
 }

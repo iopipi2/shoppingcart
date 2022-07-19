@@ -151,20 +151,20 @@ public class Product implements Serializable {
     public String getMainImagePath() {
         if (img_main == null) return null;
 
-        return "/product-images/" + id + "/" + img_main;
+        return "/product-images/"+ img_main;
     }
 
     @Transient
     public String getSubImagePath() {
         if (img_sub == null) return null;
 
-        return "/product-images/" + id + "/" + img_sub;
+        return "/product-images/" + img_sub;
     }
 
     @Transient
     public String getHoverImagePath() {
         if (img_hover == null) return null;
 
-        return "/product-images/" + id + "/" + img_hover;
+        return "/product-images/"  + img_hover;
     }
 }

@@ -1,13 +1,16 @@
 package com.FIS.shoppingcart.controller.user;
 
+import com.FIS.shoppingcart.dao.CartLineRepository;
+import com.FIS.shoppingcart.entities.CartLine;
 import com.FIS.shoppingcart.entities.Product;
-import com.FIS.shoppingcart.model.CartItemDTO;
 import com.FIS.shoppingcart.service.ProductService;
 import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,9 @@ import java.util.Set;
 public class CartItemController {
     @Autowired
     ProductService productService;
+
+    @Autowired
+    CartLineRepository cartLineRepository;
 
     @Autowired
     UserService userService;
@@ -55,27 +61,31 @@ public class CartItemController {
         double totalPriceAfterApplyCoupon = 0;
 
         if (object == null) {
-            CartItemDTO cartItemDTO = new CartItemDTO();
-            cartItemDTO.setProduct(product.get());
-            cartItemDTO.setQuantity(numproduct);
-            Map<Integer, CartItemDTO> map = new HashMap<>();// gio hang
-            map.put(id, cartItemDTO);
+            CartLine cartLine = new CartLine();
+            cartLine.setProduct(product.get());
+            cartLine.setQuantity(numproduct);
+            Map<Integer, CartLine> map = new HashMap<>();// gio hang
+            map.put(id, cartLine);
             session.setAttribute("cart", map);
+
 
             totalOfCart += numproduct;
             totalPrice = (numproduct*map.get(id).getProduct().getPrice());
             totalPriceAfterApplyCoupon = totalPrice;
+            cartLineRepository.save(cartLine);
 
 
         } else {
-            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;// lay ra map
-            CartItemDTO cartItemDTO = map.get(id);
+            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
+            CartLine cartLine = map.get(id);
 
-            if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
-                cartItemDTO = new CartItemDTO();
-                cartItemDTO.setProduct(product.get());
-                cartItemDTO.setQuantity(numproduct);
-                map.put(id, cartItemDTO);
+            if (cartLine == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
+                cartLine = new CartLine();
+                cartLine.setProduct(product.get());
+                cartLine.setQuantity(numproduct);
+                map.put(id, cartLine);
+
+
 
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
@@ -85,10 +95,11 @@ public class CartItemController {
                     totalPriceAfterApplyCoupon = totalPrice;
 
                 }
+
 
 
             } else { // neu co sp trong map roi thi tang sl cua sp len
-                cartItemDTO.setQuantity(cartItemDTO.getQuantity() + numproduct);
+                cartLine.setQuantity(cartLine.getQuantity() + numproduct);
 
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
@@ -98,6 +109,7 @@ public class CartItemController {
                     totalPriceAfterApplyCoupon = totalPrice;
 
                 }
+
             }
         }
 
@@ -110,7 +122,16 @@ public class CartItemController {
 
 
 
+    }
 
 
 
-}
+
+
+
+
+
+
+
+
+
