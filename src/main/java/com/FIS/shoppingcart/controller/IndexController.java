@@ -1,13 +1,13 @@
 package com.FIS.shoppingcart.controller;
-import com.FIS.shoppingcart.entities.CartLine;
-import com.FIS.shoppingcart.entities.Category;
-import com.FIS.shoppingcart.entities.Product;
+import com.FIS.shoppingcart.entities.*;
 import com.FIS.shoppingcart.model.CartItemDTO;
 import com.FIS.shoppingcart.service.CartService;
 import com.FIS.shoppingcart.service.CategoryService;
+import com.FIS.shoppingcart.service.LoginService;
 import com.FIS.shoppingcart.service.ProductService;
 import com.FIS.shoppingcart.service.impl.CartLineServiceImpl;
 import com.FIS.shoppingcart.service.impl.CartServiceImpl;
+import com.FIS.shoppingcart.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -34,6 +34,9 @@ public class IndexController {
     @Autowired
     @Qualifier("productService")
     private ProductService productService;
+    @Autowired
+
+    private UserServiceImpl userService;
 
     @Autowired
     private CartServiceImpl cartService;
@@ -47,14 +50,14 @@ public class IndexController {
     @GetMapping(value = "/trang-chu")
     public String getAllProduct(Model model, HttpServletRequest request, @ModelAttribute("categories") Category category, HttpSession session) {
 
-        //Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
-//        try {
-//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            model.addAttribute("id", principal.getId());
-//            model.addAttribute("user", userService.getUserById(principal.getId()));
-//        } catch (Exception e) {
-//            e.getStackTrace();
-//        }
+        Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
+        try {
+            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("id", principal.getId());
+            model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
 
         model.addAttribute("products", productService.findAllProducts());
 
@@ -138,14 +141,13 @@ public class IndexController {
     //Filter product by price, category,...
     @GetMapping(value = "/product")
     public String getAllProductForProductPage(Model model, HttpServletRequest request, HttpSession session) {
-
-//        try {
-//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            model.addAttribute("id", principal.getId());
-//            model.addAttribute("user", userService.getUserById(principal.getId()));
-//        } catch (Exception e) {
-//            e.getStackTrace();
-//        }
+        try {
+            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("id", principal.getId());
+            model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
 
         String keyword = request.getParameter("keyword") == null ? "" : request.getParameter("keyword");
 
@@ -245,13 +247,23 @@ public class IndexController {
     //=================================================Cart=====================================================
     //ViewCart
     @GetMapping("/cart/viewcart")
-    public String viewCartLine(Model model, @RequestParam int id,
-                               HttpSession session) {
+    public String viewCartLine(Model model,
+                               HttpSession session,HttpServletRequest request) {
+        Object object = session.getAttribute("cart");
+        int id=1;
+        try {
+            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Account user= userService.findUserByEmail(principal.getUsername());
+            model.addAttribute("id", principal.getId());
+            model.addAttribute("user", user);
 
-        List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
+        List<CartLine> cartLines = cartLineService.findCartLines();
 
         model.addAttribute("cartLines", cartLines);
-        return "/cart";
+        return "cart";
     }
 
 

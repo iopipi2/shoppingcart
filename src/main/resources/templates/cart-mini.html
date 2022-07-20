@@ -1,4 +1,4 @@
-<div th:fragment="cart-mini">
+<div th:fragment="cart-mini" xmlns:th="http://www.thymeleaf.org">
 
 <!-- Cart -->
 	<div class="wrap-header-cart js-panel-cart">
@@ -35,7 +35,7 @@
 					<div class="header-cart-total w-full p-tb-40" >Total: $[[${session.totalPrice}]]</div>
 
 					<div class="header-cart-buttons flex-w w-full" >
-						<th:block th:each="entry: ${#session.getAttribute('cart')}"><a  th:href="@{'/cart/viewcart?id=' + ${entry.value.id}}"
+						<th:block th:each="entry: ${#session.getAttribute('cart')}"><a  th:href="@{/cart/viewcart}"
 							class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
 							View Cart </a> <a th:href="@{/cart}"
 							class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10">

@@ -55,8 +55,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart findCart() {
         // TODO Auto-generated method stub
-
-        return null;
+        return ((UserModel) httpSession.getAttribute("userModel")).getCart();
+//        return null;
     }
 
 }
