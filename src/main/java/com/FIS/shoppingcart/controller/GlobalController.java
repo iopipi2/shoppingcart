@@ -1,12 +1,9 @@
 package com.FIS.shoppingcart.controller;
-import com.FIS.shoppingcart.entities.User;
 import com.FIS.shoppingcart.model.UserModel;
 import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import javax.servlet.http.HttpSession;
 
 @ControllerAdvice

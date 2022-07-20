@@ -4,7 +4,6 @@ package com.FIS.shoppingcart.entities;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 public class UserModel implements UserDetails {
@@ -13,7 +12,7 @@ public class UserModel implements UserDetails {
      *
      */
     private static final long serialVersionUID = 1L;
-    private User user;
+    private Account account;
     private int id;
     private String fullName;
     private String email;
@@ -64,11 +63,11 @@ public class UserModel implements UserDetails {
     public String toString() {
         return "UserModel [id=" + id + ", fullName=" + fullName + ", email=" + email + ", role=" + role + "]";
     }
-    public UserModel(User users){
-        this.user=users;
+    public UserModel(Account users){
+        this.account =users;
     }
     public boolean hasAuthority(String role) {
-            if(user.getName().equals(role)){
+            if(account.getName().equals(role)){
                 return true;
         }
         return false;

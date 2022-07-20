@@ -1,12 +1,9 @@
 package com.FIS.shoppingcart.service.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.FIS.shoppingcart.dao.UserRepository;
-import com.FIS.shoppingcart.entities.User;
+import com.FIS.shoppingcart.entities.Account;
 
 import com.FIS.shoppingcart.service.UserService;
 
@@ -29,41 +26,41 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public boolean saveUser(User user) {
+    public boolean saveUser(Account account) {
         // TODO Auto-generated method stub
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.saveAndFlush(user);
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        userRepository.saveAndFlush(account);
         return true;
     }
 
     @Override
-    public User addUser(User userDTO) {
+    public Account addUser(Account accountDTO) {
 
-        User user = new User();
+        Account account = new Account();
 
-        user.setId(userDTO.getId());
+        account.setId(accountDTO.getId());
 
-        user.setName(userDTO.getName());
+        account.setName(accountDTO.getName());
         //Lấy password người dùng nhập, mã hóa về dạng BCrypt r lưu database
         BCryptPasswordEncoder endcoder = new BCryptPasswordEncoder();
-        String rawPassword = userDTO.getPassword();
+        String rawPassword = accountDTO.getPassword();
         String endcodedPassword = endcoder.encode(rawPassword);
         System.out.println(endcodedPassword);
-        user.setPassword(endcodedPassword);
-        user.setUsername(userDTO.getUsername());
-        user.setCountry_id(userDTO.getCountry_id());
-        user.setAvatar(userDTO.getAvatar());
-        user.setCreated_time(new Date());
-        user.setRole("ROLE_USER");
-        user.setEnabled(true);
-        user.setState(userDTO.getState());
-        userRepository.saveAndFlush(user);
-        return user;
+        account.setPassword(endcodedPassword);
+        account.setUsername(accountDTO.getUsername());
+        account.setCountry_id(accountDTO.getCountry_id());
+        account.setAvatar(accountDTO.getAvatar());
+        account.setCreated_time(new Date());
+        account.setRole("ROLE_USER");
+        account.setEnabled(true);
+        account.setState(accountDTO.getState());
+        userRepository.saveAndFlush(account);
+        return account;
 
     }
 
     @Override
-    public User findUserByEmail(String email) {
+    public Account findUserByEmail(String email) {
         // TODO Auto-generated method stub
         return userRepository.findUserByEmail(email);
     }

@@ -31,7 +31,7 @@ CREATE TABLE `bill` (
   `pay` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_bill_user_idx` (`buyer_id`),
-  CONSTRAINT `fk_bill_user` FOREIGN KEY (`buyer_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `fk_bill_user` FOREIGN KEY (`buyer_id`) REFERENCES `account` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -132,13 +132,13 @@ INSERT INTO `product` VALUES (1,'Áo T-Shirt Oversize',20,'<div><ul><li>Chất l
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
+-- Table structure for table `account`
 --
 
-DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
+CREATE TABLE `account` (
   `id` int NOT NULL AUTO_INCREMENT,
   `mail` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8_bin DEFAULT NULL,
   `password` varchar(120) CHARACTER SET utf8mb3 COLLATE utf8_bin DEFAULT NULL,
@@ -159,13 +159,13 @@ CREATE TABLE `user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `account`
 --
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (52,'iamghost06@gmail.com','123456','Nguyen Ngoc Bach',NULL,NULL,NULL,NULL,0,NULL,'ROLE_USER',1,NULL,NULL,NULL),(54,'iamghost827@gmail.com','123456','Nguyễn Ngọc Bách','0969374719','64, Nguyễn Văn Trỗi, Hà Đông, Hà Nội','Ha Noi','Ha Noi',100000,NULL,'ROLE_ADMIN',1,100000,'ba2b7156370cf989082c7daa8a8c336f.jpg',NULL),(90,'ngocbachnguyen100@gmail.com','$2a$10$XZOHSDmtkUdck5M7NdelMe6Xnupo1csaviwZ3JLr8yoCUEnUYnRDm','Nguyễn Ngọc Bách',NULL,NULL,NULL,NULL,0,'2021-09-24 09:08:31','ROLE_USER',1,NULL,'69402738_2326329874274213_15742996465057792_n.jpg',NULL);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
+INSERT INTO `account` VALUES (52,'iamghost06@gmail.com','123456','Nguyen Ngoc Bach',NULL,NULL,NULL,NULL,0,NULL,'ROLE_USER',1,NULL,NULL,NULL),(54,'iamghost827@gmail.com','123456','Nguyễn Ngọc Bách','0969374719','64, Nguyễn Văn Trỗi, Hà Đông, Hà Nội','Ha Noi','Ha Noi',100000,NULL,'ROLE_ADMIN',1,100000,'ba2b7156370cf989082c7daa8a8c336f.jpg',NULL),(90,'ngocbachnguyen100@gmail.com','$2a$10$XZOHSDmtkUdck5M7NdelMe6Xnupo1csaviwZ3JLr8yoCUEnUYnRDm','Nguyễn Ngọc Bách',NULL,NULL,NULL,NULL,0,'2021-09-24 09:08:31','ROLE_USER',1,NULL,'69402738_2326329874274213_15742996465057792_n.jpg',NULL);
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

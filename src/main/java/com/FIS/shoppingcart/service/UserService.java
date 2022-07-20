@@ -1,15 +1,15 @@
 package com.FIS.shoppingcart.service;
 
-import com.FIS.shoppingcart.entities.User;
+import com.FIS.shoppingcart.entities.Account;
 
 public interface UserService {
 
-    boolean saveUser(User user);
+    boolean saveUser(Account account);
 
-    public User addUser(User user);
+    public Account addUser(Account account);
 
 
-    User findUserByEmail(String mail);
+    Account findUserByEmail(String mail);
 
 
 //    void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException;
