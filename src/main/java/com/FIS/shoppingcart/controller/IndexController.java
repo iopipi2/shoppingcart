@@ -1,7 +1,6 @@
 package com.FIS.shoppingcart.controller;
 import com.FIS.shoppingcart.entities.*;
-import com.FIS.shoppingcart.model.CartItemDTO;
-import com.FIS.shoppingcart.service.CartService;
+import com.FIS.shoppingcart.model.*;
 import com.FIS.shoppingcart.service.CategoryService;
 import com.FIS.shoppingcart.service.LoginService;
 import com.FIS.shoppingcart.service.ProductService;
@@ -10,11 +9,13 @@ import com.FIS.shoppingcart.service.impl.CartServiceImpl;
 import com.FIS.shoppingcart.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,7 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
+
+import java.text.NumberFormat;
+
+
 
 @Controller
 public class IndexController {
@@ -71,13 +77,13 @@ public class IndexController {
     public String getProductById(Model model, @RequestParam int id,
                                  HttpSession session) {
             Optional<Product> product=productService.findProductById(id);
-//        try {
-//            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//            model.addAttribute("id", principal.getId());
-//            model.addAttribute("user", userService.getUserById(principal.getId()));
-//        } catch (Exception e) {
-//            e.getStackTrace();
-//        }
+        try {
+            LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            model.addAttribute("id", principal.getId());
+            model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
+        } catch (Exception e) {
+            e.getStackTrace();
+        }
 
 //        long numberOfReview = reviewDao.countById(id);
 //
@@ -181,70 +187,198 @@ public class IndexController {
 
     //Add item to cart
     @RequestMapping("/add-to-cart")
-    public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
+    public String AddToCart(@RequestBody ProductDTO sanphamTrongGioHang,@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
                             @RequestParam(name = "num-product") int numproduct) throws IOException {
-
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("userid", principal.getId());
+        model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
+        Account account= userService.findUserByEmail(principal.getUsername());
         Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
         int totalOfCart = 0;
         double totalPrice = 0;
         double totalPriceAfterApplyCoupon = 0;
-
-        if (object == null) {
-            CartItemDTO cartItemDTO = new CartItemDTO();
-            cartItemDTO.setProduct(product.get());
-            cartItemDTO.setQuantity(numproduct);
-            Map<Integer, CartItemDTO> map = new HashMap<>();// gio hang
-            map.put(id, cartItemDTO);
-            session.setAttribute("cart", map);
-
-            totalOfCart += numproduct;
-            totalPrice = (numproduct*map.get(id).getProduct().getPrice());
-            totalPriceAfterApplyCoupon = totalPrice;
-
-
-        } else {
-            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;// lay ra map
-            CartItemDTO cartItemDTO = map.get(id);
-
-            if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
-                cartItemDTO = new CartItemDTO();
-                cartItemDTO.setProduct(product.get());
-                cartItemDTO.setQuantity(numproduct);
-                map.put(id, cartItemDTO);
-
-                Set<Integer> set = map.keySet();
-                for(Integer key : set) {
-
-                    totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-                    totalPriceAfterApplyCoupon = totalPrice;
-
-                }
-
-
-            } else { // neu co sp trong map roi thi tang sl cua sp len
-                cartItemDTO.setQuantity(cartItemDTO.getQuantity() + numproduct);
-
-                Set<Integer> set = map.keySet();
-                for(Integer key : set) {
-
-                    totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-                    totalPriceAfterApplyCoupon = totalPrice;
-
-                }
-            }
+        CartDTO giohang=null;
+        if(object!=null)
+        {
+            giohang= (CartDTO) object;
+        }
+        else {
+            giohang=new CartDTO();
+            session.setAttribute("cart",giohang);
         }
 
-        session.setAttribute("totalPriceAfterApplyCoupon",totalPriceAfterApplyCoupon);
-        session.setAttribute("totalPrice", totalPrice);
-        session.setAttribute("totalOfCart", totalOfCart);
+        List<ProductDTO> sanphamTrongGioHangs=giohang.getItemInCart();
+        boolean sanPhamDaCoTrongGioHangPhaiKhong = false;
 
+        // trường hợp đã có sản phẩm trong giỏ hàng.
+        for(ProductDTO item : sanphamTrongGioHangs) {
+            if(item.getId() == sanphamTrongGioHang.getId()) {
+                sanPhamDaCoTrongGioHangPhaiKhong = true;
+                item.setProductquantity(item.getProductquantity() + sanphamTrongGioHang.getProductquantity());
+            }
+
+            item.setPrice(item.getPrice().multiply(new BigDecimal(String.valueOf(item.getPrice()))));
+        }
+
+        // nếu sản phẩm chưa có trong giỏ hàng.
+        if(!sanPhamDaCoTrongGioHangPhaiKhong) {
+            Optional<Product> productDto = productService.findProductById(sanphamTrongGioHang.getId());
+            sanphamTrongGioHang.setName(product.get().getName());
+            sanphamTrongGioHang.setImg_main(product.get().getImg_main());
+            BigDecimal giaBan = product.get().getPrice();
+            sanphamTrongGioHang.setPrice(giaBan);
+            sanphamTrongGioHang.setTongGia(giaBan.multiply(new BigDecimal(sanphamTrongGioHang.getProductquantity())));
+            giohang.getItemInCart().add(sanphamTrongGioHang);
+        }
+        BigDecimal sum = BigDecimal.ZERO;
+
+        for(ProductDTO item : sanphamTrongGioHangs) {
+            sum = sum.add(item.getTongGia());
+
+
+        }
+        session.setAttribute("tong_gia", sum);
+        session.setAttribute("SL_SP_GIO_HANG", getTotalItems(request));
+        //=========================================================
+
+
+        session.setAttribute("totalPriceAfterApplyCoupon",totalPriceAfterApplyCoupon);
+        session.setAttribute("totalPrice", sanphamTrongGioHang.getPrice());
+        Cart cart=(Cart) session;
+        cart.setBuyer(account);
+        cartService.saveCart(cart);
         return "redirect:/product-detail?id=" + id;
     }
 
+    private int getTotalItems(final HttpServletRequest request) {
+        HttpSession httpSession = request.getSession();
+
+        if (httpSession.getAttribute("cart") == null) {
+            return 0;
+        }
+        CartDTO cart = (CartDTO) httpSession.getAttribute("cart");
+        List<ProductDTO> cartItems = cart.getItemInCart();
+        int total = 0;
+        for (ProductDTO item : cartItems) {
+            total += 1;
+        }
+        return total;
+    }
+    @RequestMapping(value = { "/xoa-sp-gio-hang" }, method = RequestMethod.POST)
+    public ResponseEntity<AjaxResponse> xoaSP_in_Cart(@RequestBody ProductDTO sanPhamTrongGioHang,
+                                                      final ModelMap model, final HttpServletRequest request, final HttpServletResponse response)
+            throws IOException {
+        HttpSession httpSession = request.getSession();
+
+        CartDTO gioHang = (CartDTO) httpSession.getAttribute("cart");
+        ProductDTO itemRemove = new ProductDTO();
+        for (ProductDTO item : gioHang.getItemInCart()) {
+            if(item.getId() == sanPhamTrongGioHang.getId())
+            {
+                itemRemove = item;
+            }
+        }
+        gioHang.getItemInCart().remove(itemRemove);
+
+        BigDecimal sum = BigDecimal.ZERO;
+        for(ProductDTO item : gioHang.getItemInCart()) {
+            sum = sum.add(item.getTongGia());
+        }
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        String total = currencyVN.format(sum);
+        httpSession.setAttribute("tong_gia", sum);
+        httpSession.setAttribute("SL_SP_GIO_HANG", getTotalItems(request));
+        ParseNumToString parseNumToString=new ParseNumToString();
+        parseNumToString.setSoLuong(String.valueOf(getTotalItems(request)));
+        parseNumToString.setTongGia(total);
+        return ResponseEntity.ok(new AjaxResponse(200, parseNumToString));
+    }
+
+    @RequestMapping(value = { "/update-sp-gio-hang" }, method = RequestMethod.POST)
+    public ResponseEntity<AjaxResponse> update_SP_in_Cart(@RequestBody ProductDTO productInCart,
+                                                          final ModelMap model, final HttpServletRequest request, final HttpServletResponse response)
+            throws IOException {
+        HttpSession httpSession = request.getSession();
+        CartDTO gioHang = (CartDTO) httpSession.getAttribute("cart");
+        for (ProductDTO item : gioHang.getItemInCart()) {
+            if(item.getId() == productInCart.getId())
+            {
+                item.setProductquantity(productInCart.getProductquantity());
+                item.setTongGia(item.getPrice().multiply(new BigDecimal(item.getProductquantity())));
+                productInCart.setTongGia(item.getTongGia());
+            }
+        }
+        BigDecimal sum = BigDecimal.ZERO;
+        for(ProductDTO item : gioHang.getItemInCart()) {
+            sum = sum.add(item.getTongGia());
+        }
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
+        String tongGia =currencyVN.format(sum);
+        String soLuong = currencyVN.format(productInCart.getTongGia());
+        ParseNumToString parseNumToString = new ParseNumToString();
+        parseNumToString.setTongGia(tongGia);
+        parseNumToString.setSoLuong(soLuong);
+        httpSession.setAttribute("tong_gia", sum);
+        return ResponseEntity.ok(new AjaxResponse(200, parseNumToString));
+    }
+//     if (object == null) {
+//        CartLine cartItemDTO = new CartLine();
+//        cartItemDTO.setProduct(product.get());
+//        cartItemDTO.setQuantity(numproduct);
+//        Map<Integer, CartLine> map = new HashMap<>();
+//        map.put(id, cartItemDTO);
+//        session.setAttribute("cart", map);
+//
+//        totalOfCart += numproduct;
+//        totalPrice = (numproduct*map.get(id).getProduct().getPrice());
+//        totalPriceAfterApplyCoupon = totalPrice;
+//
+//
+//    } else {
+//        Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;// lay ra map
+//        CartItemDTO cartItemDTO = map.get(id);
+//
+//        if (cartItemDTO == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
+//            cartItemDTO = new CartItemDTO();
+//            cartItemDTO.setUser(account);
+//            cartItemDTO.setProduct(product.get());
+//            cartItemDTO.setQuantity(numproduct);
+//            map.put(id, cartItemDTO);
+//            Set<Integer> set = map.keySet();
+//            for(Integer key : set) {
+//                totalOfCart += map.get(key).getQuantity();
+//                totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+//                totalPriceAfterApplyCoupon = totalPrice;
+//            }
+//        } else { // neu co sp trong map roi thi tang sl cua sp len
+//            cartItemDTO.setQuantity(cartItemDTO.getQuantity() + numproduct);
+//
+//            Set<Integer> set = map.keySet();
+//            for(Integer key : set) {
+//                totalOfCart += map.get(key).getQuantity();
+//                totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+//                totalPriceAfterApplyCoupon = totalPrice;
+//            }
+//        }
+//    }
+
     //=================================================Cart=====================================================
+
+    //Cart
+    @GetMapping("/My Order")
+    public String viewallCart(Model model,@RequestParam int id) {
+        //Test find by user id
+        //List<Cart> allcart=cartService.findAllCart();
+
+        List<CartLine> cartItem = cartLineService.findCartLineByCartId(id);
+        System.out.println(cartItem);
+        model.addAttribute("cartLines", cartItem);
+
+        return "";
+    }
     //ViewCart
     @GetMapping("/cart/viewcart")
     public String viewCartLine(Model model,
@@ -261,7 +395,7 @@ public class IndexController {
             e.getStackTrace();
         }
         List<CartLine> cartLines = cartLineService.findCartLines();
-
+        model.addAttribute("cart",object);
         model.addAttribute("cartLines", cartLines);
         return "cart";
     }
@@ -306,8 +440,6 @@ public class IndexController {
 //        }
 //    }
 //
-
-
 
 
 

@@ -526,7 +526,7 @@
                             </p>
 
                             <!--  -->
-                            <form th:action="@{/add-to-cart}" method="post">
+                            <form th:action="@{/add-to-cart}" method="post" id="product_addtocart_form">
                             <div class="p-t-33">
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-203 flex-c-m respon6">
@@ -565,7 +565,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="add-to-cart">
+                                    <label for="qty">Số Lượng:</label>
+                                    <div class="pull-left">
+                                        <div class="custom pull-left">
+                                            <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="icon-plus">&nbsp;</i></button>
+                                            <input type="text" class="input-text qty" title="Qty" value="1" maxlength="12" id="qty" name="qty" min="1" max="${product.productquantity }">
 
+                                            <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 0 ) result.value--;return false;" class="reduced items-count" type="button"><i class="icon-minus">&nbsp;</i></button>
+                                        </div>
+                                    </div>
+
+                                    <button onclick="order.add_to_cart(${product.id}, parseInt($('#qty').val()));" class="button btn-cart" title="Add to Cart" type="button"><span><i class="icon-basket"></i> Thêm vào giỏ</span></button>
+
+                                </div>
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-204 flex-w flex-m respon6-next">
                                         <div class="wrap-num-product flex-w m-r-20 m-tb-10">
@@ -757,6 +770,7 @@
 		});
 
 	</script>
+
 <!--===============================================================================================-->
 <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script>

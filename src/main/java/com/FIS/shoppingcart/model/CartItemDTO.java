@@ -1,21 +1,33 @@
 package com.FIS.shoppingcart.model;
 
 
+import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Product;
 
 public class CartItemDTO {
 
     private Integer id;
     private Product product;
-    private UserModel user;
+
     private int quantity;
 
-    public CartItemDTO(Integer id, Product product, UserModel user, int quantity) {
+    private long price;
+
+    public long getPrice() {
+        return price;
+    }
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public CartItemDTO(Integer id, Product product, int quantity, long price) {
         super();
         this.id = id;
         this.product = product;
-        this.user = user;
+
         this.quantity = quantity;
+        this.price=price;
     }
 
     public CartItemDTO() {
@@ -39,13 +51,6 @@ public class CartItemDTO {
         this.product = product;
     }
 
-    public UserModel getUser() {
-        return user;
-    }
-
-    public void setUser(UserModel user) {
-        this.user = user;
-    }
 
     public int getQuantity() {
         return quantity;

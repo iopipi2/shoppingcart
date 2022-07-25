@@ -2,25 +2,37 @@ package com.FIS.shoppingcart.model;
 
 
 import javax.persistence.Transient;
+import java.math.BigDecimal;
 
 public class ProductDTO {
 
     private int id;
     private String name;
-    private Long price;
+    private BigDecimal price;
     private String description;
     private CategoriesDTO category;
     private String img_main;
     private String img_hover;
     private String img_sub;
 
+    private BigDecimal tongGia;
+    private int productquantity;
+
+    public int getProductquantity() {
+        return productquantity;
+    }
+
+    public void setProductquantity(int productquantity) {
+        this.productquantity = productquantity;
+    }
+
     public ProductDTO() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public ProductDTO(int id, String name, Long price, String description, CategoriesDTO category, String img_main,
-                      String img_hover, String img_sub) {
+    public ProductDTO(int id, String name, BigDecimal price, String description, CategoriesDTO category, String img_main,
+                      String img_hover, String img_sub,int productquantity, BigDecimal tongGia) {
         super();
         this.id = id;
         this.name = name;
@@ -30,6 +42,7 @@ public class ProductDTO {
         this.img_main = img_main;
         this.img_hover = img_hover;
         this.img_sub = img_sub;
+        this.productquantity=productquantity;
     }
 
 
@@ -50,13 +63,10 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public Long getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
-    }
 
     public String getDescription() {
         return description;
@@ -96,6 +106,18 @@ public class ProductDTO {
 
     public void setImg_sub(String img_sub) {
         this.img_sub = img_sub;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getTongGia() {
+        return tongGia;
+    }
+
+    public void setTongGia(BigDecimal tongGia) {
+        this.tongGia = tongGia;
     }
 
     @Transient

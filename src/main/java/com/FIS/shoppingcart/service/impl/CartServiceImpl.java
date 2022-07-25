@@ -2,6 +2,7 @@ package com.FIS.shoppingcart.service.impl;
 
 import com.FIS.shoppingcart.dao.CartRepository;
 import com.FIS.shoppingcart.dao.UserRepository;
+import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
 import com.FIS.shoppingcart.entities.UserModel;
 import com.FIS.shoppingcart.service.CartService;
@@ -17,6 +18,7 @@ public class CartServiceImpl implements CartService {
 
     @Autowired
     private UserRepository userRepository;
+
 
     @Autowired
     private CartService cartService;
@@ -50,6 +52,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Cart> findCartByBuyerId(int buyerId) {
         return cartRepository.findAllCartByBuyerId(buyerId);
+    }
+
+    @Override
+    public List<Cart> findByBuyer(Account buyer) {
+        return cartRepository.findByBuyer(buyer);
     }
 
     @Override

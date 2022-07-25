@@ -1,7 +1,7 @@
-<div th:fragment="cart-mini" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="cart-mini" xmlns:th="http://www.thymeleaf.org" prefix="c" uri="http://java.sun.com/jsp/jstl/core">
 
 <!-- Cart -->
-	<div class="wrap-header-cart js-panel-cart">
+	<div class="wrap-header-cart js-panel-cart" >
 		<div class="s-full js-hide-cart"></div>
 
 		<div class="header-cart flex-col-l p-l-65 p-r-25">
@@ -13,26 +13,34 @@
 					<i class="zmdi zmdi-close"></i>
 				</div>
 			</div>
+			<div>
+				<c:when test="${empty cart.sanphamTrongGioHangs}"> <div class="alert alert-danger">
+					<strong>!Không </strong> có sản phẩm trong giỏ hàng
 
+				</div></c:when>
+			</div>
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
-					<th:block th:each="entry: ${#session.getAttribute('cart')}">
+					<th:block th:each="item: ${#session.getAttribute('cart')}">
 						<li class="header-cart-item flex-w flex-t m-b-12">
+							<div><a class="fas fa-trash icon-dark" th:href="@{'/trang-chu'}" ></a></div>
 							<div class="header-cart-item-img">
-								<img th:src="@{${entry.value.product.mainImagePath}}" alt="IMG">
+								<img th:src="@{${item.value.mainImagePath}}" alt="IMG">
 							</div>
 	
 							<div class="header-cart-item-txt p-t-8">
-								<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04" th:text="${entry.value.product.name}">
-									</a> <span class="header-cart-item-info"> [[${entry.value.quantity}]] x $[[${entry.value.product.price}]]
-									</span>
+								<a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04" th:text="${item.value.name}">
+									</a>
+
+<!--								<span class="header-cart-item-info"> [[${entry.value.quantity}]] x $[[${entry.value.product.price}]]-->
+<!--									</span>-->
 							</div>
 						</li>
 					</th:block>
 				</ul>
 
 				<div class="w-full">
-					<div class="header-cart-total w-full p-tb-40" >Total: $[[${session.totalPrice}]]</div>
+					<div class="header-cart-total w-full p-tb-40" >Total: $[[${session.sum}]]</div>
 
 					<div class="header-cart-buttons flex-w w-full" >
 						<th:block th:each="entry: ${#session.getAttribute('cart')}"><a  th:href="@{/cart/viewcart}"

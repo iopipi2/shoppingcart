@@ -1,6 +1,7 @@
 package com.FIS.shoppingcart.entities;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -107,8 +108,8 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Long getPrice() {
-        return price;
+    public BigDecimal getPrice() {
+        return BigDecimal.valueOf(price);
     }
 
 
