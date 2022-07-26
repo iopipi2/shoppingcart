@@ -25,7 +25,7 @@ public class Cart implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "buy_date")
+    @Column(name = "bill_date")
     private Date buyDate;
 
     @Column(name = "price_total")
@@ -42,17 +42,6 @@ public class Cart implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartLine> cartLine;
-
-    @Column(name = "pay")
-    private String pay;
-
-    public String getPay() {
-        return pay;
-    }
-
-    public void setPay(String pay) {
-        this.pay = pay;
-    }
 
     public int getId() {
         return id;

@@ -20,11 +20,11 @@ public class CartLine {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    public Product product;
 
     @ManyToOne
     @JoinColumn(name = "cart_id")
-    private Cart cart;
+    public Cart cart;
 
     private int quantity;
 
