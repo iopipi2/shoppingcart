@@ -1,13 +1,6 @@
 package com.FIS.shoppingcart.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="cart_line")
@@ -31,6 +24,17 @@ public class  CartLine {
     public CartLine() {
         super();
         // TODO Auto-generated constructor stub
+    }
+
+    @Transient
+    private int numorder;
+
+    public int getNumorder() {
+        return numorder;
+    }
+
+    public void setNumorder(int numorder) {
+        this.numorder = numorder;
     }
 
     public CartLine(Integer id, Product product , int quantity) {

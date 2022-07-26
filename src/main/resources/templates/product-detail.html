@@ -456,7 +456,7 @@
                 </div>
             </div>
         </div>
-
+<form method="POST" modelAttribute="cartForm" th:formaction="@{/add-to-cart}">
         <div class="container" >
             <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
                 <button class="how-pos3 hov3 trans-04 js-hide-modal1">
@@ -510,7 +510,7 @@
                     <div class="col-md-6 col-lg-5 p-b-30" >
                         <div class="p-r-50 p-t-5 p-lr-0-lg">
                             <h4 class="mtext-105 cl2 js-name-detail p-b-14">
-
+                                <a th:text="${products.id}" hidden="true" name="id"></a>
                                 <a th:text="${products.name}">
                                 </a>
                             </h4>
@@ -526,7 +526,7 @@
                             </p>
 
                             <!--  -->
-                            <form th:action="@{/add-to-cart}" method="post" id="product_addtocart_form">
+
                             <div class="p-t-33">
                                 <div class="flex-w flex-r-m p-b-10">
                                     <div class="size-203 flex-c-m respon6">
@@ -566,17 +566,8 @@
                                     </div>
                                 </div>
                                 <div class="add-to-cart">
-                                    <label for="qty">Số Lượng:</label>
-                                    <div class="pull-left">
-                                        <div class="custom pull-left">
-                                            <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="increase items-count" type="button"><i class="icon-plus">&nbsp;</i></button>
-                                            <input type="text" class="input-text qty" title="Qty" value="1" maxlength="12" id="qty" name="qty" min="1" max="${product.productquantity }">
-
-                                            <button onClick="var result = document.getElementById('qty'); var qty = result.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 0 ) result.value--;return false;" class="reduced items-count" type="button"><i class="icon-minus">&nbsp;</i></button>
-                                        </div>
-                                    </div>
-
-                                    <button onclick="order.add_to_cart(${product.id}, parseInt($('#qty').val()));" class="button btn-cart" title="Add to Cart" type="button"><span><i class="icon-basket"></i> Thêm vào giỏ</span></button>
+                                    <label>Số Lượng:</label>
+<!--                                    <button onclick="order.add_to_cart(${product.id}, parseInt($('#qty').val()));" class="button btn-cart" title="Add to Cart" type="button"><span><i class="icon-basket"></i> Thêm vào giỏ</span></button>-->
 
                                 </div>
                                 <div class="flex-w flex-r-m p-b-10">
@@ -585,21 +576,21 @@
                                             <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
                                                 <i class="fs-16 zmdi zmdi-minus"></i>
                                             </div>
-
-                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number" name="numorder" value="1">
 
                                             <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                 <i class="fs-16 zmdi zmdi-plus"></i>
                                             </div>
                                         </div>
 
-                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" th:formaction="@{'/add-to-cart?id='+${products.id}}">
-                                            <a>Add to cart</a>
+                                        <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail" type="submit" value="Add to cart">
+<!--                                            th:formaction="@{'/add-to-cart?id='+${products.id}}"-->
+<!--                                            <a>Add to cart</a>-->
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            </form>
+
                             <!--  -->
                             <div class="flex-w flex-m p-l-100 p-t-40 respon7">
                                 <div class="flex-m bor9 p-r-10 m-r-11">
@@ -622,14 +613,12 @@
                             </div>
                         </div>
                     </div>
-                    </form>
+
                 </div>
             </div>
-                        </form>
-                    </div>
-                </div>
             </th:block>
         </div>
+</form>
 
 <!--        <div class="row isotope-grid">-->
 <!--            <th:block th:each="p : ${products}">-->
@@ -770,6 +759,13 @@
 		});
 
 	</script>
+
+<script>
+        function showAlert() {
+          var myText = "Thêm giỏ hàng thành công!!!!";
+          alert (myText);
+        }
+</script>
 
 <!--===============================================================================================-->
 <script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
