@@ -238,15 +238,9 @@ public class IndexController {
             giohang.setPriceTotal(sum);
         }
         session.setAttribute("cart",giohang);
-
-
-
         //Cart cart= (Cart)session;
-
         Cart cart= new Cart();
         BeanUtils.copyProperties(giohang, cart);
-
-
         cart.setBuyer(account);
         cartService.saveCart(cart);
         return "redirect:/product-detail?id=" + productId;
