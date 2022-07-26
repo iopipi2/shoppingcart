@@ -3,23 +3,18 @@ package com.FIS.shoppingcart.controller.user;
 import com.FIS.shoppingcart.dao.CartLineRepository;
 import com.FIS.shoppingcart.entities.CartLine;
 import com.FIS.shoppingcart.entities.Product;
+import com.FIS.shoppingcart.model.CartItemDTO;
 import com.FIS.shoppingcart.service.ProductService;
 import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class CartItemController {
@@ -119,6 +114,32 @@ public class CartItemController {
 
         return "redirect:/product-detail?id=" + id;
     }
+
+    @SuppressWarnings({"deprecation","unchecked","unused"})
+    @GetMapping(value = "/delete-from-cart")
+    public String deleteFromCart(HttpServletRequest req, @RequestParam(name = "key", required = true) int key){
+        HttpSession session = req.getSession();
+        Object object = session.getAttribute("cart");
+
+        int totalOfCart = (int) session.getValue("totalOfCart");
+        double totalPrice = (double) session.getValue("totalPrice");
+        double totalPriceAfterApplyCoupon = (double) session.getValue("totalPriceAfterApplyCoupon");
+
+        if(object != null) {
+            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;
+            session.setAttribute("totalOfCart",totalOfCart - map.get(key).getQuantity());
+            session.setAttribute("totalPrice", totalPrice - map.get(key).getQuantity()*map.get(key).getProduct().getPrice());
+            session.setAttribute("totalPriceAfterApplyCoupon", totalPriceAfterApplyCoupon - map.get(key).getQuantity()*map.get(key).getProduct().getPrice());
+
+            map.remove(key);
+            session.setAttribute("cart",map);
+        }
+
+        return "redirect:/cart";
+
+    }
+
+
 
 
 

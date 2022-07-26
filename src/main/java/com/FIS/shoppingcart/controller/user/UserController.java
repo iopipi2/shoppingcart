@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.FIS.shoppingcart.dao.UserRepository;
-import com.FIS.shoppingcart.entities.User;
+import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.service.UserService;
 
 
@@ -34,11 +34,11 @@ public class UserController {
 
     @GetMapping("/list-user")
     public String getAllUser(Model model) {
-        List<User> users = userService.getAllUser();
-        System.out.println(users);
+        List<Account> accounts = userService.getAllUser();
+        System.out.println(accounts);
 
-        model.addAttribute("user", users);
-        model.addAttribute("u", new User());
+        model.addAttribute("user", accounts);
+        model.addAttribute("u", new Account());
 
         return "/admin/viewAddUser";
     }
@@ -49,18 +49,18 @@ public class UserController {
 
     @GetMapping("/infoUser")
     public String infoUser(Model model) {
-        User users = userService.getUserById(1);
+        Account users = userService.getUserById(1);
         model.addAttribute("user",users);
         System.out.println(users);
          return "/user/detailUser";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editUser(@ModelAttribute (name = "user") User user, @RequestParam (name = "avatarImage") MultipartFile file) throws IOException {
+    public String editUser(@ModelAttribute (name = "user") Account account, @RequestParam (name = "avatarImage") MultipartFile file) throws IOException {
         String fileName =org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
-        user.setAvatar(fileName);
-        userRepository.save(user);
-        String uploadAvt = "./avatar-images/" + user.getId();
+        account.setAvatar(fileName);
+        userRepository.save(account);
+        String uploadAvt = "./avatar-images/" + account.getId();
         Path uploadPath = Paths.get(uploadAvt);
         if(!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);

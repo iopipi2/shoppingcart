@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.FIS.shoppingcart.dao.UserRepository;
-import com.FIS.shoppingcart.entities.User;
+import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,23 +27,23 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public List<User> getAllUser() {
-        List<User> users = userRepository.findAll();
+    public List<Account> getAllUser() {
+        List<Account> accounts = userRepository.findAll();
 
-        return users;
+        return accounts;
     }
 
     @Override
-    public User getUserById(int id) {
-        User user = userRepository.getById(id);
-        System.out.println(user);
-        return user;
+    public Account getUserById(int id) {
+        Account account = userRepository.getById(id);
+        System.out.println(account);
+        return account;
     }
 
     @Override
-    public User get(int id) {
+    public Account get(int id) {
 
-            Optional<User> result = userRepository.findById(id);
+            Optional<Account> result = userRepository.findById(id);
             return userRepository.findById(id).get();
 
     }

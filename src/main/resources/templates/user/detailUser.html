@@ -326,7 +326,7 @@
 </head>
 
 <body>
-    <div th:replace="/user/header :: header"></div>
+    <div th:replace="/account/header :: header"></div>
     <div class="container-xl">
         <div class="table-responsive">
             <div class="table-wrapper">
@@ -352,10 +352,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <th:block th:each="p : ${user}">
+                        <th:block th:each="p : ${account}">
                             <tr>
                                 <td><img style="border-radius: 50%; height:45px; width:45px; margin:2px; background-color: black;"
-                                        th:src="@{${p.avatarImagePath} == null} ? @{/static/user.png} : @{${p.avatarImagePath}}">
+                                        th:src="@{${p.avatarImagePath} == null} ? @{/static/account.png} : @{${p.avatarImagePath}}">
                                 </td>
                                 <td th:text="${p.username}"></td>
                                 <td th:text="${p.phone}"></td>

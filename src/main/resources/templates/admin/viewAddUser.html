@@ -355,9 +355,9 @@ table.table .avatar {
                 </tr>
                 </thead>
                 <tbody>
-                <th:block th:each="p : ${users}">
+                <th:block th:each="p : ${accounts}">
                     <tr>
-                        <td><img style="border-radius: 50%; height:45px; width:45px; margin:2px; background-color: black;" th:src="@{${p.avatarImagePath} == null} ? @{/images/icons/user.png} : @{${p.avatarImagePath}}"> </td>
+                        <td><img style="border-radius: 50%; height:45px; width:45px; margin:2px; background-color: black;" th:src="@{${p.avatarImagePath} == null} ? @{/images/icons/account.png} : @{${p.avatarImagePath}}"> </td>
                         <td th:text="${p.username}"></td>
                         <td th:text="${p.password}"></td>
                         <td th:text="${p.role}"></td>
@@ -479,7 +479,7 @@ table.table .avatar {
 <div id="addEmployeeModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form th:action="@{/admin/user}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/admin/account}" method="post" enctype="multipart/form-data">
                 <div class="modal-header">
                     <h4 class="modal-title">Add User</h4>
                     <button type="button" class="close" data-dismiss="modal"

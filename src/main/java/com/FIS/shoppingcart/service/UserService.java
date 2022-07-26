@@ -1,15 +1,15 @@
 package com.FIS.shoppingcart.service;
 
-import com.FIS.shoppingcart.entities.User;
+import com.FIS.shoppingcart.entities.Account;
 
 import java.util.List;
 
 public interface UserService {
-public List<User> getAllUser();
+public List<Account> getAllUser();
 
-public User getUserById(int id);
+public Account getUserById(int id);
 
-public User get(int id);
+public Account get(int id);
 
 
 

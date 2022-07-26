@@ -35,7 +35,7 @@ public class Cart implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "buyer_id")
-    private User buyer;
+    private Account buyer;
 
     @Column(name = "status")
     private String status;
@@ -78,11 +78,11 @@ public class Cart implements Serializable {
         this.priceTotal = priceTotal;
     }
 
-    public User getBuyer() {
+    public Account getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(User buyer) {
+    public void setBuyer(Account buyer) {
         this.buyer = buyer;
     }
 
