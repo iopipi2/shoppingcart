@@ -246,64 +246,7 @@ public class IndexController {
         return "redirect:/product-detail?id=" + productId;
     }
 
-    @PostMapping(value = "/check-out")
-    public String checkout(HttpSession session, Model model,
-                            @ModelAttribute("cartForm") CartLine cartLineForm) throws IOException {
-        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("userid", principal.getId());
-        model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
-        Account account= userService.findUserByEmail(principal.getUsername());
-        int productId=cartLineForm.getId();
-        Optional<Product> product = productService.findProductById(productId); // lay thong tin san pham
-        Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
 
-        CartDTO giohang=null;
-        //check object
-        if(object!=null)
-        {
-            giohang= (CartDTO) object;
-            List<CartItemDTO> cartItemDTOS=giohang.getItemInCart();
-
-        }
-        else {
-            giohang=new CartDTO();
-            session.setAttribute("cart",giohang);
-        }
-        int numorder=cartLineForm.getNumorder();
-        List<CartItemDTO> sanphamTrongGioHangs=giohang.getItemInCart();
-        boolean sanPhamDaCoTrongGioHangPhaiKhong = false;
-
-        // trường hợp đã có sản phẩm trong giỏ hàng.
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            if(item.getId() == product.get().getId()) {
-                sanPhamDaCoTrongGioHangPhaiKhong = true;
-                item.setQuantity(item.getQuantity() + numorder);
-            }
-            item.setTongGia((new BigDecimal(String.valueOf( item.getQuantity()))).multiply(new BigDecimal(String.valueOf(item.getPrice()))));
-        }
-
-        // nếu sản phẩm chưa có trong giỏ hàng.
-        if(!sanPhamDaCoTrongGioHangPhaiKhong) {
-            Optional<Product> productDto = productService.findProductById(product.get().getId());
-            CartItemDTO addNewProduct= new CartItemDTO();
-            addNewProduct.setProduct(productDto.get());
-            addNewProduct.setTongGia((new BigDecimal(String.valueOf(numorder))).multiply(productDto.get().getPrice()));
-            sanphamTrongGioHangs.add(addNewProduct);
-            giohang.setItemInCart(sanphamTrongGioHangs);
-        }
-        BigDecimal sum = BigDecimal.ZERO;
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            sum = sum.add(item.getTongGia());
-            giohang.setPriceTotal(sum);
-        }
-        session.setAttribute("cart",giohang);
-        //Cart cart= (Cart)session;
-        Cart cart= new Cart();
-        BeanUtils.copyProperties(giohang, cart);
-        cart.setBuyer(account);
-        cartService.saveCart(cart);
-        return "redirect:/product-detail?id=" + productId;
-    }
 //    @RequestMapping(value = { "/xoa-sp-gio-hang" }, method = RequestMethod.POST)
 //    public ResponseEntity<AjaxResponse> xoaSP_in_Cart(@RequestBody ProductDTO sanPhamTrongGioHang,
 //                                                      final ModelMap model, final HttpServletRequest request, final HttpServletResponse response)
