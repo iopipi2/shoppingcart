@@ -35,8 +35,7 @@ public class CartController {
     }
 
     @GetMapping("/user/cart/cartline")
-    public String viewCartLine(Model model, @RequestParam int id,
-                               HttpSession session) {
+    public String viewCartLine(Model model, @RequestParam int id) {
 
         List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
         model.addAttribute("cartLines", cartLines);

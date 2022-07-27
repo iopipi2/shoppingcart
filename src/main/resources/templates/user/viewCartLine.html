@@ -336,30 +336,19 @@ table.table .avatar {
                             Quản lý <b>Giỏ hàng</b>
                         </h2>
                     </div>
-                    <div class="col-sm-6">
-                        <a href="#addEmployeeModal" class="btn btn-success"
-                           data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New Employee</span></a>
-                    </div>
                 </div>
             </div>
             <div class="container">
-
-                <if test="${not empty message }">
-                    <div class="alert alert-info">
-                        <h3 class="text-center">${message }</h3>
-                    </div>
-                </if>
 
                 <choose>
                     <when test="${not empty cartLines }">
                         <table id="cart" class="table table-hover table-condensed">
                             <thead>
                             <tr>
-                                <th style="width: 50%">Product</th>
-                                <th style="width: 10%">Price</th>
-                                <th style="width: 8%">Quantity</th>
-                                <th style="width: 22%" class="text-center">Subtotal</th>
+                                <th style="width: 20%" class="text-center">Tên sản phẩm </th>
+                                <th style="width: 10%" class="text-center">Giá</th>
+                                <th style="width: 10%" class="text-center">Số lượng</th>
+                                <th style="width: 20%" class="text-center">Tổng giá</th>
                                 <th style="width: 10%"></th>
                             </tr>
                             </thead>
@@ -369,50 +358,20 @@ table.table .avatar {
                             <th:block th:each="c : ${cartLines}">
 
                                 <tr>
-                                    <td><span th:text=" ${c.id}"></span></td>
-                                    <td><span th:text=" ${c.product.id
-                                    }"></span></td>
-                                    <td><span th:text=" ${c.cart.id}"></span></td>
-<!--                                    <td><span th:text="${c.cart_id}"></span></td>-->
-                                    <td><span th:text="${c.quantity}"></span></td>
+                                    <td class="text-center"><span th:text=" ${c.product.name}"></span></td>
+                                    <td class="text-center"><span th:text=" ${c.product.price} + '$'"></span></td>
+                                    <td class="text-center"><span th:text=" ${c.quantity}"></span></td>
+                                    <td class="text-center"><span th:text="${c.cart.priceTotal}"></span></td>
 
                                 </tr>
 
-                            </th:block>>
+                            </th:block>
 
 
                             </tbody>
 
-
-<!--                            <tfoot>-->
-<!--                            <tr class="visible-xs">-->
-<!--                                <td class="text-center"><strong>Total &#8377;-->
-<!--                                    ${userModel.cart.grandTotal }</strong></td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span-->
-<!--                                        class="glyphicon glyphicon-chevron-left"></span> Continue-->
-<!--                                    Shopping</a></td>-->
-<!--                                <td colspan="2" class="hidden-xs"></td>-->
-<!--                                <td class="hidden-xs text-center"><strong>Total-->
-<!--                                    &#8377; ${userModel.cart.grandTotal }</strong></td>-->
-<!--                                <td><a href="#" class="btn btn-success btn-block">Checkout-->
-<!--                                    <span class="glyphicon glyphicon-chevron-right"></span>-->
-<!--                                </a></td>-->
-<!--                            </tr>-->
-<!--                            </tfoot>-->
-
                         </table>
                     </when>
-                    <otherwise>
-                        <div class="jumbotron">
-                            <div class="text-center">
-                                <h1>Your cart is empty!</h1>
-
-                            </div>
-
-                        </div>
-                    </otherwise>
 
                 </choose>
 

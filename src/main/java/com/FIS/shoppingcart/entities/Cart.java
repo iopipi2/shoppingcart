@@ -29,7 +29,7 @@ public class Cart implements Serializable {
     private Date buyDate;
 
     @Column(name = "price_total")
-    private Long priceTotal;
+    public Long priceTotal;
 
 
 
