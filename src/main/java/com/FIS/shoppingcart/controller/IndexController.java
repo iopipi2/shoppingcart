@@ -10,6 +10,7 @@ import com.FIS.shoppingcart.service.impl.UserServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -187,122 +188,83 @@ public class IndexController {
     }
 
     //Add item to cart
-    @PostMapping(value = "/add-to-cart")
-    public String AddToCart(HttpSession session, Model model,
-                            @ModelAttribute("cartForm") CartLine cartLineForm) throws IOException {
-        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("userid", principal.getId());
-        model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
-        Account account= userService.findUserByEmail(principal.getUsername());
-        int productId=cartLineForm.getId();
-        Optional<Product> product = productService.findProductById(productId); // lay thong tin san pham
+    @RequestMapping("/add-to-cart")
+    public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
+                            @RequestParam(name = "num-product") int numproduct) throws IOException {
+
+        Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
+        int totalOfCart = 0;
+        BigDecimal totalPrice =BigDecimal.valueOf(0);
+        if (object == null) {
+            CartLine cartLine = new CartLine();
+            cartLine.setProduct(product.get());
+            cartLine.setQuantity(numproduct);
+            Map<Integer, CartLine> map = new HashMap<>();// gio hang
+            map.put(id, cartLine);
+            session.setAttribute("cart", map);
+            totalOfCart += numproduct;
+            totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
 
-        CartDTO giohang=null;
-        //check object
-        if(object!=null)
-        {
-            giohang= (CartDTO) object;
-            List<CartItemDTO> cartItemDTOS=giohang.getItemInCart();
+        } else {
+            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
+            CartLine cartLine = map.get(id);
 
-        }
-        else {
-            giohang=new CartDTO();
-            session.setAttribute("cart",giohang);
-        }
-        int numorder=cartLineForm.getNumorder();
-        List<CartItemDTO> sanphamTrongGioHangs=giohang.getItemInCart();
-        boolean sanPhamDaCoTrongGioHangPhaiKhong = false;
+            if (cartLine == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
+                cartLine = new CartLine();
+                cartLine.setProduct(product.get());
+                cartLine.setQuantity(numproduct);
+                map.put(id, cartLine);
 
-        // trường hợp đã có sản phẩm trong giỏ hàng.
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            if(item.getId() == product.get().getId()) {
-                sanPhamDaCoTrongGioHangPhaiKhong = true;
-                item.setQuantity(item.getQuantity() + numorder);
+
+
+                Set<Integer> set = map.keySet();
+                for(Integer key : set) {
+
+                    totalOfCart += map.get(key).getQuantity();
+                    totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
+                }
+            } else { // neu co sp trong map roi thi tang sl cua sp len
+                cartLine.setQuantity(cartLine.getQuantity() + numproduct);
+                Set<Integer> set = map.keySet();
+                for(Integer key : set) {
+                    totalOfCart += map.get(key).getQuantity();
+                    totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
+                }
+
             }
-            item.setTongGia((new BigDecimal(String.valueOf( item.getQuantity()))).multiply(new BigDecimal(String.valueOf(item.getPrice()))));
         }
+        System.out.println(id);
+        System.out.println(numproduct);
+        session.setAttribute("totalPrice", totalPrice);
+        session.setAttribute("totalOfCart", totalOfCart);
 
-        // nếu sản phẩm chưa có trong giỏ hàng.
-        if(!sanPhamDaCoTrongGioHangPhaiKhong) {
-            Optional<Product> productDto = productService.findProductById(product.get().getId());
-            CartItemDTO addNewProduct= new CartItemDTO();
-            addNewProduct.setProduct(productDto.get());
-            addNewProduct.setTongGia((new BigDecimal(String.valueOf(numorder))).multiply(productDto.get().getPrice()));
-            sanphamTrongGioHangs.add(addNewProduct);
-            giohang.setItemInCart(sanphamTrongGioHangs);
-        }
-        BigDecimal sum = BigDecimal.ZERO;
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            sum = sum.add(item.getTongGia());
-            giohang.setPriceTotal(sum);
-        }
-        session.setAttribute("cart",giohang);
-        //Cart cart= (Cart)session;
-        Cart cart= new Cart();
-        BeanUtils.copyProperties(giohang, cart);
-        cart.setBuyer(account);
-        cartService.saveCart(cart);
-        return "redirect:/product-detail?id=" + productId;
+        return "redirect:/product-detail?id=" + id;
     }
 
+
     @PostMapping(value = "/check-out")
-    public String checkout(HttpSession session, Model model,
-                            @ModelAttribute("cartForm") CartLine cartLineForm) throws IOException {
+    public String checkout(HttpSession session, @ModelAttribute("checkout") Checkout checkout
+                           ) throws IOException {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("userid", principal.getId());
-        model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
         Account account= userService.findUserByEmail(principal.getUsername());
-        int productId=cartLineForm.getId();
-        Optional<Product> product = productService.findProductById(productId); // lay thong tin san pham
-        Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
-
-        CartDTO giohang=null;
-        //check object
-        if(object!=null)
-        {
-            giohang= (CartDTO) object;
-            List<CartItemDTO> cartItemDTOS=giohang.getItemInCart();
-
-        }
-        else {
-            giohang=new CartDTO();
-            session.setAttribute("cart",giohang);
-        }
-        int numorder=cartLineForm.getNumorder();
-        List<CartItemDTO> sanphamTrongGioHangs=giohang.getItemInCart();
-        boolean sanPhamDaCoTrongGioHangPhaiKhong = false;
-
-        // trường hợp đã có sản phẩm trong giỏ hàng.
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            if(item.getId() == product.get().getId()) {
-                sanPhamDaCoTrongGioHangPhaiKhong = true;
-                item.setQuantity(item.getQuantity() + numorder);
-            }
-            item.setTongGia((new BigDecimal(String.valueOf( item.getQuantity()))).multiply(new BigDecimal(String.valueOf(item.getPrice()))));
-        }
-
-        // nếu sản phẩm chưa có trong giỏ hàng.
-        if(!sanPhamDaCoTrongGioHangPhaiKhong) {
-            Optional<Product> productDto = productService.findProductById(product.get().getId());
-            CartItemDTO addNewProduct= new CartItemDTO();
-            addNewProduct.setProduct(productDto.get());
-            addNewProduct.setTongGia((new BigDecimal(String.valueOf(numorder))).multiply(productDto.get().getPrice()));
-            sanphamTrongGioHangs.add(addNewProduct);
-            giohang.setItemInCart(sanphamTrongGioHangs);
-        }
-        BigDecimal sum = BigDecimal.ZERO;
-        for(CartItemDTO item : sanphamTrongGioHangs) {
-            sum = sum.add(item.getTongGia());
-            giohang.setPriceTotal(sum);
-        }
-        session.setAttribute("cart",giohang);
-        //Cart cart= (Cart)session;
-        Cart cart= new Cart();
-        BeanUtils.copyProperties(giohang, cart);
+        Optional<Product>product=productService.findProductById(cartLine.getProduct().getId());
+        CartLine cartline= new CartLine();
+        Cart cart=new Cart();
+        cartline.setProduct(product.get());
+        cartline.setQuantity(cartLine.getQuantity());
+        cartline.setCart(cart);
+        List<CartLine>cartLines= new ArrayList<>();
+        cartLines.add(cartline);
         cart.setBuyer(account);
+        cart.setCartItem(cartLines);
+        cart.setBuyDate(new Date());
+        cart.setStatus("pending");
+        cart.setPriceTotal(cartline.getPriceTotal());
         cartService.saveCart(cart);
-        return "redirect:/product-detail?id=" + productId;
+
+
+        return "redirect:/trang-chu" ;
     }
 //    @RequestMapping(value = { "/xoa-sp-gio-hang" }, method = RequestMethod.POST)
 //    public ResponseEntity<AjaxResponse> xoaSP_in_Cart(@RequestBody ProductDTO sanPhamTrongGioHang,

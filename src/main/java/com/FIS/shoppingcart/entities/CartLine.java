@@ -21,6 +21,17 @@ public class  CartLine {
 
     private int quantity;
 
+    @Transient
+    private Long priceTotal;
+
+    public Long getPriceTotal() {
+        return priceTotal;
+    }
+
+    public void setPriceTotal(Long priceTotal) {
+        this.priceTotal = priceTotal;
+    }
+
     public CartLine() {
         super();
         // TODO Auto-generated constructor stub
