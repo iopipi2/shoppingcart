@@ -27,10 +27,9 @@ public class CartController {
     CartLineServiceImpl cartLineService;
 
     @GetMapping("/viewListCart")
-    public String viewAllCartDone(Model model) {
-        List<Cart> allcart = cartService.findAllCart();
-        System.out.println(allcart);
-        model.addAttribute("carts", allcart);
+    public String viewAllCart(Model model) {
+        List<Cart> allCart = cartService.findAllCart();
+        model.addAttribute("carts", allCart);
 
         return "/user/viewCartDone";
     }
@@ -40,7 +39,6 @@ public class CartController {
                                HttpSession session) {
 
         List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
-        System.out.println("${cartLines.get().getProduct().getId()}");
         model.addAttribute("cartLines", cartLines);
         return "/user/viewCartLine";
     }
