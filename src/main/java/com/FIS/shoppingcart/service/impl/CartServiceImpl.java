@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -31,19 +32,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private HttpSession httpSession;
 
-    @Override
-    public boolean saveCart(Cart cart) {
-        // TODO Auto-generated method stub
-        cartRepository.saveAndFlush(cart);
-        return true;
-    }
 
-    @Override
-    public boolean updateCart(Cart cart) {
-        // TODO Auto-generated method stub
-        cartRepository.saveAndFlush(cart);
-        return true;
-    }
 
     @Override
     public List<Cart> findAllCart() {
@@ -56,9 +45,16 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<Cart> findCartDone(String status) {
+        return cartRepository.findCartDone(status);
+    }
+
+
+    @Override
     public Cart findCart() {
         // TODO Auto-generated method stub
         return ((UserDTO) httpSession.getAttribute("userModel")).getCart();
 //        return null;
     }
+
 }

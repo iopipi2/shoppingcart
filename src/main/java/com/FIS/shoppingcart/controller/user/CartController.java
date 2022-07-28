@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -31,7 +33,7 @@ public class CartController {
         List<Cart> allCart = cartService.findAllCart();
         model.addAttribute("carts", allCart);
 
-        return "/user/viewCartDone";
+        return "/user/viewCartDetail";
     }
 
     @GetMapping("/user/cart/cartline")
@@ -40,6 +42,13 @@ public class CartController {
         List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
         model.addAttribute("cartLines", cartLines);
         return "/user/viewCartLine";
+    }
+
+    @GetMapping("/viewCart")
+    public String viewCart(Model model){
+        List<Cart> cartStatusDone = cartService.findCartDone("done");
+        model.addAttribute("cartStatusDone",cartStatusDone);
+        return "/user/viewCart";
     }
 
 

@@ -37,6 +37,7 @@ public class Cart implements Serializable {
     @JoinColumn(name = "buyer_id")
     private Account buyer;
 
+
     @Column(name = "status")
     private String status;
 
