@@ -7,6 +7,7 @@ import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<Account> getAllUser() {
@@ -45,6 +49,13 @@ public class UserServiceImpl implements UserService {
 
             Optional<Account> result = userRepository.findById(id);
             return userRepository.findById(id).get();
+
+    }
+
+    @Override
+    public void save(Account account) {
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        userRepository.save(account);
 
     }
 

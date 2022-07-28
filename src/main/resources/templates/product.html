@@ -48,14 +48,14 @@
                     Free shipping for standard order over $100
                 </div>
 
-                <div class="right-top-bar flex-w h-full">
+                <!-- <div class="right-top-bar flex-w h-full">
                     <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/admin/product}" class="flex-c-m trans-04 p-lr-25">Manager</a>
                     <a href="#" class="flex-c-m trans-04 p-lr-25"> Q&A</a>
                     <a th:each="account : ${account}" th:href="@{'/member/account?id=' + ${id}}"><img style="border-radius: 50%; height:30px; width:30px; margin:5px" th:src="@{${account.avatarImagePath} == null} ? @{/images/icons/account.png} : @{${account.avatarImagePath}}"></a>
                     <a th:if="${id == null}" th:href="@{/dang-nhap}" class="flex-c-m trans-04 p-lr-25">Sign up</a>
                     <a sec:authorize="isAuthenticated()" th:href="@{'/member/account?id=' + ${id}}" class="flex-c-m trans-04 p-lr-25"><span sec:authentication = "name"></span></a>
                     <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="flex-c-m trans-04 p-lr-25"> <img th:src="@{/images/icons/cancel.png}"></a>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -464,9 +464,9 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img th:src="@{${p.mainImagePath}}" alt="IMG-PRODUCT"> <a href="#"
-                                                                                      class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                            Quick View </a>
+                            <img th:src="@{${p.mainImagePath}}" alt="IMG-PRODUCT"> <a  th:href="@{'/product-detail?id=' + ${p.id}}"
+                            class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
+                        Quick View </a>
                         </div>
                         <div class="block2-txt flex-w flex-t p-t-14">
                             <div class="block2-txt-child1 flex-col-l ">
@@ -565,7 +565,7 @@
                 <div class="col-md-6 col-lg-5 p-b-30">
                     <div class="p-r-50 p-t-5 p-lr-0-lg">
                         <h4 class="mtext-105 cl2 js-name-detail p-b-14">
-                            Lightweight Jacket ${products.name}
+                            <!-- <a th:text = "${products.name}"></a> -->
                         </h4>
 
                         <span class="mtext-106 cl2">

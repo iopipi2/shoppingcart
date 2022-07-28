@@ -28,7 +28,7 @@ public class Product implements Serializable {
     private int id;
 
     @Column(name = "name")
-    private String name;
+    public String name;
 
     @Column(name = "price")
     private Long price;

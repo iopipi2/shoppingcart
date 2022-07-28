@@ -11,6 +11,8 @@ public Account getUserById(int id);
 
 public Account get(int id);
 
+public void save(Account account);
+
 
 
 
