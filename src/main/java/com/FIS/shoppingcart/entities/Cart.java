@@ -31,8 +31,6 @@ public class Cart implements Serializable {
     @Column(name = "price_total")
     private double priceTotal;
 
-
-
     @ManyToOne
     @JoinColumn(name = "buyer_id")
     private Account buyer;
@@ -84,7 +82,6 @@ public class Cart implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-
 
     public List<CartLine> getCartItem() {
         return cartLine;

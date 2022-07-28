@@ -160,7 +160,7 @@ public class ProductController {
         return "redirect:/admin/product";
     }
 
-    @GetMapping("/admin/product/delete/{id}")
+    @GetMapping("/admin/products/delete/{id}")
     public String deleteProduct(@PathVariable(name="id") int id) {
 
         productRepository.deleteById(id);

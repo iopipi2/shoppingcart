@@ -372,6 +372,7 @@ table.table .avatar {
                                     <td><span th:text=" ${c.id}"></span></td>
                                     <td><span th:text=" ${c.buyer.name}"></span></td>
                                     <td><span th:text="${c.status}"></span></td>
+                                    td><span th:text="${c.priceTotal}"></span></td>
                                     <td><span><a th:href="'/admin/cart/cartline?id='+ ${c.id}">Details</a></span></td>
 
                                 </tr>
@@ -385,7 +386,7 @@ table.table .avatar {
                             <tfoot>
                             <tr class="visible-xs">
                                 <td class="text-center"><strong>Total &#8377;
-                                    ${userModel.cart.grandTotal }</strong></td>
+                                    ${userModel.cart.priceTotal }</strong></td>
                             </tr>
                             <tr>
                                 <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span
@@ -393,7 +394,7 @@ table.table .avatar {
                                     Shopping</a></td>
                                 <td colspan="2" class="hidden-xs"></td>
                                 <td class="hidden-xs text-center"><strong>Total
-                                    &#8377; ${userModel.cart.grandTotal }</strong></td>
+                                    &#8377; ${userModel.cart.priceTotal }</strong></td>
                                 <td><a href="#" class="btn btn-success btn-block">Checkout
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </a></td>

@@ -258,8 +258,13 @@ public class IndexController {
         Cart cart=new Cart();
         cartline.setProduct(product.get());
         cartline.setQuantity(cartLine.getQuantity());
-        product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
-        productService.updateProduct(product.get());
+        if(cartline.getQuantity()>product.get().getProductquantity())
+        {
+            String mess="Vui lòng chọn lại số lượng";
+            return mess;
+        }
+        else {product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
+        productService.updateProduct(product.get());}
         cartline.setCart(cart);
         List<CartLine>cartLines= new ArrayList<>();
         cartLines.add(cartline);
