@@ -269,7 +269,6 @@ public class IndexController {
         cart.setPriceTotal(Double.parseDouble(total));
         cartService.saveCart(cart);
 
-
         return "redirect:/trang-chu" ;
     }
 //    @RequestMapping(value = { "/xoa-sp-gio-hang" }, method = RequestMethod.POST)
