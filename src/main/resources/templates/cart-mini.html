@@ -17,11 +17,11 @@
 
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
-					<th:block th:each="entry: ${#session.getAttribute('cart')}" >
+					<th:block th:each="entry: ${#session.getAttribute('cart')}">
 
 						<li class="header-cart-item flex-w flex-t m-b-12">
 							<div>
-								<input hidden="true" name="cartlines[${entry.index}}].product.id" th:value="${entry.value.product.id}">
+								<input hidden="true" name="productid" th:value="${entry.value.product.id}">
 							</div>
 							<div class="header-cart-item-img">
 								<img th:src="@{${entry.value.product.mainImagePath}}" alt="IMG">
@@ -36,7 +36,7 @@
 										<i class="fs-16 zmdi zmdi-minus"></i>
 									</div>
 
-									<input class="mtext-104 cl3 txt-center num-product" type="number" name="cartlines[${entry.index}}].quantity" th:value="${entry.value.quantity}">
+									<input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity" th:value="${entry.value.quantity}">
 
 									<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 										<i class="fs-16 zmdi zmdi-plus"></i>
@@ -50,7 +50,7 @@
 				</ul>
 
 				<div class="w-full">
-					<div class="header-cart-total w-full p-tb-40" name="priceTotal" th:value="${session.totalPrice}" th:text="'Total: '+${session.totalPrice}"></div>
+					<div class="header-cart-total w-full p-tb-40" name="priceTotal" th:value="${session.totalPrice}" th:text="'Total: '+${session.totalPrice}+'$'" ></div>
 
 					<div class="header-cart-buttons flex-w w-full">
 						<a th:href="@{/cart}"

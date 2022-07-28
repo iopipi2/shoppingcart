@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public String deleteProduct(Integer id) {
 
-        Product product = productRepository.getOne(id);
+        Product product = productRepository.findById(id).get();
 
         product.setActive(false);
         productRepository.saveAndFlush(product);
@@ -123,7 +123,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductByIdForAdmin(int id) {
         // TODO Auto-generated method stub
-        Product product = productRepository.getOne(id);
+        Product product = productRepository.findById(id).get();
         return product;
     }
 

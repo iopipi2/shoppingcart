@@ -48,12 +48,10 @@ public class UserServiceImpl implements UserService {
         System.out.println(endcodedPassword);
         account.setPassword(endcodedPassword);
         account.setUsername(accountDTO.getUsername());
-        account.setCountry_id(accountDTO.getCountry_id());
         account.setAvatar(accountDTO.getAvatar());
         account.setCreated_time(new Date());
         account.setRole("ROLE_USER");
         account.setEnabled(true);
-        account.setState(accountDTO.getState());
         userRepository.saveAndFlush(account);
         return account;
 

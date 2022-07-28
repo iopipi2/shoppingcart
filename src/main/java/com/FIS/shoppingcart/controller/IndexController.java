@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.RequestContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -195,7 +196,7 @@ public class IndexController {
         Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
         int totalOfCart = 0;
-        BigDecimal totalPrice =BigDecimal.valueOf(0);
+        double totalPrice =0;
         if (object == null) {
             CartLine cartLine = new CartLine();
             cartLine.setProduct(product.get());
@@ -204,7 +205,7 @@ public class IndexController {
             map.put(id, cartLine);
             session.setAttribute("cart", map);
             totalOfCart += numproduct;
-            totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
+            totalPrice = numproduct*map.get(id).getProduct().getPrice();
 
         } else {
             Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
@@ -222,14 +223,16 @@ public class IndexController {
                 for(Integer key : set) {
 
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+
                 }
             } else { // neu co sp trong map roi thi tang sl cua sp len
                 cartLine.setQuantity(cartLine.getQuantity() + numproduct);
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice = (BigDecimal.valueOf(numproduct).multiply(map.get(id).getProduct().getPrice()));
+                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+
                 }
 
             }
@@ -244,11 +247,12 @@ public class IndexController {
 
 
     @PostMapping(value = "/check-out")
-    public String checkout(HttpSession session, @ModelAttribute("checkout") Checkout checkout
+    public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine,HttpServletRequest request
                            ) throws IOException {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account= userService.findUserByEmail(principal.getUsername());
-        Optional<Product>product=productService.findProductById(cartLine.getProduct().getId());
+        int id= Integer.parseInt(request.getParameter("productid"));
+        Optional<Product>product=productService.findProductById(id);
         CartLine cartline= new CartLine();
         Cart cart=new Cart();
         cartline.setProduct(product.get());
@@ -260,7 +264,9 @@ public class IndexController {
         cart.setCartItem(cartLines);
         cart.setBuyDate(new Date());
         cart.setStatus("pending");
-        cart.setPriceTotal(cartline.getPriceTotal());
+
+        String total= session.getValue("totalPrice").toString();
+        cart.setPriceTotal(Double.parseDouble(total));
         cartService.saveCart(cart);
 
 

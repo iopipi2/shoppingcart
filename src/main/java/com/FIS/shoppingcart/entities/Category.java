@@ -28,10 +28,11 @@ public class Category {
     @OneToMany(mappedBy= "category")
     private List<Product> products = new ArrayList<>();
 
-    public Category(int id, String type, List<Product> products) {
+    public Category(int id, String type,boolean active, List<Product> products) {
         super();
         this.id = id;
         this.type = type;
+        this.active=active;
         this.products = products;
     }
 

@@ -29,7 +29,7 @@ public class Cart implements Serializable {
     private Date buyDate;
 
     @Column(name = "price_total")
-    private Long priceTotal;
+    private double priceTotal;
 
 
 
@@ -61,11 +61,11 @@ public class Cart implements Serializable {
         this.buyDate = buyDate;
     }
 
-    public Long getPriceTotal() {
+    public double getPriceTotal() {
         return priceTotal;
     }
 
-    public void setPriceTotal(Long priceTotal) {
+    public void setPriceTotal(double priceTotal) {
         this.priceTotal = priceTotal;
     }
 

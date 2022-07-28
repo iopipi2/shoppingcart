@@ -35,6 +35,8 @@ public class Product implements Serializable {
     private Long price;
     @Column(name = "product_quantity")
     private int productquantity;
+    @Column(name = "active")
+    private boolean active;
 
     public int getProductquantity() {
         return productquantity;
@@ -68,15 +70,12 @@ public class Product implements Serializable {
         this.active = active;
     }
 
-    @Column(name = "active")
-    private boolean active;
-
 
     public Product() {
     }
 
     public Product(int id, String name, Long price, String description, Category category,
-                   String img_main, String img_hover, String img_sub) {
+                   String img_main, String img_hover, String img_sub,boolean active) {
         super();
         this.id = id;
         this.name = name;
@@ -86,6 +85,7 @@ public class Product implements Serializable {
         this.img_main = img_main;
         this.img_hover = img_hover;
         this.img_sub = img_sub;
+        this.active=active;
     }
 
     public Product(int id) {
@@ -108,8 +108,8 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public BigDecimal getPrice() {
-        return BigDecimal.valueOf(price);
+    public Long getPrice() {
+        return price;
     }
 
 

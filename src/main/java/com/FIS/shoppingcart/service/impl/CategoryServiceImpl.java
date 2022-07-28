@@ -38,12 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categoriesCopy = new ArrayList<>();
         categoryRepository.findAll().forEach(categories::add);
         categoriesCopy.addAll(categories);
-        for (Category c : categories) {
-            System.out.println(c);
-            if (!c.isActive()) {
-                categoriesCopy.remove(c);
-            }
-        }
+
         return categoriesCopy;
 
     }
@@ -51,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category findCategoryById(Integer id) {
         // TODO Auto-generated method stub
-        Category category = categoryRepository.getOne(id);
+        Category category = categoryRepository.findById(id).get();
         if (!category.isActive()) {
             category = null;
         }
@@ -61,7 +56,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public String deleteCategory(Integer id) {
         // TODO Auto-generated method stub
-        Category c = categoryRepository.getOne(id);
+        Category c = categoryRepository.findById(id).get();
         c.setActive(false);
         categoryRepository.saveAndFlush(c);
         return "Deleted Successfully";
