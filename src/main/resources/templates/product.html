@@ -591,6 +591,12 @@
 				swal(nameProduct, "is added to cart !", "success");
 			});
 		});
+		 $('.js-checkout-detail').each(function(){
+
+                $(this).on('click', function(){
+                    swal("Check out success !", "success");
+                });
+            });
 
 	</script>
 <!--===============================================================================================-->

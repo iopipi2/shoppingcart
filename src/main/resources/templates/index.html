@@ -704,6 +704,12 @@
 				ps.update();
 			})
 		});
+		 $('.js-checkout-detail').each(function(){
+
+                $(this).on('click', function(){
+                    swal("Check out success !", "success");
+                });
+            });
 	</script>
 <!--===============================================================================================-->
 <script th:src="@{/js/main.js}"></script>

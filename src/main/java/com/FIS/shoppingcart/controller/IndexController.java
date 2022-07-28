@@ -200,6 +200,7 @@ public class IndexController {
         if (object == null) {
             CartLine cartLine = new CartLine();
             cartLine.setProduct(product.get());
+
             cartLine.setQuantity(numproduct);
             Map<Integer, CartLine> map = new HashMap<>();// gio hang
             map.put(id, cartLine);
@@ -257,6 +258,8 @@ public class IndexController {
         Cart cart=new Cart();
         cartline.setProduct(product.get());
         cartline.setQuantity(cartLine.getQuantity());
+        product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
+        productService.updateProduct(product.get());
         cartline.setCart(cart);
         List<CartLine>cartLines= new ArrayList<>();
         cartLines.add(cartline);
@@ -264,10 +267,11 @@ public class IndexController {
         cart.setCartItem(cartLines);
         cart.setBuyDate(new Date());
         cart.setStatus("pending");
-
         String total= session.getValue("totalPrice").toString();
         cart.setPriceTotal(Double.parseDouble(total));
         cartService.saveCart(cart);
+        session.removeAttribute("cart");
+        session.removeAttribute("totalPrice");
 
         return "redirect:/trang-chu" ;
     }
