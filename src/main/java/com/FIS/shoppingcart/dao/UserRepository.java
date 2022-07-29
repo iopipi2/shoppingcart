@@ -1,20 +1,28 @@
 package com.FIS.shoppingcart.dao;
 
-import com.FIS.shoppingcart.entities.Product;
-import com.FIS.shoppingcart.entities.User;
-import org.springframework.data.domain.Sort;
+import com.FIS.shoppingcart.entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User,Integer> {
+@Repository
+
+public interface UserRepository extends JpaRepository<Account, Integer> {
 
 //    public List<Product> getProductPriceLowtoHigh(String sort);
 
 
-//    User findUserByEmail(String mail);
+    //    User findUserByEmail(String mail);
+//    public Account deleteAccount(String id);
+    @Query("SELECT a FROM Account a where a.username = ?1")
+    Account findUserByEmail(String email);
+
+    @Query("SELECT a FROM Account a where a.username LIKE %?1%"
+            + "OR a.username LIKE %?1%"
+            + "OR a.name LIKE %?1%")
+    public List<Account> findUser(String keyword);
+
 
 }

@@ -1,19 +1,27 @@
 package com.FIS.shoppingcart.service;
 
-import com.FIS.shoppingcart.entities.User;
-import com.FIS.shoppingcart.model.UserDTO;
-import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
+import com.FIS.shoppingcart.entities.Account;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
-    boolean saveUser(User user);
+    boolean saveUser(Account account);
 
-//    User findUserByEmail(String mail);
+    Account findUserByEmail(String email);
+    Optional<Account> findUserById(int id);
 
 
 //    void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException;
+    public List<Account> listAll();
+    public Account getUserById(int id);
+
+    public Account get(int id);
+
+    public List<Account> findUser(String keyword);
+
+
+
 
 }

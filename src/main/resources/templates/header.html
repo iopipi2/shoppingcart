@@ -9,9 +9,9 @@
             <div class="right-top-bar flex-w h-full">
                 <a sec:authorize="hasAnyAuthority('ROLE_ADMIN')" th:href="@{/admin/product}" class="flex-c-m trans-04 p-lr-25">Manager</a>
                 <a href="#" class="flex-c-m trans-04 p-lr-25"> Q&A</a>
-                <a th:each="user : ${user}" th:href="@{'/member/user?id=' + ${id}}"><img style="border-radius: 50%; height:30px; width:30px; margin:5px" th:src="@{${user.avatarImagePath} == null} ? @{/images/icons/user.png} : @{${user.avatarImagePath}}"></a>
+                <a th:each="account : ${account}" th:href="@{'/member/account?id=' + ${id}}"><img style="border-radius: 50%; height:30px; width:30px; margin:5px" th:src="@{${account.avatarImagePath} == null} ? @{/images/icons/account.png} : @{${account.avatarImagePath}}"></a>
                 <a th:if="${id == null}" th:href="@{/dang-nhap}" class="flex-c-m trans-04 p-lr-25">Sign up</a>
-                <a sec:authorize="isAuthenticated()" th:href="@{'/member/user?id=' + ${id}}" class="flex-c-m trans-04 p-lr-25"><span sec:authentication = "name"></span></a>
+                <a sec:authorize="isAuthenticated()" th:href="@{'/member/account?id=' + ${id}}" class="flex-c-m trans-04 p-lr-25"><span sec:authentication = "name"></span></a>
                 <a sec:authorize="isAuthenticated()" th:href="@{/logout}" class="flex-c-m trans-04 p-lr-25"> <img th:src="@{/images/icons/cancel.png}"></a>
             </div>
 

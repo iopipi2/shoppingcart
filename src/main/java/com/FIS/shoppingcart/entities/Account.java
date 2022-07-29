@@ -6,8 +6,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,7 +14,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "user", schema = "shoppingcart")
-public class User implements Serializable {
+public class Account implements Serializable {
 
     /**
      *
@@ -62,8 +60,8 @@ public class User implements Serializable {
 
 
 
-    public User(int id, String password, String username, String role, Boolean enabled, Date created_time, String name,
-                String phone, String city, String address, String state, int country_id, String postal_code,String avatar) {
+    public Account(int id, String password, String username, String role, Boolean enabled, Date created_time, String name,
+                   String phone, String city, String address, String state, int country_id, String postal_code, String avatar) {
         super();
         this.id = id;
         this.password = password;
@@ -146,7 +144,7 @@ public class User implements Serializable {
         this.postal_code = postal_code;
     }
 
-    public User() {
+    public Account() {
 
     }
 
