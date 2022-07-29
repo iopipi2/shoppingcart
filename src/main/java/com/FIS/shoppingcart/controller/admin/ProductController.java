@@ -61,11 +61,8 @@ public class ProductController {
         long count = productServiceImpl.count();
 
         long pageTotal = (long) Math.ceil((double)count/size);
-
         List<Product> products = productServiceImpl.search(keyword, category, page, size);
-
         model.addAttribute("products", products);
-
         model.addAttribute("page", page);
         model.addAttribute("size", size);
         model.addAttribute("pageTotal", pageTotal);
@@ -73,11 +70,8 @@ public class ProductController {
         model.addAttribute("category", category);
 
         System.out.println(products);
-
         List<Category> listCategories = categoryRepository.findAll();
-
         model.addAttribute("listCategories", listCategories);
-
         return "/admin/viewProduct";
     }
 
