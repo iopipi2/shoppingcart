@@ -96,6 +96,33 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public List<Account> listAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<Account> findUser(String keyword) {
+        if(keyword!=null)
+        {
+            return userRepository.findUser(keyword);
+        }
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Optional<Account> findUserById(int id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteUser(Account account) {
+        userRepository.delete(account);
+    }
+
+    public void saveInfoUser(Account account) {
+        userRepository.saveAndFlush(account);
+    }
+
 //    @Override
 //    public void generateOneTimePassword(UserDTO userDTO) throws MessagingException, UnsupportedEncodingException {
 //

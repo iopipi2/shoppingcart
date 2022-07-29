@@ -70,8 +70,8 @@ public class CartServiceImpl implements CartService {
 
     //Cua Hoang -----------------------------------------------------
     @Override
-    public List<Cart> findCartDone(String status) {
-        return cartRepository.findCartDone(status);
+    public List<Cart> findCartDone(int buyerId,String status) {
+        return cartRepository.findCartDone(buyerId,status);
     }
 
 }

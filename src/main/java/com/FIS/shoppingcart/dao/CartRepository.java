@@ -19,6 +19,8 @@ public interface CartRepository extends JpaRepository<Cart,Integer> {
      public List<Cart> findByBuyer(Account buyer);
 
      //Cua Hoang
-     @Query("SELECT a FROM Cart a WHERE a.status = :status ")
-     List<Cart> findCartDone(String status);
+     @Query("SELECT a FROM Cart a WHERE a.buyer.id= :buyerID AND a.status = :status ")
+     List<Cart> findCartDone(int buyerID,String status);
+
+
 }

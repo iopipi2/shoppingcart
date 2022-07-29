@@ -5,6 +5,7 @@ import com.FIS.shoppingcart.service.impl.UserDetailServiceImpl;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -23,6 +24,11 @@ public interface UserService {
     public Account get(int id);
 
     public void save(Account account);
+
+    public List<Account> listAll();
+
+    public List<Account> findUser(String keyword);
+    Optional<Account> findUserById(int id);
 
 
 

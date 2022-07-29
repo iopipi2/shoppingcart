@@ -14,6 +14,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -604,10 +605,8 @@ public class IndexController {
     public String viewAllCart(Model model) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id= userService.findUserByEmail(principal.getUsername()).getId();
-
         List<Cart> findAllCartByUserID = cartService.findCartByBuyerId(id);
         model.addAttribute("carts", findAllCartByUserID);
-
         return "/viewCartDetail";
     }
 
@@ -620,12 +619,11 @@ public class IndexController {
 
     @GetMapping("/viewCart")
     public String viewCart(Model model){
-
-        List<Cart> cartStatusDone = cartService.findCartDone("done");
-        model.addAttribute("cartStatusDone",cartStatusDone);
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id= userService.findUserByEmail(principal.getUsername()).getId();
+        String done="done";
+        List<Cart> findAllCartDoneByUserID = cartService.findCartDone(id,done);
+        model.addAttribute("cartStatusDone",findAllCartDoneByUserID);
         return "/viewCartUser";
     }
-
-
-
 }
