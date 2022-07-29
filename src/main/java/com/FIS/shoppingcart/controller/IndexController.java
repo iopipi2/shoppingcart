@@ -216,6 +216,7 @@ public class IndexController {
                 cartLine = new CartLine();
                 cartLine.setProduct(product.get());
                 cartLine.setQuantity(numproduct);
+
                 map.put(id, cartLine);
 
 
@@ -228,7 +229,9 @@ public class IndexController {
 
                 }
             } else { // neu co sp trong map roi thi tang sl cua sp len
+
                 cartLine.setQuantity(cartLine.getQuantity() + numproduct);
+
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
                     totalOfCart += map.get(key).getQuantity();
@@ -242,6 +245,7 @@ public class IndexController {
         System.out.println(numproduct);
         session.setAttribute("totalPrice", totalPrice);
         session.setAttribute("totalOfCart", totalOfCart);
+
 
         return "redirect:/product-detail?id=" + id;
     }
