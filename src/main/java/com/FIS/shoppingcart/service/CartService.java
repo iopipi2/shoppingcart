@@ -17,4 +17,7 @@ public interface CartService {
     List<Cart> findCartByBuyerId(int buyerId);
 
     public List<Cart> findByBuyer(Account buyer);
+
+    //Cua Hoang
+    List<Cart> findCartDone(String status);
 }

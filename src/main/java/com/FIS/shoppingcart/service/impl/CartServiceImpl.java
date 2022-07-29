@@ -59,11 +59,19 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findByBuyer(buyer);
     }
 
+
+
     @Override
     public Cart findCart() {
         // TODO Auto-generated method stub
         return ((UserModel) httpSession.getAttribute("userModel")).getCart();
 //        return null;
+    }
+
+    //Cua Hoang -----------------------------------------------------
+    @Override
+    public List<Cart> findCartDone(String status) {
+        return cartRepository.findCartDone(status);
     }
 
 }

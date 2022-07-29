@@ -1,6 +1,8 @@
 package com.FIS.shoppingcart.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Account;
@@ -24,6 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public boolean saveUser(Account account) {
@@ -61,6 +64,36 @@ public class UserServiceImpl implements UserService {
     public Account findUserByEmail(String email) {
         // TODO Auto-generated method stub
         return userRepository.findUserByEmail(email);
+    }
+
+
+    //Cua Hoang -----------------------------------------------------------------------------------------------
+    @Override
+    public List<Account> getAllUser() {
+        List<Account> accounts = userRepository.findAll();
+
+        return accounts;
+    }
+
+    @Override
+    public Account getUserById(int id) {
+        Account account = userRepository.findById(id).get();
+        System.out.println(account);
+        return account;
+    }
+
+    @Override
+    public Account get(int id) {
+
+        Optional<Account> result = userRepository.findById(id);
+        return userRepository.findById(id).get();
+    }
+
+    @Override
+    public void save(Account account) {
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        userRepository.save(account);
+
     }
 
 //    @Override

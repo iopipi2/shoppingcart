@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContext;
 
@@ -26,7 +27,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import java.text.NumberFormat;
@@ -62,14 +68,13 @@ public class IndexController {
         Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
         try {
             LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
             model.addAttribute("id", principal.getId());
             model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
         } catch (Exception e) {
             e.getStackTrace();
         }
-
         model.addAttribute("products", productService.findAllProducts());
-
         model.addAttribute("cate", categoryService.findAllCategories());
 
         return "index";
@@ -556,5 +561,71 @@ public class IndexController {
 
         return "redirect:/login?logout";
     }
+
+    //Cua Hoang
+    @GetMapping("/infoUser")
+    public String infoUser(Model model) {
+
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id= userService.findUserByEmail(principal.getUsername()).getId();
+        Account users = userService.getUserById(id);
+        model.addAttribute("user", users);
+        System.out.println(users);
+        return "/detailUser";
+    }
+
+    //Cua Hoang
+    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+    public String editUser(@ModelAttribute(name = "user") Account account, @RequestParam(name = "avatarImage") MultipartFile file) throws IOException {
+        String fileName = org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
+        account.setAvatar(fileName);
+        userService.save(account);
+        String uploadAvt = "./avatar-images/" + account.getId();
+        Path uploadPath = Paths.get(uploadAvt);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        try (InputStream inputStream = file.getInputStream()) {
+            Path filePathMain = uploadPath.resolve(fileName);
+            System.out.println("check : " + filePathMain.toFile().getAbsolutePath());
+
+            Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            throw new IOException("Could not save upload file : " + fileName);
+        }
+
+        return "redirect:/infoUser";
+
+    }
+
+    //Cua Hoang----------------------------------------------------------------------------------
+    @GetMapping("/viewListCart")
+    public String viewAllCart(Model model) {
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id= userService.findUserByEmail(principal.getUsername()).getId();
+
+        List<Cart> findAllCartByUserID = cartService.findCartByBuyerId(id);
+        model.addAttribute("carts", findAllCartByUserID);
+
+        return "/viewCartDetail";
+    }
+
+    @GetMapping("/cart/cartline")
+    public String viewCartLine(Model model, @RequestParam int id) {
+        List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
+        model.addAttribute("cartLines", cartLines);
+        return "/viewCartLineUser";
+    }
+
+    @GetMapping("/viewCart")
+    public String viewCart(Model model){
+
+        List<Cart> cartStatusDone = cartService.findCartDone("done");
+        model.addAttribute("cartStatusDone",cartStatusDone);
+        return "/viewCartUser";
+    }
+
+
 
 }

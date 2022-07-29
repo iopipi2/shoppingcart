@@ -1,13 +1,17 @@
 package com.FIS.shoppingcart.controller.admin;
+import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
 import com.FIS.shoppingcart.entities.CartLine;
 import com.FIS.shoppingcart.entities.Product;
 import com.FIS.shoppingcart.model.CartItemDTO;
+import com.FIS.shoppingcart.service.LoginService;
 import com.FIS.shoppingcart.service.impl.CartLineServiceImpl;
 import com.FIS.shoppingcart.service.impl.CartServiceImpl;
 import com.FIS.shoppingcart.service.impl.ProductServiceImpl;
+import com.FIS.shoppingcart.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +37,8 @@ public class CartController {
     private ProductServiceImpl productService;
 
     @Autowired
+    private UserServiceImpl userService;
+    @Autowired
 
     private CartServiceImpl cartService;
 
@@ -46,7 +52,7 @@ public class CartController {
         System.out.println(allcart);
         model.addAttribute("carts", allcart);
 
-        return "/admin/viewCart";
+        return "/admin/viewCart.html";
     }
 
 
@@ -58,7 +64,7 @@ public class CartController {
         List<CartLine> cartLines = cartLineService.findCartLineByCartId(id);
         System.out.println("${cartLines.get().getProduct().getId()}");
         model.addAttribute("cartLines", cartLines);
-        return "/admin/viewCartLine";
+        return "/admin/viewCartLine.html";
     }
 
 //    @GetMapping("/{id}/update")
@@ -131,5 +137,8 @@ public class CartController {
 //            return "redirect:/cart/show?result=added";
 //        }
 //    }
+
+
+
 }
 
