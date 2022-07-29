@@ -36,14 +36,11 @@ public class AdminController {
     public String getAllUser(Model model) {
         List<Account> users = userService.listAll();
         System.out.println(users);
-
         model.addAttribute("user", users);
 //        model.addAttribute("u", new Account());
 
         return "/admin/viewInfoUsers";
     }
-
-
     @RequestMapping(value = "/editUser", method = RequestMethod.POST)
     public String saveAccounts(@ModelAttribute("user") Account account,
                               @RequestParam(name = "avatarImage") MultipartFile file) throws IOException {
