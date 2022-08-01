@@ -69,7 +69,6 @@ public class IndexController {
         Object object = session.getAttribute("cart");// Tạo ngay lập tức một session 'cart' ngay cả khi khách hàng chưa thêm giỏ hàng để tránh bị null
         try {
             LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
             model.addAttribute("id", principal.getId());
             model.addAttribute("user", userService.findUserByEmail(principal.getUsername()));
         } catch (Exception e) {
@@ -77,7 +76,6 @@ public class IndexController {
         }
         model.addAttribute("products", productService.findAllProducts());
         model.addAttribute("cate", categoryService.findAllCategories());
-
         return "index";
     }
 
@@ -206,27 +204,20 @@ public class IndexController {
         if (object == null) {
             CartLine cartLine = new CartLine();
             cartLine.setProduct(product.get());
-
             cartLine.setQuantity(numproduct);
             Map<Integer, CartLine> map = new HashMap<>();// gio hang
             map.put(id, cartLine);
             session.setAttribute("cart", map);
             totalOfCart += numproduct;
             totalPrice = numproduct*map.get(id).getProduct().getPrice();
-
         } else {
             Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
             CartLine cartLine = map.get(id);
-
             if (cartLine == null) {  //neu chua co sp trong map thi lay tt sp va sl sp =1
                 cartLine = new CartLine();
                 cartLine.setProduct(product.get());
                 cartLine.setQuantity(numproduct);
-
                 map.put(id, cartLine);
-
-
-
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
 
@@ -237,26 +228,58 @@ public class IndexController {
             } else { // neu co sp trong map roi thi tang sl cua sp len
 
                 cartLine.setQuantity(cartLine.getQuantity() + numproduct);
-
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
                     totalOfCart += map.get(key).getQuantity();
                     totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-
                 }
-
             }
         }
         System.out.println(id);
         System.out.println(numproduct);
         session.setAttribute("totalPrice", totalPrice);
         session.setAttribute("totalOfCart", totalOfCart);
-
-
         return "redirect:/product-detail?id=" + id;
     }
-
-
+    //Update cart
+    @PostMapping("/update-cart")
+    public String updateCart( Model model,@RequestParam(name = "id") int id, HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        double totalPrice = 0;
+        Object object = session.getAttribute("cart");
+        Integer totalOfCart = (Integer) session.getAttribute("totalOfCart");
+            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
+            CartLine cartLine = map.get(id);
+             // neu co sp trong map roi thi tang sl cua sp len
+                cartLine.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+                Set<Integer> set = map.keySet();
+                for (Integer key : set) {
+                    session.removeAttribute("totalOfCart");
+                    session.removeAttribute("totalPrice");
+                    totalOfCart += cartLine.getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice()*Integer.parseInt(req.getParameter("quantity"));
+                }
+                session.setAttribute("totalOfCart", totalOfCart);
+                session.setAttribute("totalPrice", totalPrice);
+                session.setAttribute("cart", map);
+            return "redirect:/trang-chu";
+        }
+    //Delete product from cart
+    @GetMapping(value = "/delete-from-cart")
+    public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "id") int id) {
+        HttpSession session = req.getSession();
+        Object object = session.getAttribute("cart");
+        int totalOfCart = (int) session.getValue("totalOfCart");
+        double totalPrice = (double) session.getValue("totalPrice");
+        if (object != null) {
+            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;
+            session.setAttribute("totalOfCart", totalOfCart - map.get(id).getQuantity());
+            session.setAttribute("totalPrice", totalPrice - map.get(id).getQuantity()*map.get(id).getProduct().getPrice());
+            map.remove(id);
+            session.setAttribute("cart", map);
+        }
+        return "redirect:/trang-chu";
+    }
     @PostMapping(value = "/check-out")
     public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine,HttpServletRequest request
                            ) throws IOException {
