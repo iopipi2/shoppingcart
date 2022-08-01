@@ -18,7 +18,6 @@
 			<div class="header-cart-content flex-w js-pscroll">
 				<ul class="header-cart-wrapitem w-full">
 					<th:block th:each="entry: ${#session.getAttribute('cart')}">
-
 						<li class="header-cart-item flex-w flex-t m-b-12">
 							<div>
 								<input hidden="true" name="productid" th:value="${entry.value.product.id}">
@@ -26,7 +25,6 @@
 							<div class="header-cart-item-img">
 								<img th:src="@{${entry.value.product.mainImagePath}}" alt="IMG">
 							</div>
-
 							<div class="header-cart-item-txt p-t-8">
 								<a href="/product-detail?id=' + ${entry.value.product.id}" class="header-cart-item-name m-b-18 hov-cl1 trans-04" th:text="${entry.value.product.name}">
 
@@ -46,8 +44,8 @@
                         			</button>
 									</span>
 									<span>
-										<button class="btn btn-danger" th:formaction="@{'/delete-from-cart?id='+${entry.value.product.id}}">
-                            <a>Delete</a>
+										<button class="btn btn-danger" >
+                            <a th:href="@{'/delete-from-cart?key='+${entry.key}}">Delete</a>
                             <i class="fa-solid fa-trash-can"></i>
                         				</button>
 									</span>

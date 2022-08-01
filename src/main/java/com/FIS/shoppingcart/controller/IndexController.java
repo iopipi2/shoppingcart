@@ -265,17 +265,35 @@ public class IndexController {
             return "redirect:/trang-chu";
         }
     //Delete product from cart
+//    @GetMapping(value = "/delete-from-cart")
+//    public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "id") int id) {
+//        HttpSession session = req.getSession();
+//        Object object = session.getAttribute("cart");
+//        int totalOfCart = (int) session.getValue("totalOfCart");
+//        double totalPrice = (double) session.getValue("totalPrice");
+//        if (object != null) {
+//            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;
+//            session.setAttribute("totalOfCart", totalOfCart - map.get(id).getQuantity());
+//            session.setAttribute("totalPrice", totalPrice - map.get(id).getQuantity()*map.get(id).getProduct().getPrice());
+//            map.remove(id);
+//            session.setAttribute("cart", map);
+//        }
+//        return "redirect:/trang-chu";
+//    }
+    @SuppressWarnings({ "deprecation", "unchecked", "unused" })
     @GetMapping(value = "/delete-from-cart")
-    public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "id") int id) {
+    public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "key", required = true) int key) {
         HttpSession session = req.getSession();
         Object object = session.getAttribute("cart");
         int totalOfCart = (int) session.getValue("totalOfCart");
-        double totalPrice = (double) session.getValue("totalPrice");
+        double totalPrice = Double.parseDouble(session.getValue("totalPrice").toString());
+
         if (object != null) {
-            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;
-            session.setAttribute("totalOfCart", totalOfCart - map.get(id).getQuantity());
-            session.setAttribute("totalPrice", totalPrice - map.get(id).getQuantity()*map.get(id).getProduct().getPrice());
-            map.remove(id);
+            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
+            session.setAttribute("totalOfCart", totalOfCart - map.get(key).getQuantity());
+            session.setAttribute("totalPrice", totalPrice - map.get(key).getQuantity() * map.get(key).getProduct().getPrice());
+
+            map.remove(key);
             session.setAttribute("cart", map);
         }
         return "redirect:/trang-chu";
