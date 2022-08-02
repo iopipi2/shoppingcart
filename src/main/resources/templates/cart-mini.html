@@ -59,9 +59,9 @@
 				<div class="w-full">
 					<div class="header-cart-total w-full p-tb-40" name="priceTotal" th:value="${session.totalPrice}" th:text="'Total: '+${session.totalPrice}+'$'" ></div>
 					<div class="header-cart-buttons flex-w w-full">
-						<a th:href="@{/cart}"
+						<a th:href="@{'/cancel-cart'}"
 						   class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
-							View Cart </a>
+							Cancel </a>
 						<button type="submit" class="flex-c-m stext-101 cl0 size-101 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-b-10 js-checkout-detail">
 							<a>Check Out</a>
 						</button>

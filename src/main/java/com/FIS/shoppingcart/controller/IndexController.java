@@ -287,12 +287,10 @@ public class IndexController {
         Object object = session.getAttribute("cart");
         int totalOfCart = (int) session.getValue("totalOfCart");
         double totalPrice = Double.parseDouble(session.getValue("totalPrice").toString());
-
         if (object != null) {
             Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
             session.setAttribute("totalOfCart", totalOfCart - map.get(key).getQuantity());
             session.setAttribute("totalPrice", totalPrice - map.get(key).getQuantity() * map.get(key).getProduct().getPrice());
-
             map.remove(key);
             session.setAttribute("cart", map);
         }
@@ -331,68 +329,24 @@ public class IndexController {
 
         return "redirect:/trang-chu" ;
     }
-//    @RequestMapping(value = { "/xoa-sp-gio-hang" }, method = RequestMethod.POST)
-//    public ResponseEntity<AjaxResponse> xoaSP_in_Cart(@RequestBody ProductDTO sanPhamTrongGioHang,
-//                                                      final ModelMap model, final HttpServletRequest request, final HttpServletResponse response)
-//            throws IOException {
-//        HttpSession httpSession = request.getSession();
-//
-//        CartDTO gioHang = (CartDTO) httpSession.getAttribute("cart");
-//        ProductDTO itemRemove = new ProductDTO();
-//        for (ProductDTO item : gioHang.getItemInCart()) {
-//            if(item.getId() == sanPhamTrongGioHang.getId())
-//            {
-//                itemRemove = item;
-//            }
-//        }
-//        gioHang.getItemInCart().remove(itemRemove);
-//
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for(ProductDTO item : gioHang.getItemInCart()) {
-//            sum = sum.add(item.getTongGia());
-//        }
-//        Locale localeVN = new Locale("vi", "VN");
-//        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-//        String total = currencyVN.format(sum);
-//        httpSession.setAttribute("tong_gia", sum);
-//        httpSession.setAttribute("SL_SP_GIO_HANG", getTotalItems(request));
-//        ParseNumToString parseNumToString=new ParseNumToString();
-//        parseNumToString.setSoLuong(String.valueOf(getTotalItems(request)));
-//        parseNumToString.setTongGia(total);
-//        return ResponseEntity.ok(new AjaxResponse(200, parseNumToString));
-//    }
-//
-//    @RequestMapping(value = { "/update-sp-gio-hang" }, method = RequestMethod.POST)
-//    public ResponseEntity<AjaxResponse> update_SP_in_Cart(@RequestBody ProductDTO productInCart,
-//                                                          final ModelMap model, final HttpServletRequest request, final HttpServletResponse response)
-//            throws IOException {
-//        HttpSession httpSession = request.getSession();
-//        CartDTO gioHang = (CartDTO) httpSession.getAttribute("cart");
-//        for (ProductDTO item : gioHang.getItemInCart()) {
-//            if(item.getId() == productInCart.getId())
-//            {
-//                item.setProductquantity(productInCart.getProductquantity());
-//                item.setTongGia(item.getPrice().multiply(new BigDecimal(item.getProductquantity())));
-//                productInCart.setTongGia(item.getTongGia());
-//            }
-//        }
-//        BigDecimal sum = BigDecimal.ZERO;
-//        for(ProductDTO item : gioHang.getItemInCart()) {
-//            sum = sum.add(item.getTongGia());
-//        }
-//        Locale localeVN = new Locale("vi", "VN");
-//        NumberFormat currencyVN = NumberFormat.getCurrencyInstance(localeVN);
-//        String tongGia =currencyVN.format(sum);
-//        String soLuong = currencyVN.format(productInCart.getTongGia());
-//        ParseNumToString parseNumToString = new ParseNumToString();
-//        parseNumToString.setTongGia(tongGia);
-//        parseNumToString.setSoLuong(soLuong);
-//        httpSession.setAttribute("tong_gia", sum);
-//        return ResponseEntity.ok(new AjaxResponse(200, parseNumToString));
-//    }
 
 
-    //Cart
+    @GetMapping(value="/cancel-cart")
+    public String cancelCart(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        Object object = session.getAttribute("cart");
+        session.removeAttribute("cart");
+        session.removeAttribute("totalPrice");
+        session.removeAttribute("totalOfCart");
+        session.getAttribute("cart");
+//        if (object != null) {
+//            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
+//            map.remove(object);
+//            session.setAttribute("cart",map);
+//        }
+        return "redirect:/trang-chu";
+    }
+
     @GetMapping("/My Order")
     public String viewallCart(Model model,@RequestParam int id) {
         //Test find by user id
@@ -426,84 +380,6 @@ public class IndexController {
     }
 
 
-//    @GetMapping("/{id}/update")
-//    public String updateCart(@PathVariable int id, @RequestParam int count) {
-//        CartLine cartLine = cartLineService.findCartLineById(id);
-//        if (cartLine != null) {
-//            Product product = cartLine.getProduct();
-//            double oldTotal = cartLine.getTotal();
-//            if (product.getProductquantity() <= count) {
-//                count = product.getQuantity();
-//            }
-//            cartLine.setQuantity(count);
-//            cartLine.set(product.getUnitPrice());
-//            cartLine.setTotal(product.getUnitPrice() * count);
-//            String response = cartLineService.updateCartLine(cartLine) + "";
-//            Cart cart = cartService.findCart();
-//            cart.setGrandTotal(cart.getGrandTotal() - oldTotal + cartLine.getTotal());
-//            cartService.updateCart(cart);
-//            return "redirect:/cart/show?result=updated";
-//        } else {
-//            return "redirect:/cart/show?result=error";
-//        }
-//    }
-
-//    @GetMapping("/{id}/delete")
-//    public String deleteCart(@PathVariable int id) {
-//        // TODO : fetch the cartLine
-//        CartLine cartLine = cartLineService.findCartLineById(id);
-//        if (cartLine != null) {
-//            Cart cart = cartService.findCart();
-//            cart.setGrandTotal(cart.getGrandTotal() - cartLine.getTotal());
-//            cart.setCartLines(cart.getCartLines() - 1);
-//            cartService.updateCart(cart);
-//            // TODO : remove the cartLine
-//            cartLineService.deleteCartLine(cartLine);
-//            return "redirect:/cart/show?result=deleted";
-//        } else {
-//            return "redirect:/cart/show?result=error";
-//        }
-//    }
-//
-
-
-
-    //onlineshoppingcart
-    @GetMapping(value = {"/", "/home"})
-    public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView("page");
-        modelAndView.addObject("userClickHome", true);
-        modelAndView.addObject("title", "Home");
-
-        modelAndView.addObject("categories", categoryService.findAllCategories());
-
-        return modelAndView;
-    }
-
-    @GetMapping("/contact")
-    public ModelAndView contact() {
-        ModelAndView modelAndView = new ModelAndView("page");
-        modelAndView.addObject("userClickContact", true);
-        modelAndView.addObject("title", "Contact Us");
-
-        return modelAndView;
-    }
-
-    @GetMapping("/about")
-    public ModelAndView about() {
-        ModelAndView modelAndView = new ModelAndView("page");
-        modelAndView.addObject("userClickAbout", true);
-        modelAndView.addObject("title", "About Us");
-
-        return modelAndView;
-    }
-
-    /*
-     * Creating Custom Login Controller
-     *
-     *
-     */
-
     @GetMapping("/login")
     public ModelAndView login(@RequestParam(name = "error", required = false) String error,
                               @RequestParam(name = "logout", required = false) String logout) {
@@ -524,58 +400,6 @@ public class IndexController {
      *
      */
 
-    @GetMapping("/show/all/products")
-    public ModelAndView showAllProducts() {
-        ModelAndView modelAndView = new ModelAndView("page");
-        modelAndView.addObject("userClickAllProducts", true);
-        modelAndView.addObject("title", "All Products");
-
-        // passing the list of categories
-
-        modelAndView.addObject("categories", categoryService.findAllCategories());
-
-        return modelAndView;
-    }
-
-    @GetMapping("/show/category/{id}/products")
-    public ModelAndView showCategoryProducts(@PathVariable("id") int id) {
-        ModelAndView modelAndView = new ModelAndView("page");
-
-        Category category = null;
-        category = categoryService.findCategoryById(id);
-
-        modelAndView.addObject("userClickCategoryProducts", true);
-        modelAndView.addObject("title", category.getType());
-
-        // passing the list of categories
-
-        modelAndView.addObject("categories", categoryService.findAllCategories());
-
-        // passing the single category object
-        modelAndView.addObject("category", category);
-
-        return modelAndView;
-    }
-
-    /*
-     * Viewing a single product
-     */
-
-//    @GetMapping("/show/{id}/product")
-//    public ModelAndView showSingleProduct(@PathVariable("id") int id) throws ProductNotFoundExceptoion {
-//
-//        ModelAndView modelAndView = new ModelAndView("page");
-//
-//        Product product = productService.findProductById(id);
-//
-//        productService.updateProduct(product);
-//        modelAndView.addObject("title", product.getName());
-//        modelAndView.addObject("product", product);
-//        modelAndView.addObject("userClickShowProduct", true);
-//
-//        return modelAndView;
-//
-//    }
 
     /*
      * Access denied Page
