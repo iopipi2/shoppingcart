@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -297,36 +298,56 @@ public class IndexController {
         return "redirect:/trang-chu";
     }
     @PostMapping(value = "/check-out")
-    public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine,HttpServletRequest request
+    public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine1,HttpServletRequest request
                            ) throws IOException {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account= userService.findUserByEmail(principal.getUsername());
-        int id= Integer.parseInt(request.getParameter("productid"));
-        Optional<Product>product=productService.findProductById(id);
-        CartLine cartline= new CartLine();
+//        int id= Integer.parseInt(request.getParameter("productid"));
+//        Optional<Product>product=productService.findProductById(id);
         Cart cart=new Cart();
-        cartline.setProduct(product.get());
-        cartline.setQuantity(cartLine.getQuantity());
-        if(cartline.getQuantity()>product.get().getProductquantity())
-        {
-            String mess="Vui lòng chọn lại số lượng";
-            return mess;
-        }
-        else {product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
-        productService.updateProduct(product.get());}
-        cartline.setCart(cart);
-        List<CartLine>cartLines= new ArrayList<>();
-        cartLines.add(cartline);
         cart.setBuyer(account);
-        cart.setCartItem(cartLines);
         cart.setBuyDate(new Date());
         cart.setStatus("pending");
         String total= session.getValue("totalPrice").toString();
         cart.setPriceTotal(Double.parseDouble(total));
+//        cartline.setProduct(product.get());
+//        cartline.setQuantity(cartLine.getQuantity());
+//        if(cartline.getQuantity()>product.get().getProductquantity())
+//        {
+//            String mess="Vui lòng chọn lại số lượng";
+//            return mess;
+//        }
+//        else {product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
+//        productService.updateProduct(product.get());}
+//        cartline.setCart(cart);
+
+        List<CartLine>cartLines= new ArrayList<CartLine>();
+        Object object = session.getAttribute("cart");
+        Integer totalOfCart = (Integer) session.getAttribute("totalOfCart");
+        Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
+        Set<Integer> set = map.keySet();
+        for (Integer key : set) {
+
+                CartLine cartLine = new CartLine();
+                cartLine.setCart(cart);
+
+                Product product = productService.findProductById(map.get(key).getProduct().getId()).get();
+                if (map.get(key).getQuantity() > product.getProductquantity()) {
+                    String mess = "Vui lòng chọn lại số lượng";
+                    return mess;
+                } else {
+                    product.setProductquantity(product.getProductquantity() - map.get(key).getQuantity());
+                    productService.updateProduct(product);
+                }
+                cartLine.setQuantity(map.get(key).getQuantity());
+                cartLine.setProduct(product);
+                cartLines.add(cartLine);
+        }
+        cart.setCartItem(cartLines);
         cartService.saveCart(cart);
         session.removeAttribute("cart");
         session.removeAttribute("totalPrice");
-
+        session.removeAttribute("totalOfCart");
         return "redirect:/trang-chu" ;
     }
 
