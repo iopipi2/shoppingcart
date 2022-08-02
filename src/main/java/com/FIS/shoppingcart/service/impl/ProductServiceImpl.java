@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
        Optional<Product>  product = productRepository.findById(id);
         if (!product.get().isActive()){
             product = null;}
-
         return product;
     }
 

@@ -195,9 +195,8 @@ public class IndexController {
 
     //Add item to cart
     @RequestMapping("/add-to-cart")
-    public String AddToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
+    public String addToCart(@RequestParam(name = "id") int id, HttpSession session, HttpServletRequest request, Model model,
                             @RequestParam(name = "num-product") int numproduct) throws IOException {
-
         Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
         int totalOfCart = 0;
@@ -210,7 +209,7 @@ public class IndexController {
             map.put(id, cartLine);
             session.setAttribute("cart", map);
             totalOfCart += numproduct;
-            totalPrice = numproduct*map.get(id).getProduct().getPrice();
+            totalPrice = numproduct*product.get().getPrice();
         } else {
             Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
             CartLine cartLine = map.get(id);
@@ -221,10 +220,8 @@ public class IndexController {
                 map.put(id, cartLine);
                 Set<Integer> set = map.keySet();
                 for(Integer key : set) {
-
                     totalOfCart += map.get(key).getQuantity();
                     totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
-
                 }
             } else { // neu co sp trong map roi thi tang sl cua sp len
 
@@ -454,8 +451,7 @@ public class IndexController {
     public String infoUser(Model model) {
 
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int id= userService.findUserByEmail(principal.getUsername()).getId();
-        Account users = userService.getUserById(id);
+        Account users = userService.findUserByEmail(principal.getUsername());
         model.addAttribute("user", users);
         System.out.println(users);
         return "/detailUser";
