@@ -580,25 +580,73 @@ public class IndexController {
     public String editUser(@ModelAttribute(name = "user") Account account, @RequestParam(name = "avatarImage") MultipartFile file) throws IOException {
         String fileName = org.springframework.util.StringUtils.cleanPath(file.getOriginalFilename());
         account.setAvatar(fileName);
-        userService.save(account);
         String uploadAvt = "./avatar-images/" + account.getId();
         Path uploadPath = Paths.get(uploadAvt);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
+
+
         try (InputStream inputStream = file.getInputStream()) {
             Path filePathMain = uploadPath.resolve(fileName);
             System.out.println("check : " + filePathMain.toFile().getAbsolutePath());
 
             Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
+            userService.save(account);
 
         } catch (IOException e) {
-            throw new IOException("Could not save upload file : " + fileName);
+            System.out.println(e);
         }
 
         return "redirect:/infoUser";
 
     }
+
+    @RequestMapping(value = "/editInfo", method = RequestMethod.POST)
+    public String editInfomationAccount(@ModelAttribute(name = "users") Account account){
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id= userService.findUserByEmail(principal.getUsername()).getId();
+        userService.getUserById(account.getId());
+        account.setAvatar( userService.getUserById(account.getId()).getAvatar());
+        userService.save(account);
+        return "redirect:/infoUser";
+    }
+
+    @RequestMapping("/ViewResetPassword")
+    public ModelAndView updatePassword() {
+        ModelAndView mav = new ModelAndView("changePassword");
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Account account = userService.getUserById(principal.getId());
+
+        mav.addObject("account", account);
+        userService.save(account);
+        return mav;
+    }
+
+    //Cua Hoang----------------------------------------------------------------------------------
+    @RequestMapping("/editPassword")
+    public String changePass(Model model, HttpServletRequest request){
+        String username = request.getParameter("username");
+        String password = request.getParameter("confirmPass");
+
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id= userService.findUserByEmail(principal.getUsername()).getId();
+        Account account = userService.getUserById(id);
+
+        model.addAttribute("title", "Reset your password");
+        if(account == null) {
+            model.addAttribute("message","Invalid id");
+            return "message";
+        }else{
+            userService.updatePassword(account,password);
+            model.addAttribute(account);
+        }
+
+        return "redirect:/infoUser";
+
+
+    }
+
 
     //Cua Hoang----------------------------------------------------------------------------------
     @GetMapping("/viewListCart")

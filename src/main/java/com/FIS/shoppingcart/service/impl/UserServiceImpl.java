@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Account;
 
+import com.FIS.shoppingcart.model.AccountDTO;
 import com.FIS.shoppingcart.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.util.Base64Utils;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 
 @Service("userService")
@@ -27,13 +32,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private UserService userService;
+
+
 
     @Override
-    public boolean saveUser(Account account) {
-        // TODO Auto-generated method stub
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        userRepository.saveAndFlush(account);
-        return true;
+    public Account editUser(AccountDTO accountDTO) {
+        Account account = userRepository.getById(accountDTO.getId());
+
+        System.out.println(account);
+
+        account.setName(accountDTO.getName());
+        account.setUsername(accountDTO.getUsername());
+        account.setAddress(accountDTO.getAddress());
+        account.setPhone(accountDTO.getPhone());
+        account.setAvatar(accountDTO.getAvatar());
+
+        System.out.println("In ra cho vui : " + accountDTO.getAvatar());
+
+
+
+        return userRepository.save(account);
     }
 
     @Override
@@ -91,7 +111,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(Account account) {
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         userRepository.save(account);
 
     }
@@ -113,6 +132,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<Account> findUserById(int id) {
         return userRepository.findById(id);
+    }
+
+    @Override
+    public void updatePassword(Account account, String newPassword) {
+        String encoded = new String(bCryptPasswordEncoder.encode(newPassword));
+        account.setPassword(encoded);
+        userRepository.save(account);
+
     }
 
     public void deleteUser(Account account) {
