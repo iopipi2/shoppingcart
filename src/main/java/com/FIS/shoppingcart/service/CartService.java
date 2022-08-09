@@ -2,6 +2,7 @@ package com.FIS.shoppingcart.service;
 
 import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface CartService {
 
     //Cua Hoang
     List<Cart> findCartDone(int buyerId,String status);
+
+    public Page<Cart> listAll(int pageNumber);
+
+
 }

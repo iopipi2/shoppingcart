@@ -48,6 +48,8 @@
                 <span class="fa fa-bars"></span> Menu
             </button>
             <div class="collapse navbar-collapse" id="ftco-nav">
+                
+                
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item dropdown"><a
                             class="nav-link dropdown-toggle" th:href="@{/trang-chu}" id="dropdown04"
@@ -62,6 +64,10 @@
                     <li class="nav-item"><a th:href="@{/viewListCart}" class="nav-link"><b>Quản lí Đơn hàng</b></a></li>
                     <li class="nav-item"><a th:href="@{/viewCart}" class="nav-link"><b> Danh sách sản phẩm đã mua </b></a></li>
                     <li class="nav-item"><a th:href="@{/ViewResetPassword}" class="nav-link"><b> Đổi mật khẩu </b></a></li>
+                    <div class="right-top-bar flex-w h-full" style="margin-left:350px">
+                        <a th:each="account : ${user}" th:href="@{'/member/user?id=' + ${id}}"><img style="border-radius: 50%; height:30px; width:30px; margin:5px" th:src="@{${user.avatarImagePath} == null} ? @{/images/icons/account.png} : @{${user.avatarImagePath}}"></a>
+                        <a sec:authorize="isAuthenticated()" th:href="@{/infoUser}" class="flex-c-m trans-04 p-lr-25"><span sec:authentication = "name"></span></a>
+                    </div>
                     <li class="nav-item"><a th:href="@{/logout}" class="nav-link"><b>Đăng xuất</b></a></li>
                 </ul>
             </div>
