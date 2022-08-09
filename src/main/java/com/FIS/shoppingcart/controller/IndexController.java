@@ -628,7 +628,8 @@ public class IndexController {
     public String editInfomationAccount(@ModelAttribute(name = "users") Account account) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id = userService.findUserByEmail(principal.getUsername()).getId();
-        userService.getUserById(account.getId());
+        account.setAvatar(userService.getUserById(account.getId()).getAvatar());
+        userService.save(account);
         return "redirect:/infoUser";
     }
     @RequestMapping("/ViewResetPassword")
