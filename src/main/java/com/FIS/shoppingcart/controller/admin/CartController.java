@@ -1,4 +1,5 @@
 package com.FIS.shoppingcart.controller.admin;
+import com.FIS.shoppingcart.dao.CartRepository;
 import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
 import com.FIS.shoppingcart.entities.CartLine;
@@ -43,6 +44,11 @@ public class CartController {
 
     private CartServiceImpl cartService;
 
+    @Autowired
+
+    private CartRepository cartRepository;
+
+
     //View All Cart By Admin
     //View All Cart By Admin
     @GetMapping("/admin/cart")
@@ -73,6 +79,16 @@ public class CartController {
         System.out.println("${cartLines.get().getProduct().getId()}");
         model.addAttribute("cartLines", cartLines);
         return "/admin/viewCartLine.html";
+    }
+
+    @GetMapping("/changeStatusCart")
+    public String changeStatusCart(@RequestParam int id) {
+        Optional<Cart> cart = cartService.findCartById(id);
+        if (cart.isPresent()) {
+            cart.get().setStatus("Done");
+            cartService.saveCart(cart.get());
+        }
+        return "redirect:/admin/cart";
     }
 
 

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 @Service("cartService")
 public class CartServiceImpl implements CartService {
@@ -91,4 +92,8 @@ public class CartServiceImpl implements CartService {
         return pagingCartRepository.findAllByAdmin(pageable);
     }
 
+    @Override
+    public Optional<Cart> findCartById(int id) {
+        return cartRepository.findById(id);
+    }
 }

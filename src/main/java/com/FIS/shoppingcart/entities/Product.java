@@ -2,6 +2,7 @@ package com.FIS.shoppingcart.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,9 @@ public class Product implements Serializable {
     @Column(name = "active")
     private boolean active;
 
+    @Column(name = "create_time")
+    private Date createTime;
+
     public int getProductquantity() {
         return productquantity;
     }
@@ -52,6 +56,10 @@ public class Product implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categories_id")
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_id")
+    private Transaction transactions ;
 
     @Column(name = "img_main")
     private String img_main;
@@ -74,18 +82,36 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(int id, String name, Long price, String description, Category category,
-                   String img_main, String img_hover, String img_sub,boolean active) {
-        super();
+    public Product(int id, String name, Long price, int productquantity, boolean active,
+                   Date createTime, String description, Category category, Transaction transactions, String img_main, String img_hover, String img_sub) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.productquantity = productquantity;
+        this.active = active;
+        this.createTime = createTime;
         this.description = description;
         this.category = category;
+        this.transactions = transactions;
         this.img_main = img_main;
         this.img_hover = img_hover;
         this.img_sub = img_sub;
-        this.active=active;
+    }
+
+    public Transaction getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Transaction transactions) {
+        this.transactions = transactions;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Product(int id) {

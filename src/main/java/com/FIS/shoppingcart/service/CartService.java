@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface CartService {
     //BillService
@@ -28,6 +29,8 @@ public interface CartService {
     public Page<Cart> listAll(int id,int pageNumber);
 
     public Page<Cart> listAllByAdmin(int pageNumber);
+
+    Optional<Cart> findCartById(int id);
 
 
 }

@@ -480,7 +480,7 @@ public class IndexController {
     public String viewCart(Model model) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id = userService.findUserByEmail(principal.getUsername()).getId();
-        String done = "done";
+        String done = "Done";
         List<Cart> findAllCartDoneByUserID = cartService.findCartDone(id, done);
         model.addAttribute("cartStatusDone", findAllCartDoneByUserID);
         return "/viewCartUser";
