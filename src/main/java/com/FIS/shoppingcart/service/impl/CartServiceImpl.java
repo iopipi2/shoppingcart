@@ -80,10 +80,15 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Page<Cart> listAll(int pageNumber) {
+    public Page<Cart> listAll(int id,int pageNumber) {
         Pageable pageable = PageRequest.of(pageNumber - 1,5);
-        return pagingCartRepository.findAll(pageable);
+        return pagingCartRepository.findAll(id,pageable);
     }
 
+    @Override
+    public Page<Cart> listAllByAdmin(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        return pagingCartRepository.findAllByAdmin(pageable);
+    }
 
 }

@@ -63,7 +63,7 @@ public class IndexController {
 
     //comerce
 
-//=======================================================================Product=====================================================================
+    //=======================================================================Product=====================================================================
     //View trang chu customer
     @GetMapping(value = "/trang-chu")
     public String getAllProduct(Model model, HttpServletRequest request, @ModelAttribute("categories") Category category, HttpSession session) {
@@ -108,7 +108,7 @@ public class IndexController {
     @GetMapping("/product-detail")
     public String getProductById(Model model, @RequestParam int id,
                                  HttpSession session) {
-            Optional<Product> product=productService.findProductById(id);
+        Optional<Product> product = productService.findProductById(id);
         try {
             LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             model.addAttribute("id", principal.getId());
@@ -118,7 +118,7 @@ public class IndexController {
         }
 
 
-        productService.findProductById(id).ifPresent(p->model.addAttribute("products",p));
+        productService.findProductById(id).ifPresent(p -> model.addAttribute("products", p));
 
 
         return "product-detail";
@@ -150,10 +150,10 @@ public class IndexController {
 
         String lowtohigh = request.getParameter("lowtohigh");
 
-        if(lowtohigh != null && lowtohigh != "") {
+        if (lowtohigh != null && lowtohigh != "") {
             model.addAttribute("products", productService.getProductForProductPagePriceHigh(lowtohigh));
-        }else {
-            model.addAttribute("products", productService.getProductForProductPage(keyword ,priceStart, priceEnd, 0, page * 8));
+        } else {
+            model.addAttribute("products", productService.getProductForProductPage(keyword, priceStart, priceEnd, 0, page * 8));
         }
 
         request.setAttribute("page", page);
@@ -173,7 +173,7 @@ public class IndexController {
         Optional<Product> product = productService.findProductById(id); // lay thong tin san pham
         Object object = session.getAttribute("cart"); //lay session neu co , neu chua co tao 1 session moi la cart
         int totalOfCart = 0;
-        double totalPrice =0;
+        double totalPrice = 0;
         if (object == null) {
             CartLine cartLine = new CartLine();
             cartLine.setProduct(product.get());
@@ -182,7 +182,7 @@ public class IndexController {
             map.put(id, cartLine);
             session.setAttribute("cart", map);
             totalOfCart += numproduct;
-            totalPrice = numproduct*product.get().getPrice();
+            totalPrice = numproduct * product.get().getPrice();
         } else {
             Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;// lay ra map
             CartLine cartLine = map.get(id);
@@ -192,17 +192,17 @@ public class IndexController {
                 cartLine.setQuantity(numproduct);
                 map.put(id, cartLine);
                 Set<Integer> set = map.keySet();
-                for(Integer key : set) {
+                for (Integer key : set) {
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice() * map.get(key).getQuantity();
                 }
             } else { // neu co sp trong map roi thi tang sl cua sp len
 
                 cartLine.setQuantity(cartLine.getQuantity() + numproduct);
                 Set<Integer> set = map.keySet();
-                for(Integer key : set) {
+                for (Integer key : set) {
                     totalOfCart += map.get(key).getQuantity();
-                    totalPrice += map.get(key).getProduct().getPrice()*map.get(key).getQuantity();
+                    totalPrice += map.get(key).getProduct().getPrice() * map.get(key).getQuantity();
                 }
             }
         }
@@ -212,31 +212,32 @@ public class IndexController {
         session.setAttribute("totalOfCart", totalOfCart);
         return "redirect:/product-detail?id=" + id;
     }
+
     //Update cart
     @PostMapping("/update-cart")
-    public String updateCart( Model model,@RequestParam(name = "id") int id, HttpServletRequest req) {
+    public String updateCart(Model model, @RequestParam(name = "id") int id, HttpServletRequest req) {
         HttpSession session = req.getSession();
         double totalPrice = 0;
         Object object = session.getAttribute("cart");
         Integer totalOfCart = (Integer) session.getAttribute("totalOfCart");
-            Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
-            CartLine cartLine = map.get(id);
-             // neu co sp trong map roi thi tang sl cua sp len
-                cartLine.setQuantity(Integer.parseInt(req.getParameter("quantity")));
-                Set<Integer> set = map.keySet();
-                for (Integer key : set) {
-                    session.removeAttribute("totalOfCart");
-                    session.removeAttribute("totalPrice");
-                    totalOfCart += cartLine.getQuantity();
-                    totalPrice += map.get(key).getProduct().getPrice()*Integer.parseInt(req.getParameter("quantity"));
-                }
-                session.setAttribute("totalOfCart", totalOfCart);
-                session.setAttribute("totalPrice", totalPrice);
-                session.setAttribute("cart", map);
-            return "redirect:/trang-chu";
+        Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
+        CartLine cartLine = map.get(id);
+        // neu co sp trong map roi thi tang sl cua sp len
+        cartLine.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+        Set<Integer> set = map.keySet();
+        for (Integer key : set) {
+            session.removeAttribute("totalOfCart");
+            session.removeAttribute("totalPrice");
+            totalOfCart += cartLine.getQuantity();
+            totalPrice += map.get(key).getProduct().getPrice() * Integer.parseInt(req.getParameter("quantity"));
         }
+        session.setAttribute("totalOfCart", totalOfCart);
+        session.setAttribute("totalPrice", totalPrice);
+        session.setAttribute("cart", map);
+        return "redirect:/trang-chu";
+    }
 
-    @SuppressWarnings({ "deprecation", "unchecked", "unused" })
+    @SuppressWarnings({"deprecation", "unchecked", "unused"})
     @GetMapping(value = "/delete-from-cart")
     public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "key", required = true) int key) {
         HttpSession session = req.getSession();
@@ -252,48 +253,50 @@ public class IndexController {
         }
         return "redirect:/trang-chu";
     }
+
     @PostMapping(value = "/check-out")
-    public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine1,HttpServletRequest request
-                           ) throws IOException {
+    public String checkout(HttpSession session, @ModelAttribute("checkout") CartLine cartLine1, HttpServletRequest request
+    ) throws IOException {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account account= userService.findUserByEmail(principal.getUsername());
-        Cart cart=new Cart();
+        Account account = userService.findUserByEmail(principal.getUsername());
+        Cart cart = new Cart();
         cart.setBuyer(account);
         cart.setBuyDate(new Date());
         cart.setStatus("pending");
-        String total= session.getValue("totalPrice").toString();
+        String total = session.getValue("totalPrice").toString();
         cart.setPriceTotal(Double.parseDouble(total));
 
-        List<CartLine>cartLines= new ArrayList<CartLine>();
+        List<CartLine> cartLines = new ArrayList<CartLine>();
         Object object = session.getAttribute("cart");
         Integer totalOfCart = (Integer) session.getAttribute("totalOfCart");
         Map<Integer, CartLine> map = (Map<Integer, CartLine>) object;
         Set<Integer> set = map.keySet();
         for (Integer key : set) {
 
-                CartLine cartLine = new CartLine();
-                cartLine.setCart(cart);
+            CartLine cartLine = new CartLine();
+            cartLine.setCart(cart);
 
-                Product product = productService.findProductById(map.get(key).getProduct().getId()).get();
-                if (map.get(key).getQuantity() > product.getProductquantity()) {
-                    String mess = "Vui lòng chọn lại số lượng";
-                    return mess;
-                } else {
-                    product.setProductquantity(product.getProductquantity() - map.get(key).getQuantity());
-                    productService.updateProduct(product);
-                }
-                cartLine.setQuantity(map.get(key).getQuantity());
-                cartLine.setProduct(product);
-                cartLines.add(cartLine);
+            Product product = productService.findProductById(map.get(key).getProduct().getId()).get();
+            if (map.get(key).getQuantity() > product.getProductquantity()) {
+                String mess = "Vui lòng chọn lại số lượng";
+                return mess;
+            } else {
+                product.setProductquantity(product.getProductquantity() - map.get(key).getQuantity());
+                productService.updateProduct(product);
+            }
+            cartLine.setQuantity(map.get(key).getQuantity());
+            cartLine.setProduct(product);
+            cartLines.add(cartLine);
         }
         cart.setCartItem(cartLines);
         cartService.saveCart(cart);
         session.removeAttribute("cart");
         session.removeAttribute("totalPrice");
         session.removeAttribute("totalOfCart");
-        return "redirect:/trang-chu" ;
+        return "redirect:/trang-chu";
     }
-    @GetMapping(value="/cancel-cart")
+
+    @GetMapping(value = "/cancel-cart")
     public String cancelCart(HttpServletRequest req) {
         HttpSession session = req.getSession();
         Object object = session.getAttribute("cart");
@@ -312,12 +315,12 @@ public class IndexController {
     //ViewCart
     @GetMapping("/cart/viewcart")
     public String viewCartLine(Model model,
-                               HttpSession session,HttpServletRequest request) {
+                               HttpSession session, HttpServletRequest request) {
         Object object = session.getAttribute("cart");
-        int id=1;
+        int id = 1;
         try {
             LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Account user= userService.findUserByEmail(principal.getUsername());
+            Account user = userService.findUserByEmail(principal.getUsername());
             model.addAttribute("id", principal.getId());
             model.addAttribute("user", user);
 
@@ -325,10 +328,11 @@ public class IndexController {
             e.getStackTrace();
         }
         List<CartLine> cartLines = cartLineService.findCartLines();
-        model.addAttribute("cart",object);
+        model.addAttribute("cart", object);
         model.addAttribute("cartLines", cartLines);
         return "cart";
     }
+
     @GetMapping("/login")
     public ModelAndView login(@RequestParam(name = "error", required = false) String error,
                               @RequestParam(name = "logout", required = false) String logout) {
@@ -423,6 +427,7 @@ public class IndexController {
         userService.save(account);
         return "redirect:/infoUser";
     }
+
     @RequestMapping("/ViewResetPassword")
     public ModelAndView updatePassword() {
         ModelAndView mav = new ModelAndView("changePassword");
@@ -482,18 +487,18 @@ public class IndexController {
     }
 
     @GetMapping("/viewListCart")
-    public String pagingCartView(Model model,HttpServletRequest request){
+    public String pagingCartView(Model model, HttpServletRequest request) {
 
-        return listByPage(model,1);
+        return listByPage(model, 1);
 
     }
 
     @GetMapping("/page/{pageNumber}")
-    public String listByPage(Model model, @PathVariable("pageNumber") int currentPage){
+    public String listByPage(Model model, @PathVariable("pageNumber") int currentPage) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id = userService.findUserByEmail(principal.getUsername()).getId();
         System.out.println(currentPage);
-        Page<Cart> pagingCart = cartService.listAll(currentPage);
+        Page<Cart> pagingCart = cartService.listAll(id,currentPage);
 
 
         int totalPage = pagingCart.getTotalPages();
@@ -504,16 +509,18 @@ public class IndexController {
         System.out.println(pagingCart.getSize());
 
         List<Cart> listCart = new ArrayList<>();
-        for(Cart c: pagingCart ){
-            if(c.getBuyer().getId() == id){
+        for (Cart c : pagingCart) {
+            if (c.getBuyer().getId() == id) {
                 listCart.add(c);
             }
+
         }
 
-        model.addAttribute("currentPage",currentPage);
-        model.addAttribute("totalPage",totalPage);
-        model.addAttribute("listCart",listCart);
+            model.addAttribute("currentPage", currentPage);
+            model.addAttribute("totalPage", totalPage);
+            model.addAttribute("listCart", listCart);
 
-        return "/viewCartDetail";
+            return "/viewCartDetail";
+        }
     }
-}
+

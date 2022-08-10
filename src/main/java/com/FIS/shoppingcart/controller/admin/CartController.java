@@ -54,7 +54,7 @@ public class CartController {
     @GetMapping("/admin/cart/page/{pageNumber}")
     public String listCartByAdmin(Model model,@PathVariable(name = "pageNumber") int currentPage){
 
-        Page<Cart> pagingCart = cartService.listAll(currentPage);
+        Page<Cart> pagingCart = cartService.listAllByAdmin(currentPage);
 
         int totalPage = pagingCart.getTotalPages();
         model.addAttribute("currentPage",currentPage);

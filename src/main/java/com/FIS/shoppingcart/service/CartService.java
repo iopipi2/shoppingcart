@@ -25,5 +25,9 @@ public interface CartService {
     //Cua Hoang
     List<Cart> findCartDone(int buyerId,String status);
 
-    public Page<Cart> listAll(int pageNumber);
+    public Page<Cart> listAll(int id,int pageNumber);
+
+    public Page<Cart> listAllByAdmin(int pageNumber);
+
+
 }
