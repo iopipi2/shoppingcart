@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart,Integer> {
@@ -21,6 +22,9 @@ public interface CartRepository extends JpaRepository<Cart,Integer> {
      //Cua Hoang
      @Query("SELECT a FROM Cart a WHERE a.buyer.id= :buyerID AND a.status = :status ")
      List<Cart> findCartDone(int buyerID,String status);
+
+    @Query("SELECT p FROM Cart p WHERE p.buyer.id= :buyerID AND p.status = :status")
+    public List<Cart> findAll(String buyerID,String status ,Pageable pageable);
 
 
 }

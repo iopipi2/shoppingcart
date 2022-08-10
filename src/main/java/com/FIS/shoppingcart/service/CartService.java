@@ -4,6 +4,7 @@ import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
 import com.FIS.shoppingcart.entities.CartLine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.ArrayList;
@@ -23,4 +24,6 @@ public interface CartService {
 
     //Cua Hoang
     List<Cart> findCartDone(int buyerId,String status);
+
+    public Page<Cart> listAll(int pageNumber);
 }

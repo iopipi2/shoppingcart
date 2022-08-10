@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Manage Carttttttttttttttt</title>
+    <title>Detail Cart</title>
     <link rel="stylesheet"
           th:href="@{https://fonts.googleapis.com/css?family=Roboto|Varela+Round}">
     <link rel="stylesheet"
@@ -153,7 +153,6 @@ table.table .avatar {
 	vertical-align: middle;
 	margin-right: 10px;
 }
-
 .pagination {
 	float: right;
 	margin: 0 0 5px;
@@ -329,108 +328,79 @@ table.table .avatar {
 <div class="container-xl">
     <div class="table-responsive">
         <div class="table-wrapper">
-            <div class="table-title">
+<div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
                         <h2>
-                            Manage <b>Cart Lines</b>
+                            Detail <b>Cart</b>
                         </h2>
                     </div>
-
                 </div>
             </div>
             <div class="container">
 
                 <choose>
                     <when test="${not empty cartLines }">
-                        <table id="cart" class="table table-hover table-condensed">
+                        <table id="cart" class="table table-hover table-condensed" style="text-align:center ;">
                             <thead>
                             <tr>
-                                <th style="width: 50%">Product</th>
-                                <th style="width: 20%">Product Name</th>
-                                <th style="width: 10%">Price</th>
-                                <th style="width: 8%">Quantity</th>
+								<th style="width: 30%" class="text-center">Sản phẩm</th>
+                                <th style="width: 20%" class="text-center">Tên sản phẩm </th>
+                                <th style="width: 10%" class="text-center">Giá</th>
+                                <th style="width: 8%" class="text-center">Số lượng</th>
+                                <th style="width: 20%" class="text-center">Tổng giá</th>
                                 <th style="width: 10%"></th>
                             </tr>
                             </thead>
+
+
                             <tbody>
                             <th:block th:each="c : ${cartLines}">
 
-                                <tr>
-                                    <td>
-                                        <span>
-                                            <img style="width: 100px; height: 120px;"
-                                                   th:src="@{${c.product.mainImagePath}}" alt="IMG-LOGO">
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span th:text=" ${c.product.name
-                                    }">
-                                        </span>
-                                    <td>
-                                        <span th:text=" ${c.product.price
-                                    }">
-
-                                        </span>
-                                    </td>
-                                    <td><span th:text=" ${c.quantity}"></span></td>
+								<tr>
+                                    <td class="text-center"><img style="width: 100px; height: 120px;"
+                                                                 th:src="@{${c.product.mainImagePath}}" alt="IMG-LOGO"> </td>
+                                    <td class="text-center"><span th:text=" ${c.product.name}"></span></td>
+                                    <td class="text-center"><span th:text=" ${c.product.price} + '$'"></span></td>
+                                    <td class="text-center"><span th:text=" ${c.quantity}"></span></td>
+                                    <td class="text-center"><span>[[${c.quantity}]]*[[${c.product.price}]]</span></td>
+									
                                 </tr>
 
                             </th:block>
 
+
                             </tbody>
-<!--                            <tfoot>-->
-<!--                            <tr class="visible-xs">-->
-<!--                                <td class="text-center"><strong>Total &#8377;-->
-<!--                                    ${userModel.cart.grandTotal }</strong></td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span-->
-<!--                                        class="glyphicon glyphicon-chevron-left"></span> Continue-->
-<!--                                    Shopping</a></td>-->
-<!--                                <td colspan="2" class="hidden-xs"></td>-->
-<!--                                <td class="hidden-xs text-center"><strong>Total-->
-<!--                                    &#8377; ${userModel.cart.grandTotal }</strong></td>-->
-<!--                                <td><a href="#" class="btn btn-success btn-block">Checkout-->
-<!--                                    <span class="glyphicon glyphicon-chevron-right"></span>-->
-<!--                                </a></td>-->
-<!--                            </tr>-->
-<!--                            </tfoot>-->
+
+
+
 
                         </table>
                     </when>
-                    <otherwise>
-                        <div class="jumbotron">
-                            <div class="text-center">
-                                <h1>Your cart is empty!</h1>
 
-                            </div>
-
-                        </div>
-                    </otherwise>
 
                 </choose>
 
 
             </div>
-            </div>
+        </div>
 
-            <div class="clearfix">
-                <div class="hint-text">
-                    Showing <b>5</b> out of <b>25</b> entries
-                </div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
+        <div class="clearfix">
+            <div class="hint-text">
+                Showing <b>5</b> out of <b>25</b> entries
             </div>
+            <ul class="pagination">
+                <li class="page-item disabled"><a href="#">Previous</a></li>
+                <li class="page-item"><a href="#" class="page-link">1</a></li>
+                <li class="page-item"><a href="#" class="page-link">2</a></li>
+                <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                <li class="page-item"><a href="#" class="page-link">4</a></li>
+                <li class="page-item"><a href="#" class="page-link">5</a></li>
+                <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
         </div>
     </div>
+</div>
 </div>
 <!-- Add Modal HTML -->
 <div th:replace="/admin/footer :: footer"></div>

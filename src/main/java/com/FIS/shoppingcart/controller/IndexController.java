@@ -10,6 +10,7 @@ import com.FIS.shoppingcart.service.impl.UserServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -75,8 +76,31 @@ public class IndexController {
         } catch (Exception e) {
             e.getStackTrace();
         }
-        model.addAttribute("products", productService.findAllProducts());
+        String keyword = request.getParameter("keyword") == null ? "" : request.getParameter("keyword");
+
+        Integer page = request.getParameter("page") == null ? 1 : Integer.valueOf(request.getParameter("page"));
+
+        Long priceStart = (request.getParameter("priceStart") == null || request.getParameter("priceStart") == "") ? 1
+                : Long.valueOf(request.getParameter("priceStart"));
+
+        Long priceEnd = (request.getParameter("priceEnd") == null || request.getParameter("priceEnd") == "") ? 100000
+                : Long.valueOf(request.getParameter("priceEnd"));
+
+        String lowtohigh = request.getParameter("lowtohigh");
+
+        if (lowtohigh != null && lowtohigh != "") {
+            model.addAttribute("products", productService.getProductForProductPagePriceHigh(lowtohigh));
+        } else {
+            model.addAttribute("products", productService.getProductForProductPage(keyword, priceStart, priceEnd, 0, page * 8));
+        }
+
+        request.setAttribute("page", page);
+        request.setAttribute("priceStart", priceStart);
+        request.setAttribute("priceEnd", priceEnd);
+        request.setAttribute("keyword", keyword);
+
         model.addAttribute("cate", categoryService.findAllCategories());
+
         return "index";
     }
 
@@ -93,64 +117,13 @@ public class IndexController {
             e.getStackTrace();
         }
 
-//        long numberOfReview = reviewDao.countById(id);
-//
-//        model.addAttribute("numberOfReview", numberOfReview);
-//
-//        System.out.println(numberOfReview);
-//
-//        model.addAttribute("reviews", reviewService.find(id));
+
         productService.findProductById(id).ifPresent(p->model.addAttribute("products",p));
 
-//        model.addAttribute("products", product);
 
         return "product-detail";
     }
-//
-//    @PostMapping(value = "/member/product-detail/review")
-//    public String review(HttpServletRequest request, @ModelAttribute ReviewDTO reviewDTO, @RequestParam(name = "productId", required = false) Integer productId,
-//                         @RequestParam(name = "starNumber") int starNumber, @RequestParam(name = "review") String review) {
-//
-//        LoginService loginService = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        int check = 0;
-//        List<ReviewDTO> list = reviewService.find(productId);
-//
-//        if (list.isEmpty()) {
-//            UserDTO userDTO = new UserDTO();
-//            userDTO.setName(loginService.getName());
-//            userDTO.setId(loginService.getId());
-//            reviewDTO.setUserDTO(userDTO);
-//            reviewDTO.setReview(review);
-//            ProductDTO productDTO = new ProductDTO();
-//            productDTO.setId(productId);
-//            reviewDTO.setProductDTO(productDTO);
-//            reviewDTO.setStarNumber(starNumber);
-//            reviewService.add(reviewDTO);
-//        }
-//        for (ReviewDTO reviewDTO2 : list) {// kiem tra de moi nguoi dung chi comment dc  1 laan
-//            if (reviewDTO2.getUserDTO().getId()==loginService.getId()) {
-//                check = 1;
-//                break;
-//
-//            } else {check=2;}
-//        }
-//        if (check == 2) {
-//            UserDTO userDTO = new UserDTO();
-//            userDTO.setName(loginService.getName());
-//            userDTO.setId(loginService.getId());
-//            reviewDTO.setUserDTO(userDTO);
-//            reviewDTO.setReview(review);
-//            ProductDTO productDTO = new ProductDTO();
-//            productDTO.setId(productId);
-//            reviewDTO.setProductDTO(productDTO);
-//            reviewDTO.setStarNumber(starNumber);
-//            reviewService.add(reviewDTO);
-//        }
-//
-//
-//        return "redirect:/product-detail?id=" + productId;
-//    }
+
 
     //Filter product by price, category,...
     @GetMapping(value = "/product")
@@ -262,22 +235,7 @@ public class IndexController {
                 session.setAttribute("cart", map);
             return "redirect:/trang-chu";
         }
-    //Delete product from cart
-//    @GetMapping(value = "/delete-from-cart")
-//    public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "id") int id) {
-//        HttpSession session = req.getSession();
-//        Object object = session.getAttribute("cart");
-//        int totalOfCart = (int) session.getValue("totalOfCart");
-//        double totalPrice = (double) session.getValue("totalPrice");
-//        if (object != null) {
-//            Map<Integer, CartItemDTO> map = (Map<Integer, CartItemDTO>) object;
-//            session.setAttribute("totalOfCart", totalOfCart - map.get(id).getQuantity());
-//            session.setAttribute("totalPrice", totalPrice - map.get(id).getQuantity()*map.get(id).getProduct().getPrice());
-//            map.remove(id);
-//            session.setAttribute("cart", map);
-//        }
-//        return "redirect:/trang-chu";
-//    }
+
     @SuppressWarnings({ "deprecation", "unchecked", "unused" })
     @GetMapping(value = "/delete-from-cart")
     public String Deletefromtocart(HttpServletRequest req, @RequestParam(name = "key", required = true) int key) {
@@ -299,24 +257,12 @@ public class IndexController {
                            ) throws IOException {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account= userService.findUserByEmail(principal.getUsername());
-//        int id= Integer.parseInt(request.getParameter("productid"));
-//        Optional<Product>product=productService.findProductById(id);
         Cart cart=new Cart();
         cart.setBuyer(account);
         cart.setBuyDate(new Date());
         cart.setStatus("pending");
         String total= session.getValue("totalPrice").toString();
         cart.setPriceTotal(Double.parseDouble(total));
-//        cartline.setProduct(product.get());
-//        cartline.setQuantity(cartLine.getQuantity());
-//        if(cartline.getQuantity()>product.get().getProductquantity())
-//        {
-//            String mess="Vui lòng chọn lại số lượng";
-//            return mess;
-//        }
-//        else {product.get().setProductquantity(product.get().getProductquantity()-cartline.getQuantity());
-//        productService.updateProduct(product.get());}
-//        cartline.setCart(cart);
 
         List<CartLine>cartLines= new ArrayList<CartLine>();
         Object object = session.getAttribute("cart");
@@ -347,8 +293,6 @@ public class IndexController {
         session.removeAttribute("totalOfCart");
         return "redirect:/trang-chu" ;
     }
-
-
     @GetMapping(value="/cancel-cart")
     public String cancelCart(HttpServletRequest req) {
         HttpSession session = req.getSession();
@@ -365,17 +309,6 @@ public class IndexController {
         return "redirect:/trang-chu";
     }
 
-    @GetMapping("/My Order")
-    public String viewallCart(Model model,@RequestParam int id) {
-        //Test find by user id
-        //List<Cart> allcart=cartService.findAllCart();
-
-        List<CartLine> cartItem = cartLineService.findCartLineByCartId(id);
-        System.out.println(cartItem);
-        model.addAttribute("cartLines", cartItem);
-
-        return "";
-    }
     //ViewCart
     @GetMapping("/cart/viewcart")
     public String viewCartLine(Model model,
@@ -396,8 +329,6 @@ public class IndexController {
         model.addAttribute("cartLines", cartLines);
         return "cart";
     }
-
-
     @GetMapping("/login")
     public ModelAndView login(@RequestParam(name = "error", required = false) String error,
                               @RequestParam(name = "logout", required = false) String logout) {
@@ -451,7 +382,8 @@ public class IndexController {
     public String infoUser(Model model) {
 
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account users = userService.findUserByEmail(principal.getUsername());
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
+        Account users = userService.getUserById(id);
         model.addAttribute("user", users);
         System.out.println(users);
         return "/detailUser";
@@ -467,7 +399,6 @@ public class IndexController {
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-
 
         try (InputStream inputStream = file.getInputStream()) {
             Path filePathMain = uploadPath.resolve(fileName);
@@ -485,21 +416,18 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/editInfo", method = RequestMethod.POST)
-    public String editInfomationAccount(@ModelAttribute(name = "users") Account account){
+    public String editInfomationAccount(@ModelAttribute(name = "users") Account account) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int id= userService.findUserByEmail(principal.getUsername()).getId();
-        userService.getUserById(account.getId());
-        account.setAvatar( userService.getUserById(account.getId()).getAvatar());
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
+        account.setAvatar(userService.getUserById(account.getId()).getAvatar());
         userService.save(account);
         return "redirect:/infoUser";
     }
-
     @RequestMapping("/ViewResetPassword")
     public ModelAndView updatePassword() {
         ModelAndView mav = new ModelAndView("changePassword");
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Account account = userService.getUserById(principal.getId());
-
         mav.addObject("account", account);
         userService.save(account);
         return mav;
@@ -507,20 +435,18 @@ public class IndexController {
 
     //Cua Hoang----------------------------------------------------------------------------------
     @RequestMapping("/editPassword")
-    public String changePass(Model model, HttpServletRequest request){
+    public String changePass(Model model, HttpServletRequest request) {
         String username = request.getParameter("username");
         String password = request.getParameter("confirmPass");
-
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int id= userService.findUserByEmail(principal.getUsername()).getId();
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
         Account account = userService.getUserById(id);
-
         model.addAttribute("title", "Reset your password");
-        if(account == null) {
-            model.addAttribute("message","Invalid id");
+        if (account == null) {
+            model.addAttribute("message", "Invalid id");
             return "message";
-        }else{
-            userService.updatePassword(account,password);
+        } else {
+            userService.updatePassword(account, password);
             model.addAttribute(account);
         }
 
@@ -528,17 +454,15 @@ public class IndexController {
 
 
     }
-
-
     //Cua Hoang----------------------------------------------------------------------------------
-    @GetMapping("/viewListCart")
-    public String viewAllCart(Model model) {
-        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int id= userService.findUserByEmail(principal.getUsername()).getId();
-        List<Cart> findAllCartByUserID = cartService.findCartByBuyerId(id);
-        model.addAttribute("carts", findAllCartByUserID);
-        return "/viewCartDetail";
-    }
+//    @GetMapping("/viewListCart")
+//    public String viewAllCart(Model model) {
+//        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        int id= userService.findUserByEmail(principal.getUsername()).getId();
+//        List<Cart> findAllCartByUserID = cartService.findCartByBuyerId(id);
+//        model.addAttribute("carts", findAllCartByUserID);
+//        return "/viewCartDetail";
+//    }
 
     @GetMapping("/cart/cartline")
     public String viewCartLine(Model model, @RequestParam int id) {
@@ -548,12 +472,48 @@ public class IndexController {
     }
 
     @GetMapping("/viewCart")
-    public String viewCart(Model model){
+    public String viewCart(Model model) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        int id= userService.findUserByEmail(principal.getUsername()).getId();
-        String done="done";
-        List<Cart> findAllCartDoneByUserID = cartService.findCartDone(id,done);
-        model.addAttribute("cartStatusDone",findAllCartDoneByUserID);
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
+        String done = "done";
+        List<Cart> findAllCartDoneByUserID = cartService.findCartDone(id, done);
+        model.addAttribute("cartStatusDone", findAllCartDoneByUserID);
         return "/viewCartUser";
+    }
+
+    @GetMapping("/viewListCart")
+    public String pagingCartView(Model model,HttpServletRequest request){
+
+        return listByPage(model,1);
+
+    }
+
+    @GetMapping("/page/{pageNumber}")
+    public String listByPage(Model model, @PathVariable("pageNumber") int currentPage){
+        LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
+        System.out.println(currentPage);
+        Page<Cart> pagingCart = cartService.listAll(currentPage);
+
+
+        int totalPage = pagingCart.getTotalPages();
+        System.out.println(pagingCart.getTotalPages());
+        System.out.println(pagingCart.getTotalElements());
+        System.out.println(pagingCart.getNumber());
+        System.out.println(pagingCart.getNumberOfElements());
+        System.out.println(pagingCart.getSize());
+
+        List<Cart> listCart = new ArrayList<>();
+        for(Cart c: pagingCart ){
+            if(c.getBuyer().getId() == id){
+                listCart.add(c);
+            }
+        }
+
+        model.addAttribute("currentPage",currentPage);
+        model.addAttribute("totalPage",totalPage);
+        model.addAttribute("listCart",listCart);
+
+        return "/viewCartDetail";
     }
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Manage Carttttttttttttttt</title>
+    <title>Manage Cart</title>
     <link rel="stylesheet"
           th:href="@{https://fonts.googleapis.com/css?family=Roboto|Varela+Round}">
     <link rel="stylesheet"
@@ -336,43 +336,57 @@ table.table .avatar {
                             Manage <b>Cart</b>
                         </h2>
                     </div>
+                    <div class="col-sm-6">
 
+                    </div>
                 </div>
             </div>
             <div class="container">
-
-
-
                 <choose>
-                    <when test="${not empty cartLines }">
-                        <table id="cart" class="table table-hover table-condensed">
+                    <when test="${not empty listCart }">
+                        <table id="cart" class="table table-hover table-condensed" style="text-align:center ;">
                             <thead>
                             <tr>
-                                <th style="width: 50%">ID</th>
-                                <th style="width: 10%">User</th>
-                                <th style="width: 8%">Status</th>
-                                <th style="width: 22%" class="text-center">Pricetotal</th>
-                                <th style="width: 10%"></th>
+                                <th style="width: 10%" >ID</th>
+                                <th style="width: 20%">User</th>
+                                <th style="width: 22%">Email</th>
+                                <th style="width: 22%">Status</th>
+                                <th style="width: 20%">Subtotal</th>
+                                <th style="width: 20%"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            <th:block th:each="c : ${carts}">
+                            <th:block th:each="c : ${listCart}">
+
                                 <tr>
                                     <td><span th:text=" ${c.id}"></span></td>
                                     <td><span th:text=" ${c.buyer.name}"></span></td>
+                                    <td><span th:text=" ${c.buyer.username}"></span></td>
                                     <td><span th:text="${c.status}"></span></td>
-                                    <span th:text="${c.priceTotal}"></span></td>
+                                    <td><span th:text="${c.priceTotal}"></span></td>
                                     <td><span><a th:href="'/admin/cart/cartline?id='+ ${c.id}">Details</a></span></td>
 
                                 </tr>
 
-                            </th:block>>
+                            </th:block>
 
 
                             </tbody>
 
 
+                            <tfoot>
 
+                            <tr>
+                                <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span
+                                        class="glyphicon glyphicon-chevron-left"></span> Continue
+                                    Shopping</a></td>
+                                <td colspan="2" class="hidden-xs"></td>
+
+                                <td><a href="#" class="btn btn-success btn-block">Checkout
+                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                </a></td>
+                            </tr>
+                            </tfoot>
 
                         </table>
                     </when>
@@ -384,17 +398,17 @@ table.table .avatar {
             </form>
             <div class="clearfix">
                 <div class="hint-text">
-                    Showing <b>5</b> out of <b>25</b> entries
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
+                    Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
+                    &nbsp;
+                    <span th:each = "i: ${#numbers.sequence(1, totalPage)}">
+						<a th:href = "@{'/admin/cart/page/' + ${i}}">[[${i}]]</a> &nbsp;&nbsp;
+
+					</span>
                 </div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
             </div>
         </div>
     </div>

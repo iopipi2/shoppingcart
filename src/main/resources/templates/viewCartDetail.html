@@ -353,7 +353,7 @@ table.table .avatar {
                             <tr>
                                 <th style="width: 10%">ID</th>
                                 <th style="width: 20%">User</th>
-                                <th style="width: 22%" class="text-center">Pricetotal</th>
+                                <th style="width: 22%" class="text-center">Subtotal</th>
                                 <th style="width: 20%" class="text-center">Status</th>
                                 <th style="width: 20%">Detail</th>
                             </tr>
@@ -361,7 +361,7 @@ table.table .avatar {
 
 
                             <tbody>
-                            <th:block th:each="c : ${carts}">
+                            <th:block th:each="c : ${listCart}">
 
                                 <tr>
                                     <td><span th:text=" ${c.id}"></span></td>
@@ -401,17 +401,17 @@ table.table .avatar {
             </div>
             <div class="clearfix">
                 <div class="hint-text">
-                    Showing <b>5</b> out of <b>25</b> entries
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
+                    Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
+                    &nbsp;
+                    <span th:each = "i: ${#numbers.sequence(1, totalPage)}">
+						<a th:href = "@{'/page/' + ${i}}">[[${i}]]</a> &nbsp;&nbsp;
+
+					</span>
                 </div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    <li class="page-item"><a href="#" class="page-link">2</a></li>
-                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                    <li class="page-item"><a href="#" class="page-link">4</a></li>
-                    <li class="page-item"><a href="#" class="page-link">5</a></li>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
             </div>
         </div>
     </div>

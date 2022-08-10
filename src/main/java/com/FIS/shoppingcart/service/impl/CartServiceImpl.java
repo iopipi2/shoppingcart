@@ -1,6 +1,7 @@
 package com.FIS.shoppingcart.service.impl;
 
 import com.FIS.shoppingcart.dao.CartRepository;
+import com.FIS.shoppingcart.dao.PagingCartRepository;
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Account;
 import com.FIS.shoppingcart.entities.Cart;
@@ -8,6 +9,9 @@ import com.FIS.shoppingcart.entities.UserModel;
 import com.FIS.shoppingcart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -19,7 +23,8 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserRepository userRepository;
 
-
+    @Autowired
+    private PagingCartRepository pagingCartRepository;
     @Autowired
     private CartService cartService;
     @Qualifier("cartRepository")
@@ -74,6 +79,11 @@ public class CartServiceImpl implements CartService {
         return cartRepository.findCartDone(buyerId,status);
     }
 
+    @Override
+    public Page<Cart> listAll(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1,5);
+        return pagingCartRepository.findAll(pageable);
+    }
 
 
 }

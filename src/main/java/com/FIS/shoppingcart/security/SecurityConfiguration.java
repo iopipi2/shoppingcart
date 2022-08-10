@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		//phân quyền
 
 		http.csrf().disable();
-		http.authorizeRequests().antMatchers("/admin/**", "/admin/**")//
+		http.authorizeRequests().antMatchers("/admin/cart", "/admin/product")//
 				.access("hasAnyRole('ROLE_ADMIN')");
 
 		//Cấu hình form login

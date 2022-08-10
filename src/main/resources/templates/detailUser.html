@@ -100,7 +100,7 @@
         }
 
         table.table-striped tbody tr:nth-of-type(odd) {
-            background-color: #fcfcfc;
+background-color: #fcfcfc;
         }
 
         table.table-striped.table-hover tbody tr:hover {
@@ -232,7 +232,7 @@
             width: 6px;
             height: 11px;
             border: solid #000;
-            border-width: 0 3px 3px 0;
+border-width: 0 3px 3px 0;
             transform: inherit;
             z-index: 3;
             transform: rotateZ(45deg);
@@ -369,9 +369,9 @@
                         </td>
 
                         <td><a class="edit" th:attr="data-target='#editInfoModal'+${p.id}"
-                            data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
-                                                   title="EditInfo">&#xE254;</i>Sửa thông tin</a>
-                     </td>
+                               data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                                      title="EditInfo">&#xE254;</i>Sửa thông tin</a>
+                        </td>
 
                     </tr>
 
@@ -389,8 +389,8 @@
 
                                         <div class="form-group">
                                             <label>Ảnh đại điện</label><input th:value = "p.username" id="fileImage2" type="file"
-                                                                               class="form-control" name="avatarImage"
-                                                                               accept="image/png,image/jpeg">
+                                                                              class="form-control" name="avatarImage"
+                                                                              accept="image/png,image/jpeg">
 
                                         </div>
 
@@ -418,7 +418,7 @@
                                                                                    class="form-control" th:value="*{p.phone}" name="phone"
                                                                                    required>
                                         </div>
-                                        
+
                                         <div class="form-group" hidden part="password">
                                             <label>Mật khẩu</label> <input type="password"
                                                                              th:value="*{p.password}" name="password" class="form-control"
@@ -433,7 +433,6 @@
                                             <label>Chức năng</label> <input type="role" th:value="*{p.role}"
                                                                              name="role" class="form-control" required readonly>
                                         </div>
-
                                         <div class="form-group" hidden>
                                             <label>Trạng thái tài khoản</label> <input type="text"
                                                                                            th:value="*{p.enabled}" name="enabled" class="form-control"
@@ -481,7 +480,7 @@
                                                                                    class="form-control" th:value="*{p.phone}" name="phone"
                                                                                    required>
                                         </div>
-                                        
+
                                         <div class="form-group" hidden part="password">
                                             <label>Mật khẩu</label> <input type="password"
                                                                              th:value="*{p.password}" name="password" class="form-control"
@@ -532,7 +531,7 @@
         });
 
         function showImageThumbnail1(fileInput) {
-            file = fileInput.files[0];
+file = fileInput.files[0];
             reader = new FileReader();
 
             reader.onload = function (e) {

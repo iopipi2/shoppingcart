@@ -20,25 +20,25 @@
                 <div th:if="${param.error}">
                     <p style = "color : red; text-align: center">Invalid User or Password. Please Enter Again</p>
                 </div>
-                <!--                <div th:if="${param.otp}">-->
-                <!--                    <p style = "color : red; text-align: center">Kiểm tra mã OTP được gửi tới email [[${param.email}]]</p>-->
-                <!--                </div>-->
+<!--                <div th:if="${param.otp}">-->
+<!--                    <p style = "color : red; text-align: center">Kiểm tra mã OTP được gửi tới email [[${param.email}]]</p>-->
+<!--                </div>-->
 
                 <div th:if="${param.logout}">
                     <p style = "color : red; text-align: center"> Bạn vừa mới logout</p>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="Email"
-                                                          placeholder="Email" th:value="${param.mail}" name="username" required/>
+                                                       placeholder="Email" th:value="${param.mail}" name="username" required/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="password"
-                                                          placeholder="Mật khẩu" th:value="${param.password}" name="password" required/>
+                                                       placeholder="Mật khẩu" th:value="${param.password}" name="password" required/>
                 </div>
-                <!--                <div class="input-field">-->
-                <!--                    <i class="fas fa-lock"></i> <input type="password"-->
-                <!--                                                       th:placeholder="${param.otp != null ? 'Your One Timne Password (OTP)' : 'Password'}" name ="password" />-->
-                <!--                </div>-->
+<!--                <div class="input-field">-->
+<!--                    <i class="fas fa-lock"></i> <input type="password"-->
+<!--                                                       th:placeholder="${param.otp != null ? 'Your One Timne Password (OTP)' : 'Password'}" name ="password" />-->
+<!--                </div>-->
                 <button class="btn btn-primary" data-sitekey="6LfjhogeAAAAAALrESQQ95hwKHI5epNzvQKFCM-v" data-callback="onSubmit" data-action="submit">Đăng nhập</button> <!--class="btn solid" -->
                 <p class="social-text">Or Sign in with social platforms</p>
                 <div class="social-media">
@@ -54,13 +54,14 @@
                 <h2 class="title" style="margin-left: 130px">Đăng ký</h2>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="text"
-                                                          placeholder="Fullname" name = "name" id="name" />
+                                                       placeholder="Fullname" name = "name" id="name" />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-envelope"></i> <input type="Email"
                                                            placeholder="Email" name = "username" id="username" />
                 </div>
                 <div>
+                    <p th:text="${checkAdd}"></p>
                     <span class="alert alert-danger" th:utext="${successMessage}"></span>
                     <div class="alert alert-success alert-dismissible col-sm-12" th:if="${bindingResult !=null && bindingResult.getAllErrors() !=null}">
                         <ul th:each="data :${bindingResult.getAllErrors()}">
@@ -113,50 +114,19 @@
             document.getElementById("loginForm").submit();
         }
         function checkSignup(){
-            /*<![CDATA[*//*]]>*/
-                var checkMail=/*[[${checkAdd}]]*/ "Test";
-                var check=[[${checkAdd}]];
-                var name =document.getElementById("name").value;
-                var password =
-                    document.getElementById("password").value;
-                var repassword=document.getElementById("retype").value;
-                var regName = /\d+$/g;
-                if (name == "" || regName.test(name)) {
-                    alert("Please enter your name properly.");
-                    name.focus();
-                    return false;
-                }
-                else if(check==false){
-                    alert("Your account has been registered.Please try again!!!");
-                    return false;
-                }
-
-                else if (password == "") {
-                    alert("Please enter your password");
-                    password.focus();
-                    return false;
-                }
-                else if(password.length <6){
-                    alert("Password should be atleast 6 character long");
-                    password.focus();
-                    return false;
-                }
-                else if (password != repassword) {
-                     alert("You Confirm Passwords is not similar with Password. Please enter same password in both");
-                     return false;
-                }
-                else{
-                    alert("success!");
-                    return true;
-                }
-            }
+            /*<![CDATA[*/
+            var checkMail=/*[[${checkAdd}]]*/ "Test";
+            /*]]>*/
+                
+                alert(checkMail);
+                        }     
             // function checkEmail() {
-            //
-
+            //     
+                
             //     else{
-
+                    
             //     }
-            // }
+            // }  
         function validatePassword(password) {
   // It will not show anything when the length of password will be zero.
   if (password.length === 0) {
