@@ -51,9 +51,7 @@ public class LoginController {
 
     @PostMapping("/sign-up")
     public String login(@ModelAttribute("userDTO") Account account) {
-
         userService.addUser(account);
-
         return "/login";
     }
 

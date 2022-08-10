@@ -7,6 +7,8 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Sign in & Sign up Form</title>
+
+
 </head>
 <body>
 <div class="container">
@@ -16,27 +18,27 @@
             <form th:action="@{/login}" method ="post" class="sign-in-form" id="loginForm" modelAttribute="account">
                 <h2 class="title">Đăng nhập</h2>
                 <div th:if="${param.error}">
-                    <p style = "color : red; text-align: center">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+                    <p style = "color : red; text-align: center">Invalid User or Password. Please Enter Again</p>
                 </div>
-<!--                <div th:if="${param.otp}">-->
-<!--                    <p style = "color : red; text-align: center">Kiểm tra mã OTP được gửi tới email [[${param.email}]]</p>-->
-<!--                </div>-->
+                <!--                <div th:if="${param.otp}">-->
+                <!--                    <p style = "color : red; text-align: center">Kiểm tra mã OTP được gửi tới email [[${param.email}]]</p>-->
+                <!--                </div>-->
 
                 <div th:if="${param.logout}">
                     <p style = "color : red; text-align: center"> Bạn vừa mới logout</p>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="Email"
-                                                       placeholder="Email" th:value="${param.mail}" name="username"/>
+                                                          placeholder="Email" th:value="${param.mail}" name="username" required/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="password"
-                                                       placeholder="Mật khẩu" th:value="${param.password}" name="password"/>
+                                                          placeholder="Mật khẩu" th:value="${param.password}" name="password" required/>
                 </div>
-<!--                <div class="input-field">-->
-<!--                    <i class="fas fa-lock"></i> <input type="password"-->
-<!--                                                       th:placeholder="${param.otp != null ? 'Your One Timne Password (OTP)' : 'Password'}" name ="password" />-->
-<!--                </div>-->
+                <!--                <div class="input-field">-->
+                <!--                    <i class="fas fa-lock"></i> <input type="password"-->
+                <!--                                                       th:placeholder="${param.otp != null ? 'Your One Timne Password (OTP)' : 'Password'}" name ="password" />-->
+                <!--                </div>-->
                 <button class="btn btn-primary" data-sitekey="6LfjhogeAAAAAALrESQQ95hwKHI5epNzvQKFCM-v" data-callback="onSubmit" data-action="submit">Đăng nhập</button> <!--class="btn solid" -->
                 <p class="social-text">Or Sign in with social platforms</p>
                 <div class="social-media">
@@ -48,30 +50,36 @@
                 </a>
                 </div>
             </form>
-            <form th:action="@{/sign-up}" class="sign-up-form" method = "post">
-                <h2 class="title">Đăng ký</h2>
+            <form th:action="@{/sign-up}" class="sign-up-form" method = "post" name="RegForm" style="width=800px;" onsubmit="checkSignup()" >
+                <h2 class="title" style="margin-left: 130px">Đăng ký</h2>
                 <div class="input-field">
                     <i class="fas fa-account"></i> <input type="text"
-                                                       placeholder="Fullname" name = "name"/>
+                                                          placeholder="Fullname" name = "name" id="name" />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-envelope"></i> <input type="Email"
-                                                           placeholder="Email" name = "username"/>
+                                                           placeholder="Email" name = "username" id="username" />
+                </div>
+                <div>
+                    <span class="alert alert-danger" th:utext="${successMessage}"></span>
+                    <div class="alert alert-success alert-dismissible col-sm-12" th:if="${bindingResult !=null && bindingResult.getAllErrors() !=null}">
+                        <ul th:each="data :${bindingResult.getAllErrors()}">
+                            <li th:text="${data.getObjectName()+ ' :: ' +data.getDefaultMessage()}"></li>
+                        </ul>
+
+                    </div>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i> <input type="password"
-                                                       placeholder="Password" name="password" />
+                                                       placeholder="Password" name="password" id="password"  onkeyup="validatePassword(this.value);"/>
                 </div>
-                <input type="submit" class="btn" value="Sign up" />
-                <p class="social-text">Or Sign up with social platforms</p>
-                <div class="social-media">
-                    <a href="#" class="social-icon"> <i class="fab fa-facebook-f"></i>
-                    </a> <a href="#" class="social-icon"> <i class="fab fa-twitter"></i>
-                </a> <a href="#" class="social-icon"> <i class="fab fa-google"></i>
-                </a> <a href="#" class="social-icon"> <i
-                        class="fab fa-linkedin-in"></i>
-                </a>
+                <div><span id="UniqueID" style="margin-left:-100px"></span></div>
+                <div class="input-field">
+                    <i class="fas fa-lock"></i> <input type="password"
+                                                       placeholder="Retype password" name="repassword" id="retype" />
                 </div>
+                <button type="submit" class="btn" >Sign up</button>
+                <p class="py-2">Already have an account?<a style="margin-left:20px;" th:href="@{/cai-nay-thu}">Sign-In</a></p>
             </form>
         </div>
     </div>
@@ -81,6 +89,7 @@
             <div class="content">
                 <h3>New here ?</h3>
                 <p>Do you already have an account. If not, click below</p>
+                <a th:href="@{/register}">Signup</a>
                 <button class="btn transparent" id="sign-up-btn">Sign up</button>
             </div>
             <img th:src="@{/images/log.svg}" class="image" alt="" />
@@ -99,11 +108,96 @@
 
 <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
-<script type = "text/javascript">
+<script th:inline="javascript">
         function onSubmit(token){
             document.getElementById("loginForm").submit();
         }
-    </script>
+        function checkSignup(){
+            /*<![CDATA[*//*]]>*/
+                var checkMail=/*[[${checkAdd}]]*/ "Test";
+                var check=[[${checkAdd}]];
+                var name =document.getElementById("name").value;
+                var password =
+                    document.getElementById("password").value;
+                var repassword=document.getElementById("retype").value;
+                var regName = /\d+$/g;
+                if (name == "" || regName.test(name)) {
+                    alert("Please enter your name properly.");
+                    name.focus();
+                    return false;
+                }
+                else if(check==false){
+                    alert("Your account has been registered.Please try again!!!");
+                    return false;
+                }
+
+                else if (password == "") {
+                    alert("Please enter your password");
+                    password.focus();
+                    return false;
+                }
+                else if(password.length <6){
+                    alert("Password should be atleast 6 character long");
+                    password.focus();
+                    return false;
+                }
+                else if (password != repassword) {
+                     alert("You Confirm Passwords is not similar with Password. Please enter same password in both");
+                     return false;
+                }
+                else{
+                    alert("success!");
+                    return true;
+                }
+            }
+            // function checkEmail() {
+            //
+
+            //     else{
+
+            //     }
+            // }
+        function validatePassword(password) {
+  // It will not show anything when the length of password will be zero.
+  if (password.length === 0) {
+  document.getElementById("UniqueID").innerHTML = "";
+  return;
+  }
+  // Creation of new array and push all possible values in password
+  var T4Tutorials = new Array();
+  T4Tutorials.push("[$@$!%*#?&]"); // Special Charector
+  T4Tutorials.push("[A-Z]");      // Uppercase Alpabates
+  T4Tutorials.push("[0-9]");      // Numbers
+  T4Tutorials.push("[a-z]");     // Lowercase Alphabates
+  var ctr = 0;
+  for (var i = 0; i < T4Tutorials.length; i++) {
+  if (new RegExp(T4Tutorials[i]).test(password)) {
+  ctr++;
+  }
+  }
+  // Display it
+  var color = "";
+  var strength = "";
+  switch (ctr) {
+  case 0:
+  case 1:
+  case 2:
+  strength = "Very Weak in length";
+  color = "red";
+  break;
+  case 3:
+  strength = "Medium";
+  color = "pink";
+  break;
+  case 4:
+  strength = "Strong";
+  color = "green";
+  break;
+  }
+  document.getElementById("UniqueID").innerHTML = strength;
+  document.getElementById("UniqueID").style.color = color;
+  }
+</script>
 
 </body>
 </html>

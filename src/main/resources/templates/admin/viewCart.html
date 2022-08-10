@@ -333,23 +333,15 @@ table.table .avatar {
                 <div class="row">
                     <div class="col-sm-6">
                         <h2>
-                            Manage <b>Cartttttttttttttttttttttttttttttttttttttttttt</b>
+                            Manage <b>Cart</b>
                         </h2>
                     </div>
-                    <div class="col-sm-6">
-                        <a href="#addEmployeeModal" class="btn btn-success"
-                           data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add
-									New Employee</span></a>
-                    </div>
+
                 </div>
             </div>
             <div class="container">
 
-                <if test="${not empty message }">
-                    <div class="alert alert-info">
-                        <h3 class="text-center">${message }</h3>
-                    </div>
-                </if>
+
 
                 <choose>
                     <when test="${not empty cartLines }">
@@ -359,20 +351,17 @@ table.table .avatar {
                                 <th style="width: 50%">ID</th>
                                 <th style="width: 10%">User</th>
                                 <th style="width: 8%">Status</th>
-                                <th style="width: 22%" class="text-center">Subtotal</th>
+                                <th style="width: 22%" class="text-center">Pricetotal</th>
                                 <th style="width: 10%"></th>
                             </tr>
                             </thead>
-
-
                             <tbody>
                             <th:block th:each="c : ${carts}">
-
                                 <tr>
                                     <td><span th:text=" ${c.id}"></span></td>
                                     <td><span th:text=" ${c.buyer.name}"></span></td>
                                     <td><span th:text="${c.status}"></span></td>
-                                    td><span th:text="${c.priceTotal}"></span></td>
+                                    <span th:text="${c.priceTotal}"></span></td>
                                     <td><span><a th:href="'/admin/cart/cartline?id='+ ${c.id}">Details</a></span></td>
 
                                 </tr>
@@ -383,35 +372,10 @@ table.table .avatar {
                             </tbody>
 
 
-                            <tfoot>
-                            <tr class="visible-xs">
-                                <td class="text-center"><strong>Total &#8377;
-                                    ${userModel.cart.priceTotal }</strong></td>
-                            </tr>
-                            <tr>
-                                <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span
-                                        class="glyphicon glyphicon-chevron-left"></span> Continue
-                                    Shopping</a></td>
-                                <td colspan="2" class="hidden-xs"></td>
-                                <td class="hidden-xs text-center"><strong>Total
-                                    &#8377; ${userModel.cart.priceTotal }</strong></td>
-                                <td><a href="#" class="btn btn-success btn-block">Checkout
-                                    <span class="glyphicon glyphicon-chevron-right"></span>
-                                </a></td>
-                            </tr>
-                            </tfoot>
+
 
                         </table>
                     </when>
-                    <otherwise>
-                        <div class="jumbotron">
-                            <div class="text-center">
-                                <h1>Your cart is empty!</h1>
-
-                            </div>
-
-                        </div>
-                    </otherwise>
 
                 </choose>
 
