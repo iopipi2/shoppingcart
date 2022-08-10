@@ -7,22 +7,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <title>Sign in & Sign up Form</title>
-    <th:if test="${checkAdd != null}">
-        <th:if test="${checkAdd == true}">
-            <script>
-                    $(document).ready(function () {
-                        swal("Tạo tài khoản thành công !", "Yeahhh", "success");
-                    });
-                </script>
-        </th:if>
-        <thif test="${checkAdd == false}">
-            <script>
-                    $(document).ready(function () {
-                        swal("Tài khoản hoặc email đã tồn tại !", "Nhập lại", "error");
-                    });
-                </script>
-        </thif>
-    </th:if>
+
 
 </head>
 <body>
@@ -124,7 +109,6 @@
 <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
 <script>
-
         function onSubmit(token){
             document.getElementById("loginForm").submit();
         }
