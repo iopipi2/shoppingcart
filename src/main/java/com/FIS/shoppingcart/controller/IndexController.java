@@ -379,11 +379,11 @@ public class IndexController {
 
     //Cua Hoang
     @GetMapping("/infoUser")
-
     public String infoUser(Model model) {
 
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Account users = userService.findUserByEmail(principal.getUsername());
+        int id = userService.findUserByEmail(principal.getUsername()).getId();
+        Account users = userService.getUserById(id);
         model.addAttribute("user", users);
         System.out.println(users);
         return "/detailUser";
@@ -399,18 +399,22 @@ public class IndexController {
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
+
         try (InputStream inputStream = file.getInputStream()) {
             Path filePathMain = uploadPath.resolve(fileName);
             System.out.println("check : " + filePathMain.toFile().getAbsolutePath());
+
             Files.copy(inputStream, filePathMain, StandardCopyOption.REPLACE_EXISTING);
             userService.save(account);
+
         } catch (IOException e) {
             System.out.println(e);
         }
+
         return "redirect:/infoUser";
 
     }
-    //edit info
+
     @RequestMapping(value = "/editInfo", method = RequestMethod.POST)
     public String editInfomationAccount(@ModelAttribute(name = "users") Account account) {
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -434,6 +438,7 @@ public class IndexController {
     public String changePass(Model model, HttpServletRequest request) {
         String username = request.getParameter("username");
         String password = request.getParameter("confirmPass");
+
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id = userService.findUserByEmail(principal.getUsername()).getId();
         Account account = userService.getUserById(id);
@@ -451,8 +456,6 @@ public class IndexController {
 
 
     }
-
-
     //Cua Hoang----------------------------------------------------------------------------------
 //    @GetMapping("/viewListCart")
 //    public String viewAllCart(Model model) {

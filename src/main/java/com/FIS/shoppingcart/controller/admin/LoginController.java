@@ -60,14 +60,15 @@ public class LoginController {
     @PostMapping("/sign-up")
     public String login(@Valid @ModelAttribute("userDTO") Account account, Model model,HttpServletRequest request, ModelMap modelMap) {
         String username=request.getParameter("username");
+
         Boolean checkAdd=userService.checkIfUserExist(username);
         if(checkAdd==false)
         {
             model.addAttribute("successMessage","Username already exist!");
-            model.addAttribute("checkadd",checkAdd);
+            model.addAttribute("checkAdd","false");
         }
         else {
-            model.addAttribute("checkadd",checkAdd);
+            model.addAttribute("checkAdd","true");
             userService.addUser(account);
         }
         return "/login";

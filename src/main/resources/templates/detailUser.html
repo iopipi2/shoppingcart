@@ -100,7 +100,7 @@
         }
 
         table.table-striped tbody tr:nth-of-type(odd) {
-            background-color: #fcfcfc;
+background-color: #fcfcfc;
         }
 
         table.table-striped.table-hover tbody tr:hover {
@@ -232,7 +232,7 @@
             width: 6px;
             height: 11px;
             border: solid #000;
-            border-width: 0 3px 3px 0;
+border-width: 0 3px 3px 0;
             transform: inherit;
             z-index: 3;
             transform: rotateZ(45deg);
@@ -433,7 +433,6 @@
                                             <label>Chức năng</label> <input type="role" th:value="*{p.role}"
                                                                              name="role" class="form-control" required readonly>
                                         </div>
-
                                         <div class="form-group" hidden>
                                             <label>Trạng thái tài khoản</label> <input type="text"
                                                                                            th:value="*{p.enabled}" name="enabled" class="form-control"
@@ -532,7 +531,7 @@
         });
 
         function showImageThumbnail1(fileInput) {
-            file = fileInput.files[0];
+file = fileInput.files[0];
             reader = new FileReader();
 
             reader.onload = function (e) {

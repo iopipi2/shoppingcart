@@ -61,6 +61,7 @@
                                                            placeholder="Email" name = "username" id="username" />
                 </div>
                 <div>
+                    <p th:text="${checkAdd}"></p>
                     <span class="alert alert-danger" th:utext="${successMessage}"></span>
                     <div class="alert alert-success alert-dismissible col-sm-12" th:if="${bindingResult !=null && bindingResult.getAllErrors() !=null}">
                         <ul th:each="data :${bindingResult.getAllErrors()}">
@@ -108,46 +109,17 @@
 
 <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
-<script>
+<script th:inline="javascript">
         function onSubmit(token){
             document.getElementById("loginForm").submit();
         }
         function checkSignup(){
-                var check=[[${checkadd}]];
-                var name =document.getElementById("name").value;
-                var password =
-                    document.getElementById("password").value;
-                var repassword=document.getElementById("retype").value;
-                var regName = /\d+$/g;                                    
-                if (name == "" || regName.test(name)) {
-                    alert("Please enter your name properly.");
-                    name.focus();
-                    return false;
-                }
-                else if(check==false){
-                    alert("Your account has been registered.Please try again!!!");
-                    return false;
-                }
+            /*<![CDATA[*/
+            var checkMail=/*[[${checkAdd}]]*/ "Test";
+            /*]]>*/
                 
-                else if (password == "") {
-                    alert("Please enter your password");
-                    password.focus();
-                    return false;
-                }
-                else if(password.length <6){
-                    alert("Password should be atleast 6 character long");
-                    password.focus();
-                    return false;
-                }
-                else if (password != repassword) {
-                     alert("You Confirm Passwords is not similar with Password. Please enter same password in both");
-                     return false;
-                }
-                else{
-                    alert("success!");
-                    return true;
-                }          
-            }     
+                alert(checkMail);
+                        }     
             // function checkEmail() {
             //     
                 
