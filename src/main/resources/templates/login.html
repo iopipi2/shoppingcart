@@ -114,12 +114,42 @@
             document.getElementById("loginForm").submit();
         }
         function checkSignup(){
-            /*<![CDATA[*/
-            var checkMail=/*[[${checkAdd}]]*/ "Test";
-            /*]]>*/
-                
-                alert(checkMail);
-                        }     
+            var check=[[${checkadd}]];
+                var name =document.getElementById("name").value;
+                var password =
+                    document.getElementById("password").value;
+                var repassword=document.getElementById("retype").value;
+                var regName = /\d+$/g;
+                if (name == "" || regName.test(name)) {
+                    alert("Please enter your name properly.");
+                    name.focus();
+                    return false;
+                }
+                else if(check==false){
+                    alert("Your account has been registered.Please try again!!!");
+                    return false;
+                }
+
+                else if (password == "") {
+                    alert("Please enter your password");
+                    password.focus();
+                    return false;
+                }
+                else if(password.length <6){
+                    alert("Password should be atleast 6 character long");
+                    password.focus();
+                    return false;
+                }
+                else if (password != repassword) {
+                     alert("You Confirm Passwords is not similar with Password. Please enter same password in both");
+                     return false;
+                }
+                else{
+                    alert("success!");
+                    return true;
+                }
+                }
+
             // function checkEmail() {
             //     
                 
