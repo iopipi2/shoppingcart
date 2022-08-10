@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Chi tiết sản phẩm</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link th:rel="stylesheet"
+          th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}"></link>
+    <!-- jQuery library -->
+    <script
+            th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+
+    <!-- Popper JS -->
+    <script
+            th:src="@{https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js}"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script
+            th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
+    <link rel="stylesheet" th:href="@{/css/viewproduct.css}"></link>
+
+</head>
+<body>
+<div th:replace="/admin/header :: header"></div>
+<div class="container">
+    <h2>
+        <b>Chi tiết sản phẩm</b>
+    </h2>
+    <table
+            class="table table-bordered table-striped table-responsive-stack"
+            id="tableOne">
+        <thead class="thead-dark">
+        <tr>
+            <th>Id</th>
+            <th>Image</th>
+            <th>Image1</th>
+            <th>Image2</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr><td><span th:text="${product.id}"></span></td>
+                <td><img style="width: 100px; height: 120px;"
+                         th:src="@{${product.mainImagePath}}" alt="IMG-LOGO"></td>
+                <td><img style="width: 100px; height: 120px;"
+                         th:src="@{${product.hoverImagePath}}" alt="IMG-LOGO"></td>
+                <td><img style="width: 100px; height: 120px;"
+                         th:src="@{${product.subImagePath}}" alt="IMG-LOGO"></td>
+                <td><a th:text="${product.name}"></a></td>
+                <td><span th:text="'$'+ ${product.price}"></span></td>
+                <td><span th:text="${product.category.type}"></span></td>
+                <td><span th:text="${product.productquantity}"></span></td>
+                <td><span th:text="${product.description}"></span></td>
+                <td><div class="btn-group">
+                    <a th:href="@{'/admin/productDetail/edit/' + ${product.id}}" class="btn btn-success">Sửa</a>
+                    <a class="btn btn-danger" th:attr="data-target='#deleteProductModal'+${product.id}"
+                       data-toggle="modal"><i class="material-icons" data-toggle="tooltip"
+                                              title="Delete Product">&#xE254;</i>Xóa</a>
+                    <a class="btn btn-danger" th:href="@{'/admin/product/delete/' + ${product.id}}">Xóa</a>
+                </div></td>
+            </tr>
+            <div th:id="${'deleteProductModal'+{product.id}}" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{'/admin/products/delete/' + ${product.id}}" >
+                            <div class="modal-header">
+                                <h4 class="modal-title">Bạn có chắc muốn xóa sản phẩm</h4>
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="submit" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"><a>Có</a> </span> </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Không</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </tbody>
+    </table>
+
+</div>
+<div th:replace="/admin/footer :: footer"></div>
+
+<script th:src="@{/js/person.js}"></script>
+</body>
+</html>

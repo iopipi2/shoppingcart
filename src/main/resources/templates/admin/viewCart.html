@@ -336,7 +336,7 @@ table.table .avatar {
                             Manage <b>Cart</b>
                         </h2>
                     </div>
-					<div class="col-sm-6">
+                    <div class="col-sm-6">
 
                     </div>
                 </div>
@@ -350,7 +350,7 @@ table.table .avatar {
                                 <th style="width: 10%" >ID</th>
                                 <th style="width: 20%">User</th>
                                 <th style="width: 22%">Email</th>
-								<th style="width: 22%">Status</th>
+                                <th style="width: 22%">Status</th>
                                 <th style="width: 20%">Subtotal</th>
                                 <th style="width: 20%"></th>
                             </tr>
@@ -361,7 +361,7 @@ table.table .avatar {
                                 <tr>
                                     <td><span th:text=" ${c.id}"></span></td>
                                     <td><span th:text=" ${c.buyer.name}"></span></td>
-									<td><span th:text=" ${c.buyer.username}"></span></td>
+                                    <td><span th:text=" ${c.buyer.username}"></span></td>
                                     <td><span th:text="${c.status}"></span></td>
                                     <td><span th:text="${c.priceTotal}"></span></td>
                                     <td><span><a th:href="'/admin/cart/cartline?id='+ ${c.id}">Details</a></span></td>
@@ -375,13 +375,13 @@ table.table .avatar {
 
 
                             <tfoot>
-                           
+
                             <tr>
                                 <td><a href="${contextRoot }/show/all/products" class="btn btn-warning"><span
                                         class="glyphicon glyphicon-chevron-left"></span> Continue
                                     Shopping</a></td>
                                 <td colspan="2" class="hidden-xs"></td>
-                                
+
                                 <td><a href="#" class="btn btn-success btn-block">Checkout
                                     <span class="glyphicon glyphicon-chevron-right"></span>
                                 </a></td>
@@ -390,7 +390,7 @@ table.table .avatar {
 
                         </table>
                     </when>
-                   
+
                 </choose>
 
 
@@ -398,13 +398,13 @@ table.table .avatar {
             </form>
             <div class="clearfix">
                 <div class="hint-text">
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
-					Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
-					&nbsp;
-					<span th:each = "i: ${#numbers.sequence(1, totalPage)}">
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
+                    Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
+                    &nbsp;
+                    <span th:each = "i: ${#numbers.sequence(1, totalPage)}">
 						<a th:href = "@{'/page/' + ${i}}">[[${i}]]</a> &nbsp;&nbsp;
 
 					</span>

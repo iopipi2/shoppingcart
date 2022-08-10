@@ -7,7 +7,6 @@ import java.util.Optional;
 import com.FIS.shoppingcart.dao.UserRepository;
 import com.FIS.shoppingcart.entities.Account;
 
-import com.FIS.shoppingcart.model.AccountDTO;
 import com.FIS.shoppingcart.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.util.Base64Utils;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 
 @Service("userService")
@@ -32,37 +27,34 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    private UserService userService;
-
-
 
     @Override
-    public Account editUser(AccountDTO accountDTO) {
-        Account account = userRepository.getById(accountDTO.getId());
-
-        System.out.println(account);
-
-        account.setName(accountDTO.getName());
-        account.setUsername(accountDTO.getUsername());
-        account.setAddress(accountDTO.getAddress());
-        account.setPhone(accountDTO.getPhone());
-        account.setAvatar(accountDTO.getAvatar());
-
-        System.out.println("In ra cho vui : " + accountDTO.getAvatar());
-
-
-
-        return userRepository.save(account);
+    public boolean saveUser(Account account) {
+        // TODO Auto-generated method stub
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        userRepository.saveAndFlush(account);
+        return true;
     }
 
     @Override
+    public Boolean CheckExistAccount(String username) {
+        try{
+            Account account=userRepository.checkExistAccount(username);
+            if(account!=null)
+            {
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    @Override
     public Account addUser(Account accountDTO) {
-
         Account account = new Account();
-
         account.setId(accountDTO.getId());
-
         account.setName(accountDTO.getName());
         //Lấy password người dùng nhập, mã hóa về dạng BCrypt r lưu database
         BCryptPasswordEncoder endcoder = new BCryptPasswordEncoder();
@@ -78,6 +70,32 @@ public class UserServiceImpl implements UserService {
         userRepository.saveAndFlush(account);
         return account;
 
+    }
+
+//    @Override
+//    public boolean checkIfUserExist(String email) {
+//        try{
+//            Account account=userRepository.checkExistAccount(email);
+//            if(account!=null)
+//            {
+//                return true;
+//            }
+//            return false;
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
+    @Override
+    public boolean checkIfUserExist(String email) {
+              Account account=userRepository.findUserByEmail(email);
+              if(account!=null)
+              {
+                  return false;
+              }
+              else return true;
     }
 
     @Override
@@ -111,6 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(Account account) {
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
         userRepository.save(account);
 
     }
@@ -131,15 +150,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<Account> findUserById(int id) {
-        return userRepository.findById(id);
-    }
-
-    @Override
-    public void updatePassword(Account account, String newPassword) {
-        String encoded = new String(bCryptPasswordEncoder.encode(newPassword));
-        account.setPassword(encoded);
-        userRepository.save(account);
-
+        return Optional.empty();
     }
 
     public void deleteUser(Account account) {
@@ -148,6 +159,14 @@ public class UserServiceImpl implements UserService {
 
     public void saveInfoUser(Account account) {
         userRepository.saveAndFlush(account);
+    }
+
+    @Override
+    public void updatePassword(Account account, String newPassword) {
+        String encoded = new String(bCryptPasswordEncoder.encode(newPassword));
+        account.setPassword(encoded);
+        userRepository.save(account);
+
     }
 
 //    @Override

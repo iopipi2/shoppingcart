@@ -401,13 +401,13 @@ table.table .avatar {
             </div>
             <div class="clearfix">
                 <div class="hint-text">
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
-					&nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
-					Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
-					&nbsp;
-					<span th:each = "i: ${#numbers.sequence(1, totalPage)}">
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp;	&nbsp; &nbsp; &nbsp;
+                    Showing <b>[[${currentPage}]]</b> out of <b>[[${totalPage}]]</b> entries
+                    &nbsp;
+                    <span th:each = "i: ${#numbers.sequence(1, totalPage)}">
 						<a th:href = "@{'/page/' + ${i}}">[[${i}]]</a> &nbsp;&nbsp;
 
 					</span>

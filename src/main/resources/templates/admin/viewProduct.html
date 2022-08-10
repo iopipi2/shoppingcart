@@ -50,12 +50,8 @@
     <tr>
       <th>Id</th>
       <th>Image</th>
-      <th>Image1</th>
-      <th>Image2</th>
       <th>Name</th>
       <th>Price</th>
-      <th>Category</th>
-      <th>Description</th>
       <th>Actions</th>
     </tr>
     </thead>
@@ -64,17 +60,11 @@
       <tr><td><span th:text="${p.id}"></span></td>
         <td><img style="width: 100px; height: 120px;"
                  th:src="@{${p.mainImagePath}}" alt="IMG-LOGO"></td>
-        <td><img style="width: 100px; height: 120px;"
-                 th:src="@{${p.hoverImagePath}}" alt="IMG-LOGO"></td>
-        <td><img style="width: 100px; height: 120px;"
-                 th:src="@{${p.subImagePath}}" alt="IMG-LOGO"></td>
         <td><a th:text="${p.name}"></a></td>
         <td><span th:text="'$'+ ${p.price}"></span></td>
-        <td><span th:text="${p.category.type}"></span></td>
-        <td><span th:text="${p.description}"></span></td>
+
         <td><div class="btn-group">
-          <a th:href="@{'/admin/product/edit/' + ${p.id}}" class="btn btn-success">Sửa</a> <a class="btn btn-danger"
-                                                                                              th:href="@{'/admin/product/delete/' + ${p.id}}">Xóa</a>
+          <a th:href="@{'/admin/product-detail?id='+${p.id}}" class="btn btn-success">Chi tiết</a>
         </div></td>
       </tr>
     </th:block>

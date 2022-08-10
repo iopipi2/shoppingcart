@@ -3,6 +3,7 @@ package com.FIS.shoppingcart.dao;
 import com.FIS.shoppingcart.entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface UserRepository extends JpaRepository<Account,Integer> {
             + "OR a.name LIKE %?1%")
     public List<Account> findUser(String keyword);
 
+    @Query("SELECT a FROM Account a where a.username= lower(:username)")
+    Account checkExistAccount(@Param("username") String username);
 }

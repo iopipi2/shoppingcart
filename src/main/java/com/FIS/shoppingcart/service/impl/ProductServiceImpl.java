@@ -60,7 +60,6 @@ public class ProductServiceImpl implements ProductService {
        Optional<Product>  product = productRepository.findById(id);
         if (!product.get().isActive()){
             product = null;}
-
         return product;
     }
 
@@ -82,9 +81,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String deleteProduct(Integer id) {
-
         Product product = productRepository.findById(id).get();
-
         product.setActive(false);
         productRepository.saveAndFlush(product);
 
