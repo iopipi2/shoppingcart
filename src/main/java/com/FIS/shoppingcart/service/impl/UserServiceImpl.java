@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(Account account) {
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        account.setPassword((account.getPassword()));
         userRepository.save(account);
 
     }

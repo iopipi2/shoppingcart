@@ -36,7 +36,6 @@ public class LoginController {
     }
     @GetMapping("/cai-nay-thu")
     public String login(Model model) {
-
         return "login";
     }
 
@@ -60,7 +59,6 @@ public class LoginController {
     @PostMapping("/sign-up")
     public String login(@Valid @ModelAttribute("userDTO") Account account, Model model,HttpServletRequest request, ModelMap modelMap) {
         String username=request.getParameter("username");
-
         Boolean checkAdd=userService.checkIfUserExist(username);
         if(checkAdd==false)
         {

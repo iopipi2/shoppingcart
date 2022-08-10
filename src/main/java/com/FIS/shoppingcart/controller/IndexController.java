@@ -438,11 +438,9 @@ public class IndexController {
     public String changePass(Model model, HttpServletRequest request) {
         String username = request.getParameter("username");
         String password = request.getParameter("confirmPass");
-
         LoginService principal = (LoginService) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         int id = userService.findUserByEmail(principal.getUsername()).getId();
         Account account = userService.getUserById(id);
-
         model.addAttribute("title", "Reset your password");
         if (account == null) {
             model.addAttribute("message", "Invalid id");
